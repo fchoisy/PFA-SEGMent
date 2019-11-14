@@ -1,1 +1,49 @@
-<mxfile host="www.draw.io" modified="2019-11-14T11:11:38.153Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0" etag="oFNtt6ge9xb5faHXbrvE" version="12.2.6" type="github" pages="1"><diagram id="Seq3M3axJOQXlQTi5IoV" name="Page-1">7VjbctowEP0aJs1DGLC4hMdgCGkmnXRCMrSPwlZsJbKXkWXA+fqubBnsGKjbSUozLQ+M9mglr87eZDeIHawnki78L+Ay0bBa7rpBRg3LGhAL/zWQZEC3YwBPcjeD2ltgyl+YAVsGjbnLopKiAhCKL8qgA2HIHFXCqJSwKqs9gig/dUE9VgGmDhVVdMZd5WfoudXf4leMe37+5HZvkM0ENFc2J4l86sKqAJFxg9gSQGWjYG0zobnLecnWXe6Z3RgmWajqLOjfzVfXg1hd+S+PSYt0pDsbn5ldllTE5sA2jbS7TmLFBY+o4hAa+1WSk4JHWehhHIhLSQMcDlc+V2y6oI7GVxgKiPkqECi19bThro1G4kTOWCpVD5JbxaRi6wJkDjZhEDAlE1QxsxYxJJsoa3eMvNr6jOSO8Av+sgYGpCZOvM3eWypxYNjczWzSU5NZNw7a/fvbe8+dqec776xfYY25GFlGBKl88CCkYrxFhxLi0GV6V83LVucGYGGIfGJKJSZNaKygTDMyKJNvZn0qfNdCs5uLo3VxcpQYKbNVG7g3uAwUQSwddiCiTHorKj2mDvDT2e1QyQTG3LJsx5s75/wYzjkCydYxSR78z4CDztlT0t7cOYeMLBT+htUTaO7Q5Usceno40bXdao1YxL2QyVwDH1hQOtQdLhwFEnV0JefYVG/onImvEPG0rZDRHJSCABWEnhhS59lLI8AGodfhbuQx/RX2uBBoDM4peNVjIFaCh8ze3ATeqLkMyr1lczUp9pYdraX3Xp0lf/6HrV6kZoKQYyYIqZMg1xCz+F/Ni571tyVGHZc9LARQd38xqyyQLMoiOqq95FMEIWrb2uAA3xDMeInW26RxMQADTD5fTk/z9XP5esefxBMygm9BNS7fexy7w/37L9jdVxfsftXXm0t30dn993J2rQb2y86m0tFcOiqWuvO5Mf49sbi+5z1smc0n9P/pB/DiRj6aF2tX2bpF9k/SSSo3g+6R6ezUofN2rljIZfo1RKYXPPeEOk5ams71y386amlctwytSHUeHG521VQQnIXNZvNjFjhCaqbGb3xAQHH72SedK3w7I+Mf</diagram></mxfile>
+<mxfile host="www.draw.io" modified="2019-11-14T11:19:50.988Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:70.0) Gecko/20100101 Firefox/70.0" etag="HrwkHQhVpD9ZVkhPuxih" version="12.2.6" type="github" pages="1">
+  <diagram id="Seq3M3axJOQXlQTi5IoV" name="Page-1">
+    <mxGraphModel dx="932" dy="542" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="7RbwJ9utHhzfy034rdWE-1" value="Cas d&#39;utilisation" style="shape=umlFrame;whiteSpace=wrap;html=1;width=120;height=20;" parent="1" vertex="1">
+          <mxGeometry x="230" y="140" width="320" height="290" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7RbwJ9utHhzfy034rdWE-2" target="y6tGW5um17TOTgdWtkRg-4" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="7RbwJ9utHhzfy034rdWE-2" target="y6tGW5um17TOTgdWtkRg-2" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="7RbwJ9utHhzfy034rdWE-2" target="y6tGW5um17TOTgdWtkRg-1" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="7RbwJ9utHhzfy034rdWE-2" value="&lt;div&gt;Game Designer&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="90" y="210" width="30" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="7RbwJ9utHhzfy034rdWE-3" target="y6tGW5um17TOTgdWtkRg-3" edge="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="0fI6QdBfi40s-nEuyPeR-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="7RbwJ9utHhzfy034rdWE-3" target="0fI6QdBfi40s-nEuyPeR-1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="7RbwJ9utHhzfy034rdWE-3" value="&lt;div&gt;Joueur&lt;/div&gt;" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="620" y="210" width="30" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-1" value="&lt;div&gt;Uploader&lt;/div&gt;&lt;div&gt;ressources&lt;/div&gt;&lt;div&gt;(sons, images, vidéos, GIFS)&lt;br&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="170" width="140" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-2" value="&lt;div&gt;Uploader&lt;/div&gt;&lt;div&gt;architecture du jeu&lt;/div&gt;&lt;div&gt;(game.json)&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="250" width="140" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-3" value="&lt;div&gt;Jouer&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="390" y="215" width="140" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="y6tGW5um17TOTgdWtkRg-4" value="&lt;div&gt;Obtenir forme d&#39;accès à donner au Joueur&lt;/div&gt;&lt;div&gt;(lien...)&lt;br&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="330" width="140" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="0fI6QdBfi40s-nEuyPeR-1" value="&lt;div&gt;Sauvegarder&lt;/div&gt;&lt;div&gt;progression&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="305" width="140" height="70" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
