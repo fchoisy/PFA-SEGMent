@@ -1,43 +1,43 @@
 'use strict';
 
+let gameJSON;
+
 // Provide event listener for upload button
+
 var fileInput = document.querySelector('#file');
 fileInput.addEventListener('change', function() {
   // alert(this.files[0].name);
   var reader = new FileReader();
 
   reader.addEventListener('load', function() {
-    alert('Fichier ' + fileInput.files[0].name + ' chargé avec succès !\nContenu :\n' + reader.result);
+    //alert('Fichier ' + fileInput.files[0].name + ' chargé avec succès !\nContenu :\n' + reader.result);
+    LoadGame(reader.result);
   });
-
   reader.readAsText(fileInput.files[0]);
 });
 
-function showInitialScene(event){
-
-  // event.preventDefault();
+function LoadGame(gameJsonText){
+  var json = JSON.parse(gameJsonText);
 
   //Initial test with a test json const
   const testJSON = {"toto" : 1,"titi" : 2,"tutu" : 3};
   console.log(testJSON);
 
-
-  // Should get the json file from a local folder, not working
-  // const json = getJsonFile();
-  // console.log(json)
-
   // //Gets the game json, but pasted in a function
   // const json = getJsonTest();
   // console.log(json);
 
-  //Returns the contents of the initial scene (id=1)
-  // const scene1 = getSceneByID(json,1);
-  // console.log(scene1);
+   // Returns the contents of the initial scene (id=1)
+   const scene1 = getSceneByID(json,1);
+   console.log(scene1);
 
   //Returns the path of the background image of the initial scene
-  // const ImagePath1 = getImageScene(scene1);
-  // console.log(ImagePath1);
+  const ImagePath1 = getImageScene(scene1);
+  console.log(ImagePath1);
 }
+
+// function showInitialScene(event); -- Old version with a button to load JSON
+
 
 function getScenes(json){ //Returns all the scenes from the json file
   return json.Document.Process.Scenes;
