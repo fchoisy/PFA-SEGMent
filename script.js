@@ -1,4 +1,4 @@
-'use strict';
+'use strict'; // Empeche entre autres l'utilisation de variables non déclarées
 
 let gameJSON;
 
@@ -6,19 +6,22 @@ let gameJSON;
 
 var fileInput = document.querySelector('#file');
 fileInput.addEventListener('change', function() {
-  // alert(this.files[0].name);
   var reader = new FileReader();
-
+  // Définition du comportement à la fin de la lecture
   reader.addEventListener('load', function() {
-    //alert('Fichier ' + fileInput.files[0].name + ' chargé avec succès !\nContenu :\n' + reader.result);
-    loadGame(reader.result);
+    var gameJson;
+    try {
+      gameJson = JSON.parse(reader.result);
+    } catch (e) {
+      alert("Please upload a valid JSON file");
+      return;
+    }
+    loadGame(gameJson);
   });
   reader.readAsText(fileInput.files[0]);
 });
 
-function loadGame(gameJsonText){
-  var json = JSON.parse(gameJsonText);
-
+function loadGame(gameJson){
   //Initial test with a test json const
   const testJSON = {"toto" : 1,"titi" : 2,"tutu" : 3};
   console.log(testJSON);
@@ -28,7 +31,7 @@ function loadGame(gameJsonText){
   // console.log(json);
 
    // Returns the contents of the initial scene (id=1)
-   const scene1 = getSceneByID(json,1);
+   const scene1 = getSceneByID(gameJson,1);
    console.log(scene1);
 
   //Returns the path of the background image of the initial scene
