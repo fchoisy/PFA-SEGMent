@@ -11,12 +11,12 @@ fileInput.addEventListener('change', function() {
 
   reader.addEventListener('load', function() {
     //alert('Fichier ' + fileInput.files[0].name + ' chargé avec succès !\nContenu :\n' + reader.result);
-    LoadGame(reader.result);
+    loadGame(reader.result);
   });
   reader.readAsText(fileInput.files[0]);
 });
 
-function LoadGame(gameJsonText){
+function loadGame(gameJsonText){
   var json = JSON.parse(gameJsonText);
 
   //Initial test with a test json const
@@ -32,7 +32,7 @@ function LoadGame(gameJsonText){
    console.log(scene1);
 
   //Returns the path of the background image of the initial scene
-  const ImagePath1 = getImageScene(scene1);
+  const ImagePath1 = getSceneImage(scene1);
   console.log(ImagePath1);
 }
 
@@ -43,7 +43,7 @@ function getScenes(json){ //Returns all the scenes from the json file
   return json.Document.Process.Scenes;
 }
 
-function getImageScene(scene){ //Returns path of the background image from the scene
+function getSceneImage(scene){ //Returns path of the background image from the scene
   return scene.Image;
 }
 
