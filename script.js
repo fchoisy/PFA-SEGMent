@@ -2,8 +2,8 @@
 
 let gameJSON;
 
-// Provide event listener for upload button
 
+// Provide event listener for upload button
 var fileInput = document.querySelector('#file');
 fileInput.addEventListener('change', function() {
   // alert(this.files[0].name);
@@ -21,6 +21,17 @@ fileInput.addEventListener('change', function() {
   });
   reader.readAsText(fileInput.files[0]);
 });
+
+function changeScene(event){
+  event.preventDefault();
+  document.cookie = 'bckg_path:Game/Scenes/PorteDepart.png;';
+  document.location.href = 'display_picture.html';
+  //window.location.replace(newUrl);
+  //document.location.href = newUrl;
+};
+
+
+
 
 function loadGame(gameJson){
   //Initial test with a test json const
