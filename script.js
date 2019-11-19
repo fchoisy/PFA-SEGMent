@@ -12,22 +12,22 @@ fileInput.addEventListener('change', function() {
   reader.addEventListener('load', function() {
     var gameJson;
     try {
-      gameJson = JSON.parse(reader.result);
+      gameJSON = JSON.parse(reader.result);
     } catch (e) {
       alert("Please upload a valid JSON file");
       return;
     }
-    loadGame(gameJson);
+    loadGame(gameJSON);
   });
   reader.readAsText(fileInput.files[0]);
 });
 
 function changeScene(event){
   event.preventDefault();
-  document.cookie = 'bckg_path:Game/Scenes/PorteDepart.png;';
+  var scene = getSceneByID(gameJSON,1);
+  var img = getSceneImage(scene);
+  document.cookie = "bckg_path='"+ img +"';";
   document.location.href = 'display_picture.html';
-  //window.location.replace(newUrl);
-  //document.location.href = newUrl;
 };
 
 
@@ -59,7 +59,7 @@ function getScenes(json){ //Returns all the scenes from the json file
 }
 
 function getSceneImage(scene){ //Returns path of the background image from the scene
-  return scene.Image;
+  return "Game/"+scene.Image;
 }
 
 function getSceneByID(json,id){ // returns the scene number id. Note : les scènes commencent à id = 1
@@ -76,7 +76,7 @@ function getSceneByID(json,id){ // returns the scene number id. Note : les scèn
 }
 
 function getJsonFile(){
-  var json = $.getJSON(data );
+  var json = $.getJSON(data);
   console.log(data);
   return data;
 }
