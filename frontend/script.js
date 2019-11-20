@@ -1,4 +1,4 @@
-'use strict'; // Empeche entre autres l'utilisation de variables non déclarées
+'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
 let gameJSON;
 
@@ -7,7 +7,7 @@ let gameJSON;
 var fileInput = document.querySelector('#file');
 fileInput.addEventListener('change', function() {
   var reader = new FileReader();
-  // Définition du comportement à la fin de la lecture
+  // Action to execute when the file has been loaded
   reader.addEventListener('load', function() {
     var gameJson;
     try {
@@ -28,9 +28,6 @@ function changeScene(event){
   document.cookie = "bckg_path='"+ img +"';";
   document.location.href = 'display_picture.html';
 };
-
-
-
 
 function loadGame(gameJson){
   //Initial test with a test json const
@@ -70,7 +67,7 @@ function getSceneByID(json,id){ // returns the scene number id. Note : les scèn
       return scenes[i];
     }
   }
-  console.log("Error : Scene " + id + " not found"); // Note : Peut être à modifier avec une vraie gestion d'erreur
+  console.log("Error : Scene " + id + " not found"); // TODO: replace with real error management ?
   return scenes[0];
 }
 
