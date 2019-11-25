@@ -21,6 +21,10 @@ fileInput.addEventListener('change', function() {
   reader.readAsText(fileInput.files[0]);
 });
 
+function getJSONBackend(event){
+  
+}
+
 function changeScene(event){
   event.preventDefault();
   var scene = getSceneByID(gameJSON,1);
