@@ -1,8 +1,12 @@
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
 let gameJSON;
+const GeneralURL = "http://clemetayer.vvv.enseirb-matmeca.fr/Game/";
+const JSONUrl = GeneralURL + "game.segment";
 
 
+
+// TODO: use Fetch API to send the files to backend
 // Provide event listener for upload button
 var fileInput = document.querySelector('#file');
 fileInput.addEventListener('change', function() {
@@ -39,7 +43,7 @@ function loadGame(gameJson){
   // console.log(json);
 
    // Returns the contents of the initial scene (id=1)
-   const scene1 = getSceneByID(gameJson,1);
+   const scene1 = getInitialScene(gameJson);
    console.log(scene1);
 
   //Returns the path of the background image of the initial scene
@@ -69,6 +73,16 @@ function getSceneByID(json,id){ // returns the scene number id. Note : les scèn
   }
   console.log("Error : Scene " + id + " not found"); // TODO: replace with real error management ?
   return scenes[0];
+}
+
+function getInitialScene(json){
+  const scenes = getScenes(json);
+  const length = Object.keys(scenes).length;
+  for(var i = 0; i < length; i++){
+    if(scenes[i].SceneType == 1){
+      return scenes[i];
+    }
+  }
 }
 
 function getJsonFile(){

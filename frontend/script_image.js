@@ -12,7 +12,7 @@ function backgroundModifier(){
   img_path = getCookieValue("bckg_path");
   elem.setAttribute("src",eval(img_path));
   console.log(img_path);
-  //elem.innerHTML = "html {margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;-webkit-background-size: cover;background-size: cover;}"
+  //elem.innerHTML = "html {margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;;-webkit-background-size: cover;background-size: contain;}"
   //console.log(document.body.style.backgroundImage);
 };
 
