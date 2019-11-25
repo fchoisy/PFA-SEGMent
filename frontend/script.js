@@ -1,6 +1,10 @@
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
 let gameJSON;
+const GeneralURL = "http://clemetayer.vvv.enseirb-matmeca.fr/Game/";
+const JSONUrl = GeneralURL + "game.segment";
+
+
 
 // TODO: use Fetch API to send the files to backend
 // Provide event listener for upload button
