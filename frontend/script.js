@@ -25,7 +25,7 @@ function changeScene(event){
   event.preventDefault();
   var scene = getSceneByID(gameJSON,1);
   var img = getSceneImage(scene);
-  document.cookie = "bckg_path='"+ img +"';";
+  document.cookie = ("bckg_path='"+ img +"';");
   document.location.href = 'display_picture.html';
 };
 
@@ -39,7 +39,7 @@ function loadGame(gameJson){
   // console.log(json);
 
    // Returns the contents of the initial scene (id=1)
-   const scene1 = getInitialScene();
+   const scene1 = getInitialScene(gameJson);
    console.log(scene1);
 
   //Returns the path of the background image of the initial scene
@@ -71,7 +71,7 @@ function getSceneByID(json,id){ // returns the scene number id. Note : les scèn
   return scenes[0];
 }
 
-function getInitialScene(){
+function getInitialScene(json){
   const scenes = getScenes(json);
   const length = Object.keys(scenes).length;
   for(var i = 0; i < length; i++){
