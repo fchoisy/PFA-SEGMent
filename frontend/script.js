@@ -29,7 +29,7 @@ function changeScene(event){
   event.preventDefault();
   var scene = getSceneByID(gameJSON,1);
   var img = getSceneImage(scene);
-  document.cookie = ("bckg_path='"+ img +"';");
+  document.cookie = "bckg_path="+ img +";";
   document.location.href = 'display_picture.html';
 };
 
