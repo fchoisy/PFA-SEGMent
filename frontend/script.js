@@ -55,7 +55,7 @@ function getScenes(json){ //Returns all the scenes from the json file
 }
 
 function getSceneImage(scene){ //Returns path of the background image from the scene
-  return "Game/"+scene.Image;
+  return "../Game/"+scene.Image;
 }
 
 function getSceneByID(json,id){ // returns the scene number id. Note : les scènes commencent à id = 1
