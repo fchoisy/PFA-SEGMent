@@ -2,7 +2,7 @@
 
 let gameJSON;
 
-
+// TODO: use Fetch API to send the files to backend
 // Provide event listener for upload button
 var fileInput = document.querySelector('#file');
 fileInput.addEventListener('change', function() {
