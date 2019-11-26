@@ -13,7 +13,6 @@ fileInput.addEventListener('change', function() {
   var reader = new FileReader();
   // Action to execute when the file has been loaded
   reader.addEventListener('load', function() {
-    var gameJson;
     try {
       gameJSON = JSON.parse(reader.result);
     } catch (e) {
