@@ -1,57 +1,16 @@
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
-let gameJSON;
-const GeneralURL = "http://clemetayer.vvv.enseirb-matmeca.fr/Game/";
-const JSONUrl = GeneralURL + "game.segment";
-
-
-
-// TODO: use Fetch API to send the files to backend
-// Provide event listener for upload button
-var fileInput = document.querySelector('#file');
-fileInput.addEventListener('change', function() {
-  var reader = new FileReader();
-  // Action to execute when the file has been loaded
-  reader.addEventListener('load', function() {
-    try {
-      gameJSON = JSON.parse(reader.result);
-    } catch (e) {
-      alert("Please upload a valid JSON file");
-      return;
-    }
-    loadGame(gameJSON);
-  });
-  reader.readAsText(fileInput.files[0]);
-});
+const GameURL = "Game/game.segment"
 
 function changeScene(event){
   event.preventDefault();
-  var scene = getSceneByID(gameJSON,1);
-  var img = getSceneImage(scene);
-  document.cookie = "bckg_path="+ img +";";
-  document.location.href = 'display_picture.html';
+  $.getJSON( GameURL, function(data) {
+    var scene = getSceneByID(data,1);
+    var img = getSceneImage(scene);
+    document.cookie = "bckg_path="+ img +";";
+    document.location.href = 'display_picture.html';
+  });
 };
-
-function loadGame(gameJson){
-  //Initial test with a test json const
-  const testJSON = {"toto" : 1,"titi" : 2,"tutu" : 3};
-  console.log(testJSON);
-
-  // //Gets the game json, but pasted in a function
-  // const json = getJsonTest();
-  // console.log(json);
-
-   // Returns the contents of the initial scene (id=1)
-   const scene1 = getInitialScene(gameJson);
-   console.log(scene1);
-
-  //Returns the path of the background image of the initial scene
-  const ImagePath1 = getSceneImage(scene1);
-  console.log(ImagePath1);
-}
-
-// function showInitialScene(event); -- Old version with a button to load JSON
-
 
 function getScenes(json){ //Returns all the scenes from the json file
   return json.Document.Process.Scenes;
@@ -82,12 +41,6 @@ function getInitialScene(json){
       return scenes[i];
     }
   }
-}
-
-function getJsonFile(){
-  var json = $.getJSON(data);
-  console.log(data);
-  return data;
 }
 
 function getJsonTest(){
