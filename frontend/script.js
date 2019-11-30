@@ -20,6 +20,31 @@ function getSceneImage(scene){ //Returns path of the background image from the s
   return "../Game/"+scene.Image;
 }
 
+function getClickZones(scene){ //Returns array where each element contains the four positions of the four edges of the click zone, relatively to the image size.
+
+    let area_arrays = [];
+    let areas = scene.ClickAreas;
+    var i = 0;
+    console.log(areas.length);
+    while (i<=areas.length){
+	let currentArea = areas[i];
+	if (i != areas.length){
+	    area_arrays.push(
+		{
+		    'x1': currentArea.Pos[0],
+		    'y1': currentArea.Pos[1],
+		    'x2': currentArea.Size[0] + currentArea.Pos[0],
+		    'y2': currentArea.Size[1] + currentArea.Pos[1]
+		}
+	    );
+	    console.log(area_arrays[i]);
+	    i += 1;
+	}
+    }
+    console.log(area_arrays);
+    return area_arrays; 
+}
+
 function getSceneByID(json,id){ // returns the scene number id. Note : les scènes commencent à id = 1
   const scenes = getScenes(json);
   console.log(scenes);
