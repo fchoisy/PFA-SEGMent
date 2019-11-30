@@ -5,15 +5,16 @@ let img_path;
 window.onload = backgroundModifier();
 
 function backgroundModifier(){
-  let elem = document.getElementById('backg');
-  elem.setAttribute("width",window.innerWidth);
-  elem.setAttribute("height",window.innerHeight);
-  console.log(document.cookie);
+  //let elem = document.getElementById('backg');
+  //elem.setAttribute("width",window.innerWidth);
+  //elem.setAttribute("height",window.innerHeight);
+  //console.log(document.cookie);
   img_path = getCookieValue("bckg_path");
-  elem.setAttribute("src",img_path);
-  console.log(img_path);
-  //elem.innerHTML = "html {margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;;-webkit-background-size: cover;background-size: contain;}"
-  //console.log(document.body.style.backgroundImage);
+  //elem.setAttribute("src",img_path);
+  //console.log(img_path);
+  let elem = document.getElementById('style');
+  elem.innerHTML = "html {margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;background-color: black;-webkit-background-size: cover;background-size: contain;}"
+  console.log(document.body.style.backgroundImage);
 };
 
 

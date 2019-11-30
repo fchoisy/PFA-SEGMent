@@ -1,6 +1,6 @@
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
-const GameURL = "Game/game.segment"
+const GameURL = "../Game/game.segment"
 
 function changeScene(event){
   event.preventDefault();
@@ -42,7 +42,7 @@ function getClickZones(scene){ //Returns array where each element contains the f
 	}
     }
     console.log(area_arrays);
-    return area_arrays; 
+    return area_arrays;
 }
 
 function getSceneByID(json,id){ // returns the scene number id. Note : les scènes commencent à id = 1
