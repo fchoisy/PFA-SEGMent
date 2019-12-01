@@ -41,10 +41,13 @@ function clickZones(){
     var y1 = parseFloat(getCookieValue(sy1));
     var x2 = parseFloat(getCookieValue(sx2));
     var y2 = parseFloat(getCookieValue(sy2));
-    console.log(x1);
+    console.log(x1); // Note : j'ai pas reussi a avoir la largeur et longueur de la fenêtre dans script.js, donc les valeurs sont trop petites
     console.log(x2);
     console.log(y1);
     console.log(y2);
+    var area = '<area shape="rect" coords="'+ x1 + "," + y1 + "," + x2 + "," + y2 + '"href="" target="" alt="" />';
+    console.log(area);
+    parent.insertAdjacentHTML('afterbegin', area);
   }
 }
 
