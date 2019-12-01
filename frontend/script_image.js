@@ -25,8 +25,11 @@ function getIndexName(cname,cook){
   var i = 0;
   var begin_chaine = 0;
   while (i<cook.length){
+      if(i==begin_chaine && cook[i]==" "){
+        begin_chaine += 1;
+      }
       if(cook[i] == "="){
-          var str = cook.substr(begin_chaine,i+1);
+          var str = cook.substring(begin_chaine,i+1);
           if(toSearch == str){
               return i;
           }
@@ -53,5 +56,3 @@ function getCookieValue(cname){
   j=i
   return cook.substr(ind+1,j);
 }
-
-window.onresize = backgroundModifier;
