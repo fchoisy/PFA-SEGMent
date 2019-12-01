@@ -54,5 +54,5 @@ function getCookieValue(cname){
     i = i+1;
   }
   j=i
-  return cook.substr(ind+1,j);
+  return cook.substring(ind+1,j);
 }
