@@ -10,6 +10,7 @@ function backgroundModifier(){
   //elem.setAttribute("height",window.innerHeight);
   //console.log(document.cookie);
   img_path = getCookieValue("bckg_path");
+  console.log(img_path);
   //elem.setAttribute("src",img_path);
   //console.log(img_path);
   let elem = document.getElementById('style');

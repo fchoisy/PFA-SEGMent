@@ -6,7 +6,28 @@ function changeScene(event){
   event.preventDefault();
   $.getJSON( GameURL, function(data) {
     var scene = getSceneByID(data,1);
+    // var ClickZones = getClickZones(scene);
     var img = getSceneImage(scene);
+    // var w = img.width; // s'initialise à NaN je sais pas pourquoi
+	  // var h = img.height;
+    var clickZones = getClickZones(scene);
+    const nbClickZones = clickZones.length;
+    document.cookie = "nb_click_zones=" + nbClickZones + ";";
+    for(var i = 0; i < nbClickZones; i++){
+      var zones = clickZones[i];
+      // var zonex1 = zones.x1 * w; //cf plus haut
+      // console.log(zonex1);
+      // var zonex2 = zones.x2 * w;
+      // console.log(zonex2);
+      // var zoney1 = zones.y1 * h;
+      // console.log(zoney1);
+      // var zoney2 = zones.y2 * h;
+      // console.log(zoney2);
+      document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
+      document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
+      document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
+      document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
+    }
     document.cookie = "bckg_path="+ img +";";
     document.location.href = 'display_picture.html';
   });
@@ -24,28 +45,43 @@ function getClickZones(scene){ //Returns array where each element contains the f
 
     let area_arrays = [];
     let areas = scene.ClickAreas;
-    var i = 0;
+    // var i = 0;
     console.log(areas.length);
-    while (i<=areas.length){
-	let currentArea = areas[i];
-	if (i != areas.length){
-	    area_arrays.push(
-		{
-		    'x1': currentArea.Pos[0],
-		    'y1': currentArea.Pos[1],
-		    'x2': currentArea.Size[0] + currentArea.Pos[0],
-		    'y2': currentArea.Size[1] + currentArea.Pos[1]
-		}
-	    );
-	    console.log(area_arrays[i]);
-	    i += 1;
-	}
-    }
+    console.log(areas);
+    // while (i<=areas.length){
+    // 	let currentArea = areas[i];
+    // 	if (i != areas.length){
+    // 	    area_arrays.push(
+    //     		{
+    //     		    'x1': currentArea.Pos[0],
+    //     		    'y1': currentArea.Pos[1],
+    //     		    'x2': currentArea.Size[0] + currentArea.Pos[0],
+    //     		    'y2': currentArea.Size[1] + currentArea.Pos[1]
+    //     		}
+  	//       );
+  	//     console.log(area_arrays[i]);
+    //     i += 1;
+    //     console.log("in if : " + i);
+  	//   }
+    // }
+    for(var i = 0; i < areas.length; i++){
+      let currentArea = areas[i];
+      area_arrays.push(
+        		{
+      		    'x1': currentArea.Pos[0],
+      		    'y1': currentArea.Pos[1],
+      		    'x2': currentArea.Size[0] + currentArea.Pos[0],
+      		    'y2': currentArea.Size[1] + currentArea.Pos[1]
+        		}
+          );
+        console.log(area_arrays[i]);
+        console.log("in for : " + i);
+      }
     console.log(area_arrays);
     return area_arrays;
 }
 
-function getSceneByID(json,id){ // returns the scene number id. Note : les scènes commencent à id = 1
+function getSceneByID(json,id){ // returns the scene number id. Note : les scènes commencent à id = 0
   const scenes = getScenes(json);
   console.log(scenes);
   const length = Object.keys(scenes).length;
