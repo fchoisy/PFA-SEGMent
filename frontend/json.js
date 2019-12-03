@@ -2,6 +2,16 @@
 
 var GameJson = game;
 
+class clickZone {
+  constructor(x1,y1,x2,y2,id) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.id = id;
+  }
+}
+
 function loadJson(){
   console.log(game);
 }
@@ -83,4 +93,61 @@ function getInitialScene(){ // NOTE : different from get_scene_by_id because the
       return scenes[i];
     }
   }
+}
+function getClickZonesByScenesId(scene){ //Returns array where each element contains the four positions of the four edges of the click zone, relatively to the image size.
+    let area_arrays = [];
+    let areas = scene.ClickAreas;
+    // var i = 0;
+    console.log(areas.length);
+    console.log(areas);
+    // while (i<=areas.length){
+    // 	let currentArea = areas[i];
+    // 	if (i != areas.length){
+    // 	    area_arrays.push(
+    //     		{
+    //     		    'x1': currentArea.Pos[0],
+    //     		    'y1': currentArea.Pos[1],
+    //     		    'x2': currentArea.Size[0] + currentArea.Pos[0],
+    //     		    'y2': currentArea.Size[1] + currentArea.Pos[1]
+    //     		}
+  	//       );
+  	//     console.log(area_arrays[i]);
+    //     i += 1;
+    //     console.log("in if : " + i);
+  	//   }
+    // }
+    for(var i = 0; i < areas.length; i++){
+      let clikzone = new clickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],currentArea.Size[1] + currentArea.Pos[1],getPointedScene(currentArea.Metadata.Path));
+      let currentArea = areas[i];
+      let array = [];
+      array.push(clikzone);
+    }
+      // area_arrays.push(
+      //   		{
+      // 		    'x1': currentArea.Pos[0],
+      // 		    'y1': currentArea.Pos[1],
+      // 		    'x2': currentArea.Size[0] + currentArea.Pos[0],
+      // 		    'y2': currentArea.Size[1] + currentArea.Pos[1]
+      //   		}
+      //     );
+      //   console.log(area_arrays[i]);
+      //   console.log("in for : " + i);
+      // }
+    console.log(area_arrays);
+    return array;
+    //return area_arrays;
+}
+
+function getPointedScene(path){
+    len = scene.Transitions.length();
+    for(let i=0;i<len;i++){
+        if(scene.Transitions[i].Which == "ClickAreaToScene"){
+            let elem = scene.Transitions[i].Transition;
+            if(elem.ClickAreaToScene.From == path){
+                len = elem.To.length();
+                return parseInt(elem.To.substring(len-1,len));
+            }
+        }
+    }
+    return -1
 }
