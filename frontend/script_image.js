@@ -71,7 +71,7 @@ function isOnZone(X,Y){
         if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
             return clickZones[i].id;
         }
-    }  
+    }
   return -1;
 }
 
