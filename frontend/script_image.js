@@ -24,6 +24,7 @@ function backgroundModifier(){
   //elem.setAttribute("width",window.innerWidth);
   //elem.setAttribute("height",window.innerHeight);
   //console.log(document.cookie);
+  document.body.style.cursor = "default";
   img_path = getCookieValue("bckg_path");
   var image = new Image();
 
@@ -37,55 +38,57 @@ function backgroundModifier(){
 };
 
 function clickzone(){
-    let nb_zone = getCookieValue("nb_click_zones");
-    nb_zone = parseInt(nb_zone);
-    let x1,x2,y1,y2;
-    for (let i=0;i<nb_zone;i++){
-        x1=getCookieValue("coor_click_x1_"+i);
-        x2=getCookieValue("coor_click_x2_" + i);
-        y1=getCookieValue("coor_click_y1_" + i);
-        y2=getCookieValue("coor_click_y2_" + i);
-        let zone = new clickZone(parseFloat(x1),parseFloat(y1),parseFloat(x2),parseFloat(y2));
-        clickZones.push(zone);
-    }
-    x1 = parseInt(parseFloat(x1)*500);
-    y1 = parseInt(parseFloat(y1)*500);
-    x2 = parseInt(parseFloat(x2)*500);
-    y2 = parseInt(parseFloat(y2)*500);
+  let nb_zone = getCookieValue("nb_click_zones");
+  nb_zone = parseInt(nb_zone);
+  let x1,x2,y1,y2;
+  for (let i=0;i<nb_zone;i++){
+    x1=getCookieValue("coor_click_x1_"+i);
+    x2=getCookieValue("coor_click_x2_" + i);
+    y1=getCookieValue("coor_click_y1_" + i);
+    y2=getCookieValue("coor_click_y2_" + i);
+    let zone = new clickZone(parseFloat(x1),parseFloat(y1),parseFloat(x2),parseFloat(y2));
+    clickZones.push(zone);
+  }
+  x1 = parseInt(parseFloat(x1)*500);
+  y1 = parseInt(parseFloat(y1)*500);
+  x2 = parseInt(parseFloat(x2)*500);
+  y2 = parseInt(parseFloat(y2)*500);
 }
 
 
 function verifyClick(event){
-    //console.log(event);
-    const X = event.clientX;
-    const Y = event.clientY;
-    if(isOnZone(X,Y)>=0){
-        console.log("Coucou");
+  //console.log(event);
+  const X = event.clientX;
+  const Y = event.clientY;
+  if(isOnZone(X,Y)>=0){
+    if(window.location.pathname == "/pong.html"){
+      changeScene(event, "ping.html", isOnZone(X, Y));
     }
+  }
 }
 
 function isOnZone(X,Y){
-    let width = parseInt(window.innerWidth);
-    let height = parseInt(window.innerHeight);
-    X = X / width;
-    Y = Y / height;
-    let len = clickZones.length;
-    for(let i=0;i<len;i++){
-        if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
-            return i;
-        }
+  let width = parseInt(window.innerWidth);
+  let height = parseInt(window.innerHeight);
+  X = X / width;
+  Y = Y / height;
+  let len = clickZones.length;
+  for(let i=0;i<len;i++){
+    if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
+      return i;
     }
-    return -1;
+  }
+  return -1;
 }
 function changeCursor(event){
-    let X = event.clientX;
-    let Y = event.clientY;
-    if(isOnZone(X,Y)>=0){
-        document.body.style.cursor = 'pointer';
-        return;
-    }
-    console.log("Hey");
-    document.body.style.cursor = 'default';
+  let X = event.clientX;
+  let Y = event.clientY;
+  if(isOnZone(X,Y)>=0){
+    document.body.style.cursor = 'pointer';
+    return;
+  }
+  console.log("Hey");
+  document.body.style.cursor = 'default';
 }
 
 
@@ -94,19 +97,19 @@ function getIndexName(cname,cook){
   var i = 0;
   var begin_chaine = 0;
   while (i<cook.length){
-      if(i==begin_chaine && cook[i]==" "){
-        begin_chaine += 1;
+    if(i==begin_chaine && cook[i]==" "){
+      begin_chaine += 1;
+    }
+    if(cook[i] == "="){
+      var str = cook.substring(begin_chaine,i+1);
+      if(toSearch == str){
+        return i;
       }
-      if(cook[i] == "="){
-          var str = cook.substring(begin_chaine,i+1);
-          if(toSearch == str){
-              return i;
-          }
-      }
-      if(cook[i] == ";"){
-        begin_chaine = i+1;
-      }
-      i += 1;
+    }
+    if(cook[i] == ";"){
+      begin_chaine = i+1;
+    }
+    i += 1;
   }
   return -1;
 }
@@ -125,5 +128,27 @@ function getCookieValue(cname){
   j=i
   return cook.substring(ind+1,j);
 }
+
+function changeScene(event, html, id){
+  event.preventDefault();
+  $.getJSON( GameURL, function(data) {
+    var scene = getSceneByID(data,id);
+    var img = getSceneImage(scene);
+    var clickZones = getClickZones(scene);
+    const nbClickZones = clickZones.length;
+    document.cookie = "nb_click_zones=" + nbClickZones + ";";
+    for(var i = 0; i < nbClickZones; i++){
+      var zones = clickZones[i];
+      document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
+      document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
+      document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
+      document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
+    }
+    document.cookie = "bckg_path="+ img +";";
+    document.location.href = html;
+  });
+};
+
+
 window.addEventListener("click",verifyClick,false);
 window.addEventListener("mousemove",changeCursor,false);
