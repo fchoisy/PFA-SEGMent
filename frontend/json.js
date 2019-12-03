@@ -1,19 +1,19 @@
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
-var GameJson = game;
-
-class clickZone {
-  constructor(x1,y1,x2,y2,id) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-    this.id = id;
-  }
-}
+const GameURL = "./Game/game.segment";
+var GameJson;
 
 function loadJson(){
-  console.log(game);
+  $.ajax({
+    type: 'GET',
+    url: GameURL,
+    async: false,
+    dataType: 'json',
+    success: function (data) {
+      GameJson=data;
+    }
+  });
+  console.log(GameJson);
 }
 
 function getSceneBackgroundById(id){
@@ -115,4 +115,19 @@ function getPointedScene(path){
         }
     }
     return -1
+}
+
+function getSceneTextBySceneId(scene_id){ // Returns the text starting the scene which id is "SceneId"
+  const scene = getSceneByID(scene_id);
+  const text = scene.StartText;
+  return text;
+}
+
+function getSceneTextAreasBySceneId(scene_id){ // Returns the text in text areas of the scene which id is "SceneId"
+  const scene = getSceneByID(scene_id);
+  const text_areas = [];
+  for(var i = 0; i < scene.TextAreas.length; i++){
+    text_areas[i] = scene.TextAreas[i].Text;
+  }
+  return text_areas;
 }
