@@ -1,16 +1,11 @@
 'use strict';
 
+
 let img_path;
 let clickZones = [];
+let scene_number;
 
-class clickZone {
-  constructor(x1,y1,x2,y2) {
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
-  }
-}
+
 
 window.onload = initialisation();
 
@@ -24,39 +19,38 @@ function backgroundModifier(){
   //elem.setAttribute("width",window.innerWidth);
   //elem.setAttribute("height",window.innerHeight);
   //console.log(document.cookie);
-  img_path = getCookieValue("bckg_path");
-  var image = new Image();
-
-  console.log(img_path);
+  scene_number = getCookieValue("scene_number");
+  img_path = getSceneBackgroundById(parseInt(scene_number));
   //elem.setAttribute("src",img_path);
   //console.log(img_path);
   let elem = document.getElementById('style');
   elem.innerHTML = "html {height:100%;margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;background-color: black;-webkit-background-size: cover;background-size: contain;}"
-  console.log(document.cookie);
   //return(elem.backgroundImage.width,elem.backgroundImage.height);
 };
 
 function clickzone(){
     let nb_zone = getCookieValue("nb_click_zones");
     nb_zone = parseInt(nb_zone);
-    let x1,x2,y1,y2;
-    for (let i=0;i<nb_zone;i++){
-        x1=getCookieValue("coor_click_x1_"+i);
-        x2=getCookieValue("coor_click_x2_" + i);
-        y1=getCookieValue("coor_click_y1_" + i);
-        y2=getCookieValue("coor_click_y2_" + i);
-        let zone = new clickZone(parseFloat(x1),parseFloat(y1),parseFloat(x2),parseFloat(y2));
-        clickZones.push(zone);
-    }
-    x1 = parseInt(parseFloat(x1)*500);
-    y1 = parseInt(parseFloat(y1)*500);
-    x2 = parseInt(parseFloat(x2)*500);
-    y2 = parseInt(parseFloat(y2)*500);
+    clickZones = getClickZonesByScenesId(scene_number);
+    let len = clikzones.length();
+    // let x1,x2,y1,y2;
+    // for (let i=0;i<nb_zone;i++){
+    //     x1=getCookieValue("coor_click_x1_"+i);
+    //     x2=getCookieValue("coor_click_x2_" + i);
+    //     y1=getCookieValue("coor_click_y1_" + i);
+    //     y2=getCookieValue("coor_click_y2_" + i);
+    //     let zone = new clickZone(parseFloat(x1),parseFloat(y1),parseFloat(x2),parseFloat(y2),);
+    //     clickZones.push(zone);
+    // }
+    // x1 = parseInt(parseFloat(x1)*500);
+    // y1 = parseInt(parseFloat(y1)*500);
+    // x2 = parseInt(parseFloat(x2)*500);
+    // y2 = parseInt(parseFloat(y2)*500);
 }
 
 
 function verifyClick(event){
-    //console.log(event);
+    console.log(kikou());
     const X = event.clientX;
     const Y = event.clientY;
     if(isOnZone(X,Y)>=0){
@@ -72,11 +66,12 @@ function isOnZone(X,Y){
     let len = clickZones.length;
     for(let i=0;i<len;i++){
         if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
-            return i;
+            return clickZones[i].id;
         }
     }
     return -1;
 }
+
 function changeCursor(event){
     let X = event.clientX;
     let Y = event.clientY;
@@ -84,10 +79,8 @@ function changeCursor(event){
         document.body.style.cursor = 'pointer';
         return;
     }
-    console.log("Hey");
     document.body.style.cursor = 'default';
 }
-
 
 function getIndexName(cname,cook){
   var toSearch =cname +"=";
@@ -125,5 +118,7 @@ function getCookieValue(cname){
   j=i
   return cook.substring(ind+1,j);
 }
-window.addEventListener("click",verifyClick,false);
+
+
 window.addEventListener("mousemove",changeCursor,false);
+window.addEventListener("click",verifyClick,false);
