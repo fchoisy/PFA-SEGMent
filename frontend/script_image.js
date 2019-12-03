@@ -21,6 +21,7 @@ function backgroundModifier(){
   //console.log(document.cookie);
   scene_number = getCookieValue("scene_number");
   img_path = getSceneBackgroundById(parseInt(scene_number));
+  document.body.style.cursor = "default";
   //elem.setAttribute("src",img_path);
   //console.log(img_path);
   let elem = document.getElementById('style');
@@ -50,12 +51,14 @@ function clickzone(){
 
 
 function verifyClick(event){
-    console.log(kikou());
-    const X = event.clientX;
-    const Y = event.clientY;
-    if(isOnZone(X,Y)>=0){
-        console.log("Coucou");
+  //console.log(event);
+  const X = event.clientX;
+  const Y = event.clientY;
+  if(isOnZone(X,Y)>=0){
+    if(window.location.pathname == "/pong.html"){
+      changeScene(event, "ping.html", isOnZone(X, Y));
     }
+  }
 }
 
 function isOnZone(X,Y){
@@ -69,7 +72,8 @@ function isOnZone(X,Y){
             return clickZones[i].id;
         }
     }
-    return -1;
+  }
+  return -1;
 }
 
 function changeCursor(event){
@@ -87,19 +91,19 @@ function getIndexName(cname,cook){
   var i = 0;
   var begin_chaine = 0;
   while (i<cook.length){
-      if(i==begin_chaine && cook[i]==" "){
-        begin_chaine += 1;
+    if(i==begin_chaine && cook[i]==" "){
+      begin_chaine += 1;
+    }
+    if(cook[i] == "="){
+      var str = cook.substring(begin_chaine,i+1);
+      if(toSearch == str){
+        return i;
       }
-      if(cook[i] == "="){
-          var str = cook.substring(begin_chaine,i+1);
-          if(toSearch == str){
-              return i;
-          }
-      }
-      if(cook[i] == ";"){
-        begin_chaine = i+1;
-      }
-      i += 1;
+    }
+    if(cook[i] == ";"){
+      begin_chaine = i+1;
+    }
+    i += 1;
   }
   return -1;
 }
@@ -118,6 +122,26 @@ function getCookieValue(cname){
   j=i
   return cook.substring(ind+1,j);
 }
+
+function changeScene(event, html, id){
+  event.preventDefault();
+  $.getJSON( GameURL, function(data) {
+    var scene = getSceneByID(data,id);
+    var img = getSceneImage(scene);
+    var clickZones = getClickZones(scene);
+    const nbClickZones = clickZones.length;
+    document.cookie = "nb_click_zones=" + nbClickZones + ";";
+    for(var i = 0; i < nbClickZones; i++){
+      var zones = clickZones[i];
+      document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
+      document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
+      document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
+      document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
+    }
+    document.cookie = "bckg_path="+ img +";";
+    document.location.href = html;
+  });
+};
 
 
 window.addEventListener("mousemove",changeCursor,false);
