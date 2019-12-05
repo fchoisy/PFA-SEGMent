@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 
-<html>
+<html id="html" class="html-class">
+<!-- Inline CSS will be inserted by JS here in the html tag -->
+
 <head>
   <!-- Type d'encodage -->
   <meta charset="utf-8">
@@ -14,29 +16,45 @@
 
 
   <style id="style">
-  html{
-    margin:0;
-    padding:0;
-    height:100%;
-    background-color:black;
-    background: url("") no-repeat center fixed;
-    -webkit-background-size: contain;
-    background-size: contain;
-    cursor: wait;
-  }
-  body{
-    height:100%;
-  }
+    .html-class {
+      /* Default style, not to be touched by JS */
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: url("") no-repeat center fixed;
+      background-color: black;
+      background-size: contain;
+      -webkit-background-size: contain;
+      cursor: wait;
+    }
+
+    body {
+      height: 100%;
+    }
+
+    #fade {
+      /* To be above all other elements */
+      z-index: 100;
+      position:fixed;
+      padding:0;
+      margin:0;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      background-color:rgba(255,255,255);
+    }
   </style>
 </head>
 
-<body >
-<!--<img id="backg" src="" alt="Background Image" width="" height=""/>-->
+<body>
+  <div id="fade">
+  <!--<img id="backg" src="" alt="Background Image" width="" height=""/>-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- Inclure la license quelque part dans le code ? -->
-<script type="text/javascript" src="json.js"></script>
-<script type="text/javascript" src="script_image.js"></script>
+  <script type="text/javascript" src="json.js"></script>
+  <script type="text/javascript" src="script_image.js"></script>
 
-<!-- <script type="module" src="script.js">
+  <!-- <script type="module" src="script.js">
     import * from "./script.js";
 	  var scene = getInitialScene(json);
 	  var img = getSceneImage(scene);
@@ -48,7 +66,8 @@
 	  <area shape="rect" coords='currentZone.x1 * w "," currentZone.y1 * h "," currentZone.x2 * w "," currentZone.y2 * h' href="" target="" alt="" />
 	  }
 </script> -->
-<!-- <script type="text/javascript" src="script_image.js"></script> -->
-<style>body{height:100%;}</style>
+  <!-- <script type="text/javascript" src="script_image.js"></script> -->
+</div>
 </body>
+
 </html>
