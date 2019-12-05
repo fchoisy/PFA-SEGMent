@@ -33,7 +33,8 @@ function clickzone(){
     let nb_zone = getCookieValue("nb_click_zones");
     nb_zone = parseInt(nb_zone);
     clickZones = getClickZonesByScenesId(scene_number);
-    let len = clikzones.length();
+    console.log(clickZones);
+    let len = clickZones.length;
     // let x1,x2,y1,y2;
     // for (let i=0;i<nb_zone;i++){
     //     x1=getCookieValue("coor_click_x1_"+i);
@@ -69,6 +70,7 @@ function isOnZone(X,Y){
     let len = clickZones.length;
     for(let i=0;i<len;i++){
         if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
+            console.log("Hey");
             return clickZones[i].id;
         }
     }
@@ -119,27 +121,27 @@ function getCookieValue(cname){
     i = i+1;
   }
   j=i
-  return cook.substring(ind+1,j);
+  return cook.substring(ind+1,j-1);
 }
 
 function changeScene(event, html, id){
   event.preventDefault();
-  $.getJSON( GameURL, function(data) {
-    var scene = getSceneByID(data,id);
-    var img = getSceneImage(scene);
-    var clickZones = getClickZones(scene);
-    const nbClickZones = clickZones.length;
-    document.cookie = "nb_click_zones=" + nbClickZones + ";";
-    for(var i = 0; i < nbClickZones; i++){
-      var zones = clickZones[i];
-      document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
-      document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
-      document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
-      document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
-    }
-    document.cookie = "bckg_path="+ img +";";
-    document.location.href = html;
-  });
+  // $.getJSON( GameURL, function(data) {
+  //   var scene = getSceneByID(data,id);
+  //   var img = getSceneImage(scene);
+  //   var clickZones = getClickZones(scene);
+  //   const nbClickZones = clickZones.length;
+  //   document.cookie = "nb_click_zones=" + nbClickZones + ";";
+  //   for(var i = 0; i < nbClickZones; i++){
+  //     var zones = clickZones[i];
+  //     document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
+  //     document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
+  //     document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
+  //     document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
+  //   }
+  //   document.cookie = "bckg_path="+ img +";";
+  //   document.location.href = html;
+  // });
 };
 
 
