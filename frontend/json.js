@@ -1,6 +1,6 @@
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
-//window.onload = initialise();
+window.onload = initialise();
 
 class clickZone {
   constructor(x1,y1,x2,y2,id) {
@@ -13,35 +13,30 @@ class clickZone {
 }
 
 //let GameURL;
-//var GameJson;
+var GameJson;
 //window.onload = loadJson();
 
 function initialise(){
-    GameJson = getCookieValue("json");
+    var str = window.sessionStorage.getItem("json");
+    //console.log(str);
+    GameJson = JSON.parse(str);
 }
 
 function loadJson(){
   //GameURL = "./Game/game.segment";
   //GameJson = jsonTest;
-// return new Promise (function(resolve,reject){
-//   $.ajax({
-//     type: 'GET',
-//     url: "./Game/game.segment",
-//     async: true,
-//     dataType: 'json',
-//     success: function (data) {
-//       GameJson=data;
-//     }
-//   });});
+return new Promise (function(resolve,reject){
+  $.ajax({
+    type: 'GET',
+    url: "./Game/game.segment",
+    async: true,
+    dataType: 'json',
+    success: function (data) {
+      window.sessionStorage.setItem("json",JSON.stringify(data));
+    }
+  });});
 }
 
-function returnJson(){
-  return GameJson;
-  // loadJson().then(function(result){
-  //   GameJson = result;
-  //   console.log("coucou2");
-  // });
-}
 
 
 function getSceneBackgroundById(id){
@@ -50,8 +45,6 @@ function getSceneBackgroundById(id){
 
 function getScenes(){ //Returns all the scenes from the json file
   var json = GameJson;
-  console.log(GameJson);
-  console.log(json);
   return json.Document.Process.Scenes;
 }
 
@@ -62,11 +55,8 @@ function getIDScene(scene){
 function getSceneByID(id){ // returns the scene number id. Note : les scènes commencent à id = 0
   var json = GameJson;
   const scenes = getScenes(json);
-  console.log(scenes);
   const length = Object.keys(scenes).length;
   for (var i = 0; i < length; i++){
-    console.log(scenes[i].id);
-    console.log(id);
     if (scenes[i].id == id){
       return scenes[i];
     }
@@ -95,7 +85,6 @@ function getClickZonesByScenesId(id){ //Returns array where each element contain
     let areas = scene.ClickAreas;
     // var i = 0;
     //console.log(areas.length);
-    console.log(areas[0]);
     // while (i<=areas.length){
     // 	if (i != areas.length){
     //
@@ -115,7 +104,6 @@ function getClickZonesByScenesId(id){ //Returns array where each element contain
     let array = [];
     for(var i = 0; i < areas.length; i++){
       let currentArea = areas[i];
-      console.log(currentArea.Path);
       let clickzone = new clickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],currentArea.Size[1] + currentArea.Pos[1],getPointedScene(currentArea.Path));
       array.push(clickzone);
     }
@@ -130,22 +118,21 @@ function getClickZonesByScenesId(id){ //Returns array where each element contain
       //   console.log(area_arrays[i]);
       //   console.log("in for : " + i);
       // }
-    console.log(area_arrays);
     return array;
     //return area_arrays;
 }
 
 function getPointedScene(path){
-    let scene = getSceneByID(path.substring(path.lengt-1,path.length));
-    scene = GameJson.Document.Process;
+//     const leng = path.length - 1;
+//     let scene = getSceneByID(path.substring(leng,path.length));
+    let scene = GameJson.Document.Process;
     let len = scene.Transitions.length;
     for(let i=0;i<len;i++){
-        if(scene.Transitions[i].Which == "ClickAreaToScene"){
+        if(scene.Transitions[i].Transition.Which == "ClickAreaToScene"){
             let elem = scene.Transitions[i].Transition;
             if(elem.ClickAreaToScene.From == path){
-                len = elem.To.length();
-                console.log("To" + elem.To);
-                return parseInt(elem.To.substring(len-1,len));
+                len = elem.ClickAreaToScene.To.length - 1;
+                return parseInt(elem.ClickAreaToScene.To.substring(len,elem.ClickAreaToScene.To.length));
             }
         }
     }
@@ -200,7 +187,7 @@ function getCookieValue(cname){
 
 
 
-let GameJson = {
+let GameJsonTest = {
     "Document": {
         "ObjectName": "SEGMentDocument",
         "Process": {

@@ -30,10 +30,8 @@ function backgroundModifier(){
 };
 
 function clickzone(){
-    let nb_zone = getCookieValue("nb_click_zones");
-    nb_zone = parseInt(nb_zone);
+    scene_number = getCookieValue("scene_number");
     clickZones = getClickZonesByScenesId(scene_number);
-    console.log(clickZones);
     let len = clickZones.length;
     // let x1,x2,y1,y2;
     // for (let i=0;i<nb_zone;i++){
@@ -52,12 +50,13 @@ function clickzone(){
 
 
 function verifyClick(event){
-  //console.log(event);
   const X = event.clientX;
   const Y = event.clientY;
   if(isOnZone(X,Y)>=0){
     if(window.location.pathname == "/pong.html"){
       changeScene(event, "ping.html", isOnZone(X, Y));
+    } else {
+      changeScene(event, "pong.html", isOnZone(X, Y));
     }
   }
 }
@@ -70,7 +69,6 @@ function isOnZone(X,Y){
     let len = clickZones.length;
     for(let i=0;i<len;i++){
         if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
-            console.log("Hey");
             return clickZones[i].id;
         }
     }
@@ -121,11 +119,24 @@ function getCookieValue(cname){
     i = i+1;
   }
   j=i
-  return cook.substring(ind+1,j-1);
+  return cook.substring(ind+1,j);
 }
 
 function changeScene(event, html, id){
   event.preventDefault();
+  let cook = document.cookie;
+  let i =0;
+  while(cook[i] != ";" && i<cook.length){
+      i = i + 1;
+  }
+  // var stri = document.cookie.substring(i,document.cookie.length);
+  // console.log("stri : " + stri);
+  // document.cookie = "json=;expires=Thu, 01 Jan 1970 00:00:01 GMT"
+  // //document.cookie = "scene_number=;expires=Thu, 01 Jan 1970 00:00:01 GMT"
+  // console.log(document.cookie);
+  // console.log("Ho " + document.cookie);
+  document.cookie = "scene_number=" + id + ";";// + stri);
+  //
   // $.getJSON( GameURL, function(data) {
   //   var scene = getSceneByID(data,id);
   //   var img = getSceneImage(scene);
@@ -140,7 +151,7 @@ function changeScene(event, html, id){
   //     document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
   //   }
   //   document.cookie = "bckg_path="+ img +";";
-  //   document.location.href = html;
+  document.location.href = html;
   // });
 };
 

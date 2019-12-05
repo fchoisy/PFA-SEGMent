@@ -2,17 +2,12 @@
 
 let json;
 
-
+window.onload = loadJson();
 
 
 function startScene(event){
-  console.log("coucou");
   // let json = await returnJson();
-  let json = returnJson();
-  console.log("salut");
   event.preventDefault();
-  document.cookie = "scene_number=" + getIDScene(getInitialScene()) + ";"
-  console.log(json);
-  document.cookie = "json=" + json +";";
+  document.cookie = "scene_number=" + getIDScene(getInitialScene()) + ";";
   document.location.href = 'ping.html';
 };
