@@ -86,7 +86,7 @@ function isOnZone(X,Y){
     else
 	width = parseInt(window.innerWidth);
     let height = parseInt(window.innerHeight);
-    X = X / (width+delta);
+    X = (X - delta) / width;
     Y = Y / height;
     let len = clickZones.length;
     for(let i=0;i<len;i++){
