@@ -2,6 +2,7 @@
 
 let img_path;
 let clickZones = [];
+let imgSize = [];
 
 class clickZone {
   constructor(x1,y1,x2,y2) {
@@ -15,8 +16,9 @@ class clickZone {
 window.onload = initialisation();
 
 function initialisation(){
-  backgroundModifier();
-  clickzone();
+    backgroundModifier();
+    clickzone();
+    img_Size();
 }
 
 function backgroundModifier(){
@@ -55,6 +57,16 @@ function clickzone(){
 }
 
 
+function img_Size(){
+    var w = getCookieValue("img_width");
+    var h = getCookieValue("img_height");
+    w = parseInt(w);
+    h = parseInt(h);
+    imgSize.push(w,h);
+}
+
+
+
 function verifyClick(event){
     //console.log(event);
     const X = event.clientX;
@@ -65,9 +77,16 @@ function verifyClick(event){
 }
 
 function isOnZone(X,Y){
-    let width = parseInt(window.innerWidth);
+    let width = 0;
+    let delta = 0;
+    if (parseInt(window.innerWidth) >= imgSize[0]){
+	width = imgSize[0]; // + (parseInt(window.innerWidth) - imgSize[0]) / 2;
+	delta = (parseInt(window.innerWidth) - imgSize[0]) / 2;
+    }
+    else
+	width = parseInt(window.innerWidth);
     let height = parseInt(window.innerHeight);
-    X = X / width;
+    X = X / (width+delta);
     Y = Y / height;
     let len = clickZones.length;
     for(let i=0;i<len;i++){
@@ -77,6 +96,7 @@ function isOnZone(X,Y){
     }
     return -1;
 }
+
 function changeCursor(event){
     let X = event.clientX;
     let Y = event.clientY;

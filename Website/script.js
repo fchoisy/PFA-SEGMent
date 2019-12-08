@@ -5,29 +5,21 @@ const GameURL = "../Game/game.segment"
 function changeScene(event){
   event.preventDefault();
   $.getJSON( GameURL, function(data) {
-    var scene = getSceneByID(data,1);
-    // var ClickZones = getClickZones(scene);
-    var img = getSceneImage(scene);
-    // var w = img.width; // s'initialise à NaN je sais pas pourquoi
-	  // var h = img.height;
-    var clickZones = getClickZones(scene);
-    const nbClickZones = clickZones.length;
-    document.cookie = "nb_click_zones=" + nbClickZones + ";";
-    for(var i = 0; i < nbClickZones; i++){
-      var zones = clickZones[i];
-      // var zonex1 = zones.x1 * w; //cf plus haut
-      // console.log(zonex1);
-      // var zonex2 = zones.x2 * w;
-      // console.log(zonex2);
-      // var zoney1 = zones.y1 * h;
-      // console.log(zoney1);
-      // var zoney2 = zones.y2 * h;
-      // console.log(zoney2);
-      document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
-      document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
-      document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
-      document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
-    }
+      var scene = getSceneByID(data,1);
+      var img = getSceneImage(scene);
+      var size = getImageSize(scene);
+      document.cookie = "img_width=" + size[0].width + ";";
+      document.cookie = "img_height=" + size[0].height + ";";
+      var clickZones = getClickZones(scene);
+      const nbClickZones = clickZones.length;
+      document.cookie = "nb_click_zones=" + nbClickZones + ";";
+      for(var i = 0; i < nbClickZones; i++){
+	  var zones = clickZones[i];
+	  document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
+	  document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
+	  document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
+	  document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
+      }
     document.cookie = "bckg_path="+ img +";";
     document.location.href = 'display_picture.html';
   });
@@ -40,6 +32,19 @@ function getScenes(json){ //Returns all the scenes from the json file
 function getSceneImage(scene){ //Returns path of the background image from the scene
   return "../Game/"+scene.Image;
 }
+
+function getImageSize(scene){
+    let image_size = [];
+    image_size.push(
+	{
+	'width': scene.ImageSize[0],
+	'height': scene.ImageSize[1]
+	}
+    );
+    console.log(image_size);
+    return image_size;
+}
+
 
 function getClickZones(scene){ //Returns array where each element contains the four positions of the four edges of the click zone, relatively to the image size.
 
