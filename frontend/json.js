@@ -28,11 +28,12 @@ function loadJson(){
 return new Promise (function(resolve,reject){
   $.ajax({
     type: 'GET',
-    url: "./Game/game.segment",
+    url: "../Game/game.segment",
     async: true,
     dataType: 'json',
-    success: function (data) {
-      window.sessionStorage.setItem("json",JSON.stringify(data));
+      success: function (data) {
+	  GameJson = data;
+	  window.sessionStorage.setItem("json",JSON.stringify(data));
     }
   });});
 }
@@ -69,6 +70,21 @@ function getSceneImage(scene){ //Returns path of the background image from the s
   return "../Game/"+scene.Image;
 }
 
+function getImageSize(scene){
+    let image_size = [];
+    image_size.push(
+	{
+	'width': scene.ImageSize[0],
+	'height': scene.ImageSize[1]
+	}
+    );
+    console.log(image_size);
+    return image_size;
+}
+
+function getImageSizeByID(id){
+    return getImageSize(getSceneByID(id));
+}
 
 function getInitialScene(){ // NOTE : different from get_scene_by_id because there is a special type if a scene is a initial scene (i.e SceneType = 1; Final = 2; Other = 0)
   const scenes = getScenes();

@@ -6,15 +6,16 @@ const FADE_IN_TIME = 1500;
 let img_path;
 let clickZones = [];
 let scene_number;
-
+let imgSize = [];
 
 
 window.onload = initialisation();
 
 function initialisation() {
-  backgroundModifier();
-  clickzone();
-  $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+    backgroundModifier();
+    clickzone();
+    imgsize();
+    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
 function backgroundModifier() {
@@ -52,6 +53,11 @@ function clickzone() {
   // y2 = parseInt(parseFloat(y2)*500);
 }
 
+function imgsize(){
+    scene_number = getCookieValue("scene_number");
+    imgSize = getImageSizeByID(scene_number);
+}
+
 function verifyClick(event) {
   const X = event.clientX;
   const Y = event.clientY;
@@ -64,20 +70,36 @@ function verifyClick(event) {
   }
 }
 
-function isOnZone(X, Y) {
-  let width = parseInt(window.innerWidth);
-  let height = parseInt(window.innerHeight);
-  X = X / width;
-  Y = Y / height;
-  let len = clickZones.length;
-  for (let i = 0; i < len; i++) {
-    if (X >= clickZones[i].x1 && X <= clickZones[i].x2 && Y >= clickZones[i].y1 && Y <= clickZones[i].y2) {
-      return clickZones[i].id;
+function isOnZone(X,Y){
+    let width = 0;
+    let height = 0;
+    let Dx = 0;
+    let Dy = 0;
+    
+    if (parseInt(window.innerWidth) >= imgSize[0].width){
+	width = imgSize[0].width; 
+	Dx = (parseInt(window.innerWidth) - imgSize[0].width) / 2;
     }
-  }
-  return -1;
+    else
+	width = parseInt(window.innerWidth);
+    
+    if (parseInt(window.innerHeight) >= imgSize[0].height){
+	height = imgSize[0].height;
+	Dy = (parseInt(window.innerHeight) - imgSize[0].height) / 2;
+    }
+    else
+	height = parseInt(window.innerHeight);
+    
+    X = (X - Dx) / width;
+    Y = (Y - Dy) / height;
+    let len = clickZones.length;
+    for(let i=0;i<len;i++){
+        if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
+            return i;
+        }
+    }
+    return -1;
 }
-
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
