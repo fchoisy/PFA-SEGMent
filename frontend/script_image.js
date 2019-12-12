@@ -13,6 +13,7 @@ window.onload = initialisation();
 
 function initialisation() {
     backgroundModifier();
+    //playSound('Sounds/Sound.mp3');
     clickzone();
     imgsize();
     $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
@@ -62,6 +63,7 @@ function verifyClick(event) {
   const X = event.clientX;
   const Y = event.clientY;
   if (isOnZone(X, Y) >= 0) {
+    playSoundTest(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
     if (window.location.pathname == "/pong.html") {
       changeScene(event, "ping.html", isOnZone(X, Y));
     } else {
@@ -70,26 +72,37 @@ function verifyClick(event) {
   }
 }
 
+function playSoundTest(clickZoneId){
+  var Scene = getSceneByID(scene_number);
+  console.log(Scene);
+  var clickAreas = getClickAreas(Scene);
+  console.log(clickAreas);
+  var clickArea = getClickAreaByID(clickAreas,clickZoneId);
+  console.log(clickArea);
+  var SoundPath = getSoundPath(clickArea);
+  playSound(SoundPath);
+}
+
 function isOnZone(X,Y){
     let width = 0;
     let height = 0;
     let Dx = 0;
     let Dy = 0;
-    
+
     if (parseInt(window.innerWidth) >= imgSize[0].width){
-	width = imgSize[0].width; 
+	width = imgSize[0].width;
 	Dx = (parseInt(window.innerWidth) - imgSize[0].width) / 2;
     }
     else
 	width = parseInt(window.innerWidth);
-    
+
     if (parseInt(window.innerHeight) >= imgSize[0].height){
 	height = imgSize[0].height;
 	Dy = (parseInt(window.innerHeight) - imgSize[0].height) / 2;
     }
     else
 	height = parseInt(window.innerHeight);
-    
+
     X = (X - Dx) / width;
     Y = (Y - Dy) / height;
     let len = clickZones.length;

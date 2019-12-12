@@ -38,8 +38,6 @@ return new Promise (function(resolve,reject){
   });});
 }
 
-
-
 function getSceneBackgroundById(id){
     return getSceneImage(getSceneByID(id));
 }
@@ -51,6 +49,17 @@ function getScenes(){ //Returns all the scenes from the json file
 
 function getIDScene(scene){
   return scene.id;
+}
+
+function playSound(SoundPath){
+  console.log('here');
+  if(SoundPath == ""){
+    console.log("Sound not defined !");
+  }
+  else{
+    var audio = new Audio('Game/' + SoundPath);
+    audio.play();
+  }
 }
 
 function getSceneByID(id){ // returns the scene number id. Note : les scènes commencent à id = 0
@@ -137,6 +146,25 @@ function getClickZonesByScenesId(id){ //Returns array where each element contain
     return array;
     //return area_arrays;
 }
+
+function getClickAreas(scene){
+  return scene.ClickAreas;
+}
+
+function getClickAreaByID(clickArea,id){
+  for (var i = 0; i < clickArea.length; i++) {
+    if(clickArea[i].id == id){
+      return clickArea[i];
+    }
+  }
+  console.log("clickArea " + id + "not found");
+}
+
+//Plays the sound described in the parsed part of JSON element
+function getSoundPath(element){
+    return element.Sound.Path;
+}
+
 
 function getPointedScene(path){
 //     const leng = path.length - 1;
