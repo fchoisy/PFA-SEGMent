@@ -52,12 +52,23 @@ function getIDScene(scene){
 }
 
 function playSound(SoundPath){
-  console.log('here');
   if(SoundPath == ""){
     console.log("Sound not defined !");
   }
   else{
     var audio = new Audio('Game/' + SoundPath);
+    audio.loop = false;
+    audio.play();
+  }
+}
+
+function playSoundLoop(SoundPath){
+  if(SoundPath == ""){
+    console.log("Sound not defined !");
+  }
+  else{
+    var audio = new Audio('Game/' + SoundPath);
+    audio.loop = true;
     audio.play();
   }
 }
