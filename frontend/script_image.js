@@ -108,7 +108,7 @@ function isOnZone(X,Y){
     let len = clickZones.length;
     for(let i=0;i<len;i++){
         if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
-            return i;
+            return clickZones[i].id;
         }
     }
     return -1;
