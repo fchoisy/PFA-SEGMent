@@ -94,27 +94,16 @@ function playSound(SoundPath,loop=false,volume=1.0){
   }
   else{
     var audio = new Audio('Game/' + SoundPath);
-    audio.loop = false;
-    if (loop == true){
-      audio.loop = true;
-    }
-    audio.volume=volume;
+    audio.loop = loop;
+    audio.volume = volume;
     audio.play();
   }
 }
 
-/*
-function playSoundLoop(SoundPath){
-  if(SoundPath == ""){
-    console.log("Sound not defined !");
-  }
-  else{
-    var audio = new Audio('Game/' + SoundPath);
-    audio.loop = true;
-    audio.play();
-  }
-}*/
-
+/**
+ * Plays the sound of the current scene
+ *
+ */
 function playSoundScene(){
   let scene = getSceneByID(scene_number);
   let SoundPath = scene.Ambience.Path;
@@ -152,6 +141,11 @@ function getSceneImage(scene) {
   return "../Game/" + scene.Image;
 }
 
+/**
+ * Returns an array containing the current width and height of the scene
+ *
+ * @param {Scene object} scene
+ */
 function getImageSize(scene) {
   let image_size = [];
   image_size.push({
