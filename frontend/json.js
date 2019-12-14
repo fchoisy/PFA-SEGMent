@@ -80,28 +80,30 @@ function getScenes() {
 function getSceneId(scene) {
   return scene.id;
 }
+
 /**
  * Plays a sound
  * 
  * @param {string} soundPath the path of the sound to play
+ * @param {bool} loop wether to loop the sound or not
+ * @param {float} volume the volume at which the sound should be played
  */
-function playSound(soundPath) {
-  if (soundPath == "") {
-    console.error("Sound not defined !");
-  } else {
-    var audio = new Audio('Game/' + soundPath);
-    // TODO : le chargement par Audio est asynchrone
-    // donc la lecture ne devrait pas commencer tout de suite
+function playSound(SoundPath,loop=false,volume=1.0){
+  if(SoundPath == ""){
+    console.log("Sound not defined !");
+  }
+  else{
+    var audio = new Audio('Game/' + SoundPath);
     audio.loop = false;
+    if (loop == true){
+      audio.loop = true;
+    }
+    audio.volume=volume;
     audio.play();
   }
 }
 
-/**
- * Plays a looping sound
- * 
- * @param {string} soundPath the path of the sound to play
- */
+/*
 function playSoundLoop(SoundPath){
   if(SoundPath == ""){
     console.log("Sound not defined !");
@@ -111,6 +113,14 @@ function playSoundLoop(SoundPath){
     audio.loop = true;
     audio.play();
   }
+}*/
+
+function playSoundScene(){
+  let scene = getSceneByID(scene_number);
+  let SoundPath = scene.Ambience.Path;
+  let loop = scene.Ambience.Repeat;
+  let volume = scene.Ambience.Volume;
+  playSound(SoundPath,loop,volume);
 }
 
 /**

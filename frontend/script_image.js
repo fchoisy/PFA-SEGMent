@@ -15,11 +15,11 @@ window.onload = initialisation();
  * Function to be called when scene is opened
  */
 function initialisation() {
-  backgroundModifier();
-  //playSound('Sounds/Sound.mp3');
-  clickzone();
-  imgsize();
-  $("#fade").fadeOut(FADE_OUT_TIME);
+    backgroundModifier();
+    playSoundScene();
+    clickzone();
+    imgsize();
+    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
 /**
