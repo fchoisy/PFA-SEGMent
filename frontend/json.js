@@ -51,17 +51,22 @@ function getIDScene(scene){
   return scene.id;
 }
 
-function playSound(SoundPath){
+function playSound(SoundPath,loop=false,volume=1.0){
   if(SoundPath == ""){
     console.log("Sound not defined !");
   }
   else{
     var audio = new Audio('Game/' + SoundPath);
     audio.loop = false;
+    if (loop == true){
+      audio.loop = true;
+    }
+    audio.volume=volume;
     audio.play();
   }
 }
 
+/*
 function playSoundLoop(SoundPath){
   if(SoundPath == ""){
     console.log("Sound not defined !");
@@ -71,7 +76,16 @@ function playSoundLoop(SoundPath){
     audio.loop = true;
     audio.play();
   }
+}*/
+
+function playSoundScene(){
+  let scene = getSceneByID(scene_number);
+  let SoundPath = scene.Ambience.Path;
+  let loop = scene.Ambience.Repeat;
+  let volume = scene.Ambience.Volume;
+  playSound(SoundPath,loop,volume);
 }
+
 
 function getSceneByID(id){ // returns the scene number id. Note : les scènes commencent à id = 0
   var json = GameJson;

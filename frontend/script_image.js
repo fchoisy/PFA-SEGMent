@@ -13,7 +13,7 @@ window.onload = initialisation();
 
 function initialisation() {
     backgroundModifier();
-    //playSound('Sounds/Sound.mp3');
+    playSoundScene();
     clickzone();
     imgsize();
     $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
