@@ -115,6 +115,7 @@ function getInitialScene(){ // NOTE : different from get_scene_by_id because the
     }
   }
 }
+
 function getClickZonesByScenesId(id){ //Returns array where each element contains the four positions of the four edges of the click zone, relatively to the image size.
     const scene = getSceneByID(id);
     let area_arrays = [];
@@ -137,10 +138,17 @@ function getClickZonesByScenesId(id){ //Returns array where each element contain
     //     console.log("in if : " + i);
   	//   }
     // }
+
+    /*Commentaires:
+    La position de l'image est bien relative par rapport à la taille de l'image.
+    Le size est calculé proportionnellement par rapport à la longueur de l'image.
+    */
     let array = [];
     for(var i = 0; i < areas.length; i++){
       let currentArea = areas[i];
-      let clickzone = new clickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],currentArea.Size[1] + currentArea.Pos[1],getPointedScene(currentArea.Path));
+      let heightPourcentage = currentArea.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
+      //let clickzone = new clickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],currentArea.Size[1] + currentArea.Pos[1],getPointedScene(currentArea.Path));
+      let clickzone = new clickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path));
       array.push(clickzone);
     }
       // area_arrays.push(
@@ -157,6 +165,7 @@ function getClickZonesByScenesId(id){ //Returns array where each element contain
     return array;
     //return area_arrays;
 }
+
 
 function getClickAreas(scene){
   return scene.ClickAreas;

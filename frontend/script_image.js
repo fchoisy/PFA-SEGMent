@@ -84,6 +84,30 @@ function playSoundTest(clickZoneId){
 }
 
 function isOnZone(X,Y){
+    //console.log("scene "+scene_number);
+
+    let winWidth=parseInt(window.innerWidth);
+    let winHeight=parseInt(window.innerHeight);
+    let imgWidth=imgSize[0].width;
+    let imgHeight=imgSize[0].height;
+
+    let scale;
+    let dx=0;
+    let dy=0;
+    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+      scale = 1.0/(imgWidth/winWidth);
+      dy = (winHeight-(imgHeight*scale))/2;
+    }else{                                        //Black borders on the left and the right of the window
+      scale=1.0/(imgHeight/winHeight);
+      dx=(winWidth-(imgWidth*scale))/2;
+    }
+
+    X = (X-dx)/(winWidth-2*dx);
+    Y = (Y-dy)/(winHeight-2*dy);
+
+    //console.log(X,Y);
+
+/*
     let width = 0;
     let height = 0;
     let Dx = 0;
@@ -105,6 +129,9 @@ function isOnZone(X,Y){
 
     X = (X - Dx) / width;
     Y = (Y - Dy) / height;
+
+    */
+    //console.log(clickZones);
     let len = clickZones.length;
     for(let i=0;i<len;i++){
         if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
@@ -113,6 +140,7 @@ function isOnZone(X,Y){
     }
     return -1;
 }
+
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
