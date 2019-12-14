@@ -113,34 +113,61 @@ function playSoundTest(clickZoneId){
  * @returns id of the corresponding click zone, -1 if there is none
  */
 function isOnZone(X,Y){
-  let width = 0;
-  let height = 0;
-  let Dx = 0;
-  let Dy = 0;
-  
-  if (parseInt(window.innerWidth) >= imgSize[0].width){
-    width = imgSize[0].width;
-    Dx = (parseInt(window.innerWidth) - imgSize[0].width) / 2;
-  }
-  else
-  width = parseInt(window.innerWidth);
-  
-  if (parseInt(window.innerHeight) >= imgSize[0].height){
-    height = imgSize[0].height;
-    Dy = (parseInt(window.innerHeight) - imgSize[0].height) / 2;
-  }
-  else
-  height = parseInt(window.innerHeight);
-  
-  X = (X - Dx) / width;
-  Y = (Y - Dy) / height;
-  let len = clickZones.length;
-  for(let i=0;i<len;i++){
-    if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
-      return i;
+    //console.log("scene "+scene_number);
+
+    let winWidth=parseInt(window.innerWidth);
+    let winHeight=parseInt(window.innerHeight);
+    let imgWidth=imgSize[0].width;
+    let imgHeight=imgSize[0].height;
+
+    let scale;
+    let dx=0;
+    let dy=0;
+    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+      scale = 1.0/(imgWidth/winWidth);
+      dy = (winHeight-(imgHeight*scale))/2;
+    }else{                                        //Black borders on the left and the right of the window
+      scale=1.0/(imgHeight/winHeight);
+      dx=(winWidth-(imgWidth*scale))/2;
     }
-  }
-  return -1;
+
+    X = (X-dx)/(winWidth-2*dx);
+    Y = (Y-dy)/(winHeight-2*dy);
+
+    //console.log(X,Y);
+
+/*
+    let width = 0;
+    let height = 0;
+    let Dx = 0;
+    let Dy = 0;
+
+    if (parseInt(window.innerWidth) >= imgSize[0].width){
+	width = imgSize[0].width;
+	Dx = (parseInt(window.innerWidth) - imgSize[0].width) / 2;
+    }
+    else
+	width = parseInt(window.innerWidth);
+
+    if (parseInt(window.innerHeight) >= imgSize[0].height){
+	height = imgSize[0].height;
+	Dy = (parseInt(window.innerHeight) - imgSize[0].height) / 2;
+    }
+    else
+	height = parseInt(window.innerHeight);
+
+    X = (X - Dx) / width;
+    Y = (Y - Dy) / height;
+
+    */
+    //console.log(clickZones);
+    let len = clickZones.length;
+    for(let i=0;i<len;i++){
+        if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
+            return clickZones[i].id;
+        }
+    }
+    return -1;
 }
 
 /**

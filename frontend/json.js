@@ -80,7 +80,6 @@ function getScenes() {
 function getSceneId(scene) {
   return scene.id;
 }
-
 /**
  * Plays a sound
  * 
@@ -93,6 +92,23 @@ function playSound(soundPath) {
     var audio = new Audio('Game/' + soundPath);
     // TODO : le chargement par Audio est asynchrone
     // donc la lecture ne devrait pas commencer tout de suite
+    audio.loop = false;
+    audio.play();
+  }
+}
+
+/**
+ * Plays a looping sound
+ * 
+ * @param {string} soundPath the path of the sound to play
+ */
+function playSoundLoop(SoundPath){
+  if(SoundPath == ""){
+    console.log("Sound not defined !");
+  }
+  else{
+    var audio = new Audio('Game/' + SoundPath);
+    audio.loop = true;
     audio.play();
   }
 }
@@ -169,12 +185,16 @@ function getInitialScene() {
  */
 function getClickZonesByScenesId(id) {
   const scene = getSceneByID(id);
-  let area_arrays = [];
   let areas = scene.ClickAreas;
+  /*Commentaires:
+  La position de l'image est bien relative par rapport à la taille de l'image.
+  Le size est calculé proportionnellement par rapport à la longueur de l'image.
+  */
   let array = [];
-  for (var i = 0; i < areas.length; i++) {
+  for(var i = 0; i < areas.length; i++){
     let currentArea = areas[i];
-    let clickzone = new ClickZone(currentArea.Pos[0], currentArea.Pos[1], currentArea.Size[0] + currentArea.Pos[0], currentArea.Size[1] + currentArea.Pos[1], getPointedScene(currentArea.Path));
+    let heightPourcentage = currentArea.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
+    let clickzone = new clickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path));
     array.push(clickzone);
   }
   return array;
