@@ -11,14 +11,21 @@ let imgSize = [];
 
 window.onload = initialisation();
 
+/**
+ * Function to be called when scene is opened
+ */
 function initialisation() {
-    backgroundModifier();
-    //playSound('Sounds/Sound.mp3');
-    clickzone();
-    imgsize();
-    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+  backgroundModifier();
+  //playSound('Sounds/Sound.mp3');
+  clickzone();
+  imgsize();
+  $("#fade").fadeOut(FADE_OUT_TIME);
 }
 
+/**
+ * Changes the background of "ping.html" (or "pong.html")
+ * according to 'scene_number'
+ */
 function backgroundModifier() {
   //let elem = document.getElementById('backg');
   //elem.setAttribute("width",window.innerWidth);
@@ -35,6 +42,9 @@ function backgroundModifier() {
   //return(elem.backgroundImage.width,elem.backgroundImage.height);
 };
 
+/**
+ * Initializes the global array 'clickZones'
+ */
 function clickzone() {
   scene_number = getCookieValue("scene_number");
   clickZones = getClickZonesByScenesId(scene_number);
@@ -54,11 +64,19 @@ function clickzone() {
   // y2 = parseInt(parseFloat(y2)*500);
 }
 
+/**
+ * Initializes the global field 'imgSize'
+ */
 function imgsize(){
-    scene_number = getCookieValue("scene_number");
-    imgSize = getImageSizeByID(scene_number);
+  scene_number = getCookieValue("scene_number");
+  imgSize = getImageSizeByID(scene_number);
 }
 
+/**
+ * Check wether a mouse click is inside a click zone
+ * and launches 'changeScene' if it is
+ * @param {MouseEvent} event 
+ */
 function verifyClick(event) {
   const X = event.clientX;
   const Y = event.clientY;
@@ -72,6 +90,10 @@ function verifyClick(event) {
   }
 }
 
+/**
+ * Play sound associated with clickZoneId
+ * @param {*} clickZoneId 
+ */
 function playSoundTest(clickZoneId){
   var Scene = getSceneByID(scene_number);
   console.log(Scene);
@@ -83,36 +105,48 @@ function playSoundTest(clickZoneId){
   playSound(SoundPath);
 }
 
+/**
+ * Checks wether the point of coordinates (X,Y) is inside a click zone
+ * @param {coordinate} X 
+ * @param {coordinate} Y 
+ * 
+ * @returns id of the corresponding click zone, -1 if there is none
+ */
 function isOnZone(X,Y){
-    let width = 0;
-    let height = 0;
-    let Dx = 0;
-    let Dy = 0;
-
-    if (parseInt(window.innerWidth) >= imgSize[0].width){
-	width = imgSize[0].width;
-	Dx = (parseInt(window.innerWidth) - imgSize[0].width) / 2;
+  let width = 0;
+  let height = 0;
+  let Dx = 0;
+  let Dy = 0;
+  
+  if (parseInt(window.innerWidth) >= imgSize[0].width){
+    width = imgSize[0].width;
+    Dx = (parseInt(window.innerWidth) - imgSize[0].width) / 2;
+  }
+  else
+  width = parseInt(window.innerWidth);
+  
+  if (parseInt(window.innerHeight) >= imgSize[0].height){
+    height = imgSize[0].height;
+    Dy = (parseInt(window.innerHeight) - imgSize[0].height) / 2;
+  }
+  else
+  height = parseInt(window.innerHeight);
+  
+  X = (X - Dx) / width;
+  Y = (Y - Dy) / height;
+  let len = clickZones.length;
+  for(let i=0;i<len;i++){
+    if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
+      return i;
     }
-    else
-	width = parseInt(window.innerWidth);
-
-    if (parseInt(window.innerHeight) >= imgSize[0].height){
-	height = imgSize[0].height;
-	Dy = (parseInt(window.innerHeight) - imgSize[0].height) / 2;
-    }
-    else
-	height = parseInt(window.innerHeight);
-
-    X = (X - Dx) / width;
-    Y = (Y - Dy) / height;
-    let len = clickZones.length;
-    for(let i=0;i<len;i++){
-        if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
-            return i;
-        }
-    }
-    return -1;
+  }
+  return -1;
 }
+
+/**
+ * Changes the mouse pointer icon in reponse to an event
+ * @param {MouseEvent} event 
+ */
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
@@ -123,6 +157,11 @@ function changeCursor(event) {
   document.body.style.cursor = 'default';
 }
 
+/**
+ * Returns the index of cookie whose name is 'cname' in 'cook'
+ * @param {*} cname 
+ * @param {*} cook 
+ */
 function getIndexName(cname, cook) {
   var toSearch = cname + "=";
   var i = 0;
@@ -145,6 +184,10 @@ function getIndexName(cname, cook) {
   return -1;
 }
 
+/**
+ * Get the value of the cookie whose name is 'cname'
+ * @param {string} cname 
+ */
 function getCookieValue(cname) {
   const cook = document.cookie;
   var ind = getIndexName(cname, cook);
@@ -160,6 +203,12 @@ function getCookieValue(cname) {
   return cook.substring(ind + 1, j);
 }
 
+/**
+ * Fades in the screen and moves to a new scene
+ * @param {Event} event (ignored)
+ * @param {string} html path of page to go to
+ * @param {number} id id of scene to go to
+ */
 function changeScene(event, html, id) {
   event.preventDefault();
   $("#fade").fadeIn(FADE_IN_TIME, () => {

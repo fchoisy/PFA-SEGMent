@@ -6,8 +6,7 @@ window.onload = loadJson();
 
 
 function startScene(event){
-  // let json = await returnJson();
   event.preventDefault();
-  document.cookie = "scene_number=" + getIDScene(getInitialScene()) + ";";
+  document.cookie = "scene_number=" + getSceneId(getInitialScene()) + ";";
   document.location.href = 'ping.html';
 };
