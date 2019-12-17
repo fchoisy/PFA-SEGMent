@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+
+<html id="html" class="html-class">
+<!-- Inline CSS will be inserted by JS here in the html tag -->
+
+<head>
+  <!-- Type d'encodage -->
+  <meta charset="utf-8">
+  <!-- Sert à interdire le mode de compatibilité sur IE -->
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <!-- Permet de fixer la taille de la zone visible par l'utilisateur -->
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- jQuery is is released under the terms of the MIT license https://jquery.org/license/ -->
+
+  <title>Bienvenue</title>
+
+  <style id="style">
+    .html-class {
+      /* Default style, not to be touched by JS */
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: url("") no-repeat center fixed;
+      background-color: black;
+      background-size: contain;
+      -webkit-background-size: contain;
+      cursor: wait;
+    }
+
+    body {
+      height: 100%;
+    }
+
+    #fade {
+      /* To be above all other elements */
+      z-index: 100;
+      position:fixed;
+      padding:0;
+      margin:0;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      background-color:rgba(255,255,255);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Element for fade in & fade out transitions -->
+  <div id="fade"> 
+  <script type="text/javascript" src="json.js"></script>
+  <script type="text/javascript" src="script_image.js"></script>
+</div>
+</body>
+
+</html>
