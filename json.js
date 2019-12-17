@@ -204,7 +204,7 @@ function getClickZonesByScenesId(id) {
   for(var i = 0; i < areas.length; i++){
     let currentArea = areas[i];
     let heightPourcentage = currentArea.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
-    let clickzone = new clickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path));
+    let clickzone = new ClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path));
     array.push(clickzone);
   }
   return array;
