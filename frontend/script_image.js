@@ -5,6 +5,7 @@ const FADE_IN_TIME = 1500;
 
 let img_path;
 let clickZones = [];
+let backClickZones = [];
 let scene_number;
 let imgSize = [];
 
@@ -15,10 +16,14 @@ window.onload = initialisation();
  * Function to be called when scene is opened
  */
 function initialisation() {
-    backgroundModifier();
-    playSoundScene();
-    clickzone();
-    imgsize();
+    scene_number = getLastElem(getCookieValue("scene_number"));
+    let isback = getCookieValue("isback");
+    if(!(isback == "true")){
+      backgroundModifier();
+    }
+      playSoundScene();
+      clickzone();
+      imgsize();
     $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
@@ -31,7 +36,7 @@ function backgroundModifier() {
   //elem.setAttribute("width",window.innerWidth);
   //elem.setAttribute("height",window.innerHeight);
   //console.log(document.cookie);
-  scene_number = getCookieValue("scene_number");
+  scene_number = getLastElem(getCookieValue("scene_number"));
   img_path = getSceneBackgroundById(parseInt(scene_number));
   document.body.style.cursor = "default";
   //elem.setAttribute("src",img_path);
@@ -46,8 +51,9 @@ function backgroundModifier() {
  * Initializes the global array 'clickZones'
  */
 function clickzone() {
-  scene_number = getCookieValue("scene_number");
-  clickZones = getClickZonesByScenesId(scene_number);
+  scene_number = getLastElem(getCookieValue("scene_number"));
+  clickZones = getClickZonesByScenesId(scene_number,false);
+  backClickZones = getClickZonesByScenesId(scene_number,true);
   let len = clickZones.length;
   // let x1,x2,y1,y2;
   // for (let i=0;i<nb_zone;i++){
@@ -68,31 +74,43 @@ function clickzone() {
  * Initializes the global field 'imgSize'
  */
 function imgsize(){
-  scene_number = getCookieValue("scene_number");
+  scene_number = getLastElem(getCookieValue("scene_number"));
   imgSize = getImageSizeByID(scene_number);
 }
 
 /**
  * Check wether a mouse click is inside a click zone
  * and launches 'changeScene' if it is
- * @param {MouseEvent} event 
+ * @param {MouseEvent} event
  */
 function verifyClick(event) {
   const X = event.clientX;
   const Y = event.clientY;
-  if (isOnZone(X, Y) >= 0) {
+  let sId = isOnZone(X, Y);
+  if (sId >= 0) {
     playSoundTest(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
     if (window.location.pathname == "/pong.html") {
-      changeScene(event, "ping.html", isOnZone(X, Y));
+      changeScene(event, "ping.html", sId, false);
     } else {
-      changeScene(event, "pong.html", isOnZone(X, Y));
+      changeScene(event, "pong.html", sId, false);
+    }
+  }
+  if(isOnBackZone(X, Y)){
+    playBackSound(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
+    let passedScene = getLastElem(getCookieValue("scene_number"));
+    let sId = 0;
+    if (window.location.pathname == "/pong.html") {
+      changeScene(event, "ping.html", sId, true);
+    } else {
+      changeScene(event, "pong.html", sId, true);
     }
   }
 }
 
+
 /**
  * Play sound associated with clickZoneId
- * @param {*} clickZoneId 
+ * @param {*} clickZoneId
  */
 function playSoundTest(clickZoneId){
   var Scene = getSceneByID(scene_number);
@@ -105,11 +123,18 @@ function playSoundTest(clickZoneId){
   playSound(SoundPath);
 }
 
+function playBackSound(backClickZoneId){
+  var Scene = getSceneByID(scene_number);
+  var clickArea = getBackClickArea(Scene);
+  var SoundPath = getSoundPath(clickArea);
+  playSound(SoundPath);
+}
+
 /**
  * Checks wether the point of coordinates (X,Y) is inside a click zone
- * @param {coordinate} X 
- * @param {coordinate} Y 
- * 
+ * @param {coordinate} X
+ * @param {coordinate} Y
+ *
  * @returns id of the corresponding click zone, -1 if there is none
  */
 function isOnZone(X,Y){
@@ -170,14 +195,44 @@ function isOnZone(X,Y){
     return -1;
 }
 
+function isOnBackZone(X,Y){
+
+    let winWidth=parseInt(window.innerWidth);
+    let winHeight=parseInt(window.innerHeight);
+    let imgWidth=imgSize[0].width;
+    let imgHeight=imgSize[0].height;
+
+    let scale;
+    let dx=0;
+    let dy=0;
+    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+      scale = 1.0/(imgWidth/winWidth);
+      dy = (winHeight-(imgHeight*scale))/2;
+    }else{                                        //Black borders on the left and the right of the window
+      scale=1.0/(imgHeight/winHeight);
+      dx=(winWidth-(imgWidth*scale))/2;
+    }
+
+    X = (X-dx)/(winWidth-2*dx);
+    Y = (Y-dy)/(winHeight-2*dy);
+
+    let len = backClickZones.length;
+    for(let i=0;i<len;i++){
+        if(X>=backClickZones[i].x1 && X<=backClickZones[i].x2 && Y>=backClickZones[i].y1 && Y<=backClickZones[i].y2){
+            return true;
+        }
+    }
+    return false;
+}
+
 /**
  * Changes the mouse pointer icon in reponse to an event
- * @param {MouseEvent} event 
+ * @param {MouseEvent} event
  */
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
-  if (isOnZone(X, Y) >= 0) {
+  if (isOnZone(X, Y) >= 0 || isOnBackZone(X,Y)) {
     document.body.style.cursor = 'pointer';
     return;
   }
@@ -186,8 +241,8 @@ function changeCursor(event) {
 
 /**
  * Returns the index of cookie whose name is 'cname' in 'cook'
- * @param {*} cname 
- * @param {*} cook 
+ * @param {*} cname
+ * @param {*} cook
  */
 function getIndexName(cname, cook) {
   var toSearch = cname + "=";
@@ -213,7 +268,7 @@ function getIndexName(cname, cook) {
 
 /**
  * Get the value of the cookie whose name is 'cname'
- * @param {string} cname 
+ * @param {string} cname
  */
 function getCookieValue(cname) {
   const cook = document.cookie;
@@ -221,10 +276,10 @@ function getCookieValue(cname) {
   var i = ind;
   var j = 0;
   while (j == 0 && i < cook.length) {
+    i = i + 1;
     if (cook[i] == ";") {
       j = i;
     }
-    i = i + 1;
   }
   j = i
   return cook.substring(ind + 1, j);
@@ -236,7 +291,7 @@ function getCookieValue(cname) {
  * @param {string} html path of page to go to
  * @param {number} id id of scene to go to
  */
-function changeScene(event, html, id) {
+function changeScene(event, html, id, back) {
   event.preventDefault();
   $("#fade").fadeIn(FADE_IN_TIME, () => {
     let cook = document.cookie;
@@ -250,7 +305,31 @@ function changeScene(event, html, id) {
     // //document.cookie = "scene_number=;expires=Thu, 01 Jan 1970 00:00:01 GMT"
     // console.log(document.cookie);
     // console.log("Ho " + document.cookie);
-    document.cookie = "scene_number=" + id + ";"; // + stri);
+    let lstSceneNumber = getCookieValue("scene_number")
+    if(lstSceneNumber.length > 0 ){
+        lstSceneNumber = lstSceneNumber.substring(0,lstSceneNumber.length);
+    }
+    else{
+        lstSceneNumber = "";
+    }
+    if(getCookieValue("isback") == "false;" && back){
+        const lst = removeLastElem(lstSceneNumber);
+        document.cookie = "scene_number=" + lst + ";";
+        document.cookie = "isback=" + true +";";
+        document.location.href = html;
+        return;
+    }
+    else{
+      if(back){
+        const lst = removeLastElem(lstSceneNumber);
+        document.cookie = "scene_number=" + lst + ";";
+        document.cookie = "isback=" + "falsesecond" +";";
+      }
+      else{
+        document.cookie = "isback=" + false +";";
+        document.cookie = "scene_number=" + lstSceneNumber + "," + id + ";"; // + stri);
+      }
+    }
     //
     // $.getJSON( GameURL, function(data) {
     //   var scene = getSceneByID(data,id);
@@ -271,6 +350,27 @@ function changeScene(event, html, id) {
   })
 };
 
+function removeLastElem(lst){
+    let len = lst.length;
+    console.log(lst);
+    while(lst[len] !=","){
+        len = len - 1;
+    }
+    return lst.substring(0,len);
+}
+
+function getLastElem(lst){
+  let len = lst.length;
+  while(lst[len] !="," && len!=0){
+      len = len-1;
+  }
+  let ret = lst.length;
+  if(len != 0 ){
+      len = len+1;
+      ret = ret+1;
+  }
+  return lst.substring(len,ret);
+}
 
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
