@@ -22,9 +22,10 @@ function initialisation() {
       backgroundModifier();
     }
       playSoundScene();
+      printOpeningText();
       clickzone();
       imgsize();
-    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+      $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
 /**

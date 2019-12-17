@@ -453,6 +453,24 @@ function getSceneTextAreasBySceneId(sceneId) {
 }
 
 // ========================================================================================
+//                                      ***Texts***
+// ========================================================================================
+
+function printOpeningText(){
+  let text = getSceneTextBySceneId(scene_number);
+  let textBox = document.getElementById("textbox");
+  let i = 0;
+  function charByChar() {
+    if (i < text.length) {
+      textBox.innerHTML += text[i];
+      i++;
+      setTimeout(charByChar, 200);
+    }
+  }
+  charByChar();
+}
+
+// ========================================================================================
 //                                      ***Sounds***
 // ========================================================================================
 

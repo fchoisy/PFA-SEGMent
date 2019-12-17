@@ -45,15 +45,33 @@
       height: 100%;
       background-color:rgba(255,255,255);
     }
+
+    #textbox {
+      position:fixed;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      top: 75%;
+      font-size:200%;
+      text-align: center;
+      font-weight: bold;
+      -webkit-text-stroke: 1px white;
+      font-family: monospace;
+    }
   </style>
 </head>
 
 <body>
   <!-- Element for fade in & fade out transitions -->
-  <div id="fade"> 
+  <div id="fade"></div>
+
+  <div id="textbox">
+  <!-- Text displayed when scene is open -->
+  </div>
+  
   <script type="text/javascript" src="json.js"></script>
   <script type="text/javascript" src="script_image.js"></script>
-</div>
+
 </body>
 
 </html>
