@@ -124,7 +124,7 @@ function getImageSize(scene) {
     'width': scene.ImageSize[0],
     'height': scene.ImageSize[1]
   });
-  console.log(image_size);
+  //console.log(image_size);
   return image_size;
 }
 
@@ -298,7 +298,6 @@ function getClickZonesByScenesId(id,back) {
   let areas;
   if(back){
     areas = scene.BackClickAreas;
-    console.log(areas);
     if(areas === null){
         areas = [];
     }
@@ -306,7 +305,6 @@ function getClickZonesByScenesId(id,back) {
   else{
     areas = scene.ClickAreas;
   }
-  console.log(areas);
   /*Commentaires:
   La position de l'image est bien relative par rapport à la taille de l'image.
   Le size est calculé proportionnellement par rapport à la longueur de l'image.

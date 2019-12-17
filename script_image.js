@@ -16,8 +16,8 @@ window.onload = initialisation();
  * Function to be called when scene is opened
  */
 function initialisation() {
-    document.getElementById("canvas").height = window.innerHeight;
-    document.getElementById("canvas").width = window.innerWidth;
+    //document.getElementById("canvas").height = window.innerHeight;
+    //document.getElementById("canvas").width = window.innerWidth;
     scene_number = getLastElem(getCookieValue("scene_number"));
     let isback = getCookieValue("isback");
     if(!(isback == "true")){
@@ -25,8 +25,8 @@ function initialisation() {
     }
       playSoundScene();
       printOpeningText();
-      clickzone();
       imgsize();
+      clickzone();
       $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
@@ -57,9 +57,10 @@ function clickzone() {
   scene_number = getLastElem(getCookieValue("scene_number"));
   clickZones = getClickZonesByScenesId(scene_number,false);
   backClickZones = getClickZonesByScenesId(scene_number,true);
-  if(!(backClickZones.length == 0)){
-    displayBackClickImage(backClickZones[0]);
-  }
+  //if(!(backClickZones.length == 0)){
+    //displayBackClickImage(backClickZones[0]);
+    displayBackClickImage();
+  //}
   // let x1,x2,y1,y2;
   // for (let i=0;i<nb_zone;i++){
   //     x1=getCookieValue("coor_click_x1_"+i);
@@ -75,32 +76,35 @@ function clickzone() {
   // y2 = parseInt(parseFloat(y2)*500);
 }
 
-function displayBackClickImage(backClick){
-  let winWidth=parseInt(window.innerWidth);
-  let winHeight=parseInt(window.innerHeight);
-  let imgWidth=imgSize[0].width;
-  let imgHeight=imgSize[0].height;
-  let scale;
-  if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
-    scale = 1.0/(imgWidth/winWidth);
-  }else{
-    scale = 1.0/(imgHeight/winHeight);
+//function displayBackClickImage(backClick=backClickZones[0]){
+function displayBackClickImage(){
+  if(!(backClickZones.length == 0)){
+    let backClick=backClickZones[0];
+    let winWidth=parseInt(window.innerWidth);
+    let winHeight=parseInt(window.innerHeight);
+    //console.log(imgSize);
+    let imgWidth=imgSize[0].width;
+    let imgHeight=imgSize[0].height;
+    let dx=0;
+    let dy=0;
+    let scale;
+    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+      scale = 1.0/(imgWidth/winWidth);
+      dy = (winHeight-(imgHeight*scale))/2;
+    }else{
+      scale = 1.0/(imgHeight/winHeight);
+      dx=(winWidth-(imgWidth*scale))/2;
+    }
+    var canvas = document.getElementById("canvas");
+    canvas.width  = winWidth;
+    canvas.height = winHeight;
+    var ctx = canvas.getContext('2d');
+    var img = new Image();
+    img.onload = function() {
+      ctx.drawImage(img, dx + (backClick.x1 * imgWidth * scale), dy+ (backClick.y1 * imgHeight * scale), (backClick.x2 - backClick.x1) * imgWidth * scale, (backClick.y2-backClick.y1) * imgHeight * scale);
+    };
+    img.src = "Game/" + backClick.image;
   }
-
-  var myImage = new Image(100,100);
-  myImage.src = "Game/" + backClick.image;
-  console.log(myImage);
-  myImage.id = "toto"
-  var canvas = document.getElementById("canvas");
-
-/*
-    canvas.width  = myImage.width;
-    canvas.height = myImage.height;
-*/
-    myImage = document.getElementById("toto");
-    var context = canvas.getContext("2d");
-    //context.drawImage(myImage, 10, 10, 150, 180);
-
 }
 
 /**
@@ -165,7 +169,7 @@ function isOnZone(X,Y){
       scale=1.0/(imgHeight/winHeight);
       dx=(winWidth-(imgWidth*scale))/2;
     }
-
+    //console.log(X,Y);
     X = (X-dx)/(winWidth-2*dx);
     Y = (Y-dy)/(winHeight-2*dy);
 
@@ -384,3 +388,4 @@ function getLastElem(lst){
 
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
+window.addEventListener("resize",displayBackClickImage);
