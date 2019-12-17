@@ -11,10 +11,9 @@
   <!-- Permet de fixer la taille de la zone visible par l'utilisateur -->
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <!-- jQuery is is released under the terms of the MIT license https://jquery.org/license/ -->
-
   <title>Bienvenue</title>
+
+
 
   <style id="style">
     .html-class {
@@ -45,33 +44,30 @@
       height: 100%;
       background-color:rgba(255,255,255);
     }
-
-    #textbox {
-       position:fixed;
-       margin: 0 auto;
-       left: 0;
-       right: 0;
-       top: 75%;
-       font-size:200%;
-       text-align: center;
-       font-weight: bold;
-       -webkit-text-stroke: 1px white;
-       font-family: monospace;
-    }
   </style>
 </head>
 
 <body>
-  <!-- Element for fade in & fade out transitions -->
   <div id="fade">
-
-</div>
-
-  <div id="textbox">
-    <!-- Text displayed when scene is open -->
-  </div>
+  <!--<img id="backg" src="" alt="Background Image" width="" height=""/>-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- Inclure la license quelque part dans le code ? -->
   <script type="text/javascript" src="json.js"></script>
   <script type="text/javascript" src="script_image.js"></script>
+
+  <!-- <script type="module" src="script.js">
+    import * from "./script.js";
+	  var scene = getInitialScene(json);
+	  var img = getSceneImage(scene);
+	  var w = img.width;
+	  var h = img.height;
+	  var clicks = getClickZones(scene);
+	  for (var i = 0; i < clicks.length; i++){
+	  let currentZone = clicks[i];
+	  <area shape="rect" coords='currentZone.x1 * w "," currentZone.y1 * h "," currentZone.x2 * w "," currentZone.y2 * h' href="" target="" alt="" />
+	  }
+</script> -->
+  <!-- <script type="text/javascript" src="script_image.js"></script> -->
+</div>
 </body>
 
 </html>
