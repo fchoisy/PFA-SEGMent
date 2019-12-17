@@ -5,7 +5,7 @@
  */
 
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
-
+//
 const GameURL = "../Game/game.segment"
 
 window.onload = initialise();
