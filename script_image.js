@@ -16,14 +16,16 @@ window.onload = initialisation();
  * Function to be called when scene is opened
  */
 function initialisation() {
+    document.getElementById("canvas").height = window.innerHeight;
+    document.getElementById("canvas").width = window.innerWidth;
     scene_number = getLastElem(getCookieValue("scene_number"));
     let isback = getCookieValue("isback");
     if(!(isback == "true")){
       backgroundModifier();
     }
-      playSoundScene();
-      clickzone();
-      imgsize();
+    playSoundScene();
+    imgsize();
+    clickzone();
     $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
@@ -54,7 +56,9 @@ function clickzone() {
   scene_number = getLastElem(getCookieValue("scene_number"));
   clickZones = getClickZonesByScenesId(scene_number,false);
   backClickZones = getClickZonesByScenesId(scene_number,true);
-  let len = clickZones.length;
+  if(!(backClickZones.length == 0)){
+    displayBackClickImage(backClickZones[0]);
+  }
   // let x1,x2,y1,y2;
   // for (let i=0;i<nb_zone;i++){
   //     x1=getCookieValue("coor_click_x1_"+i);
@@ -68,6 +72,34 @@ function clickzone() {
   // y1 = parseInt(parseFloat(y1)*500);
   // x2 = parseInt(parseFloat(x2)*500);
   // y2 = parseInt(parseFloat(y2)*500);
+}
+
+function displayBackClickImage(backClick){
+  let winWidth=parseInt(window.innerWidth);
+  let winHeight=parseInt(window.innerHeight);
+  let imgWidth=imgSize[0].width;
+  let imgHeight=imgSize[0].height;
+  let scale;
+  if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+    scale = 1.0/(imgWidth/winWidth);
+  }else{
+    scale = 1.0/(imgHeight/winHeight);
+  }
+
+  var myImage = new Image(100,100);
+  myImage.src = "Game/" + backClick.image;
+  console.log(myImage);
+  myImage.id = "toto"
+  var canvas = document.getElementById("canvas");
+
+/*
+    canvas.width  = myImage.width;
+    canvas.height = myImage.height;
+*/
+    myImage = document.getElementById("toto");
+    var context = canvas.getContext("2d");
+    //context.drawImage(myImage, 10, 10, 150, 180);
+
 }
 
 /**
