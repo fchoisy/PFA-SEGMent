@@ -24,9 +24,9 @@ function initialisation() {
       backgroundModifier();
     }
       playSoundScene();
+      imgsize();
       printOpeningText();
       clickzone();
-      imgsize();
       $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
