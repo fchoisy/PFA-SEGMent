@@ -4,7 +4,6 @@ let json;
 
 window.onload = loadJson();
 
-
 function startScene(event){
   event.preventDefault();
   document.cookie = "scene_number=" + getSceneId(getInitialScene()) + ";";

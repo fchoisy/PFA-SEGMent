@@ -44,13 +44,33 @@
       height: 100%;
       background-color:rgba(255,255,255);
     }
+
+    #textbox {
+      position:fixed;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      top: 75%;
+      font-size:200%;
+      text-align: center;
+      font-weight: bold;
+      -webkit-text-stroke: 1px white;
+      font-family: monospace;
+    }
   </style>
 </head>
 
 <body>
+=======
   <canvas  id="canvas">
-  </canvas>
-  <div id="fade">
+      </canvas>
+  <div id="fade"></div>
+
+  <div id="textbox">
+    <!-- Text displayed when scene is open -->
+  </div>
+
+  <!--<img id="backg" src="" alt="Background Image" width="" height=""/>-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> <!-- Inclure la license quelque part dans le code ? -->
   <script type="text/javascript" src="json.js"></script>
   <script type="text/javascript" src="script_image.js"></script>
@@ -67,7 +87,7 @@
 	  }
 </script> -->
   <!-- <script type="text/javascript" src="script_image.js"></script> -->
-</div>
+
 </body>
 
 </html>
