@@ -96,7 +96,7 @@ function verifyClick(event) {
     }
   }
   if(isOnBackZone(X, Y)){
-    playBackSound(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
+    playSoundBackClickArea(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = 0;
     if (window.location.pathname == "/pong.html") {
@@ -105,29 +105,6 @@ function verifyClick(event) {
       changeScene(event, "pong.html", sId, true);
     }
   }
-}
-
-
-/**
- * Play sound associated with clickZoneId
- * @param {*} clickZoneId
- */
-function playSoundTest(clickZoneId){
-  var Scene = getSceneByID(scene_number);
-  console.log(Scene);
-  var clickAreas = getClickAreas(Scene);
-  console.log(clickAreas);
-  var clickArea = getClickAreaByID(clickAreas,clickZoneId);
-  console.log(clickArea);
-  var SoundPath = getSoundPath(clickArea);
-  playSound(SoundPath);
-}
-
-function playBackSound(backClickZoneId){
-  var Scene = getSceneByID(scene_number);
-  var clickArea = getBackClickArea(Scene);
-  var SoundPath = getSoundPath(clickArea);
-  playSound(SoundPath);
 }
 
 /**
