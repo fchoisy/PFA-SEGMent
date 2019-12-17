@@ -28,6 +28,16 @@ class ClickZone {
   }
 }
 
+class BackClickZone {
+  constructor(x1, y1, x2, y2, image) {
+    this.x1 = x1;
+    this.y1 = y1;
+    this.x2 = x2;
+    this.y2 = y2;
+    this.image = image;
+  }
+}
+
 /**
  * Global variable for containing game JSON
  */
@@ -291,13 +301,12 @@ function getClickZonesByScenesId(id,back) {
   for(var i = 0; i < areas.length; i++){
     let currentArea = areas[i];
     let heightPourcentage = currentArea.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
-    let id;
+    let clickzone = 0;
     if(back){
-        id = 0;
+      clickzone = new BackClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getBackClickAreaImagePath(scene));
     }else{
-        id = getPointedScene(currentArea.Path);
+      clickzone = new ClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path));
     }
-    let clickzone = new ClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path));
     array.push(clickzone);
   }
   return array;
@@ -349,6 +358,24 @@ function getGifByID(gifs, id) {
     }
   }
   throw "Gif " + id + " not found";
+}
+
+function getObjects(scene){
+  return scene.Objects;
+}
+
+function getBackClickAreaImagePath(scene){
+  let objects = getObjects(scene);
+  let len = objects.length;
+  let path = "";
+  let i = 0;
+  while (i < len && path == "") {
+    if(objects[i].PuzzlePiece==false){
+      path=objects[i].Image;
+    }
+    i++;
+  }
+  return path;
 }
 
 /**
