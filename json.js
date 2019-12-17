@@ -1,6 +1,6 @@
 /**
  * json.js
- * 
+ *
  * Methods for interpreting the 'segment.game' JSON file
  */
 
@@ -59,7 +59,7 @@ function loadJson() {
 
 /**
  * Returns the path to the background image of the scene whose id is 'id'
- * @param {number} id 
+ * @param {number} id
  */
 function getSceneBackgroundById(id) {
   return getSceneImage(getSceneByID(id));
@@ -75,7 +75,7 @@ function getScenes() {
 
 /**
  * Returns the id of the specified scene
- * @param {Scene object} scene 
+ * @param {Scene object} scene
  */
 function getSceneId(scene) {
   return scene.id;
@@ -83,7 +83,7 @@ function getSceneId(scene) {
 
 /**
  * Plays a sound
- * 
+ *
  * @param {string} soundPath the path of the sound to play
  * @param {bool} loop wether to loop the sound or not
  * @param {float} volume the volume at which the sound should be played
@@ -113,11 +113,35 @@ function playSoundScene(){
 }
 
 /**
+ * Play sound associated with clickZoneId
+ * @param {*} clickZoneId
+ */
+function playSoundClickZone(clickZoneId){
+  var Scene = getSceneByID(scene_number);
+  var clickAreas = getClickAreas(Scene);
+  var clickArea = getClickAreaByID(clickAreas,clickZoneId);
+  var SoundPath = getSoundPath(clickArea);
+  playSound(SoundPath);
+}
+
+/**
+ * Play sound associated with backClickAreaId
+ * @param {*} backClickAreaId
+ */
+function playSoundBackClickArea(backClickAreaId){
+  var Scene = getSceneByID(scene_number);
+  var backClickAreas = getBackClickAreas(Scene);
+  var backClickArea = getBackClickAreaByID(backClickAreas,backClickAreaId);
+  var SoundPath = getSoundPath(backClickArea);
+  playSound(SoundPath);
+}
+
+/**
  * Returns the scene object whose identifier in the game JSON is 'id'
  * Throws an error if no scene matches the given id
  * Note : scene identifiers start at 0
- * 
- * @param {number} id 
+ *
+ * @param {number} id
  */
 function getSceneByID(id) {
   var json = GameJson;
@@ -134,8 +158,8 @@ function getSceneByID(id) {
 
 /**
  * Returns path of the background image from the scene object specified
- * 
- * @param {Scene object} scene 
+ *
+ * @param {Scene object} scene
  */
 function getSceneImage(scene) {
   return "../Game/" + scene.Image;
@@ -158,8 +182,8 @@ function getImageSize(scene) {
 
 /**
  * Returns the scene object whose identifier in the game JSON is 'id'
- * 
- * @param {number} id 
+ *
+ * @param {number} id
  */
 function getImageSizeByID(id) {
   return getImageSize(getSceneByID(id));
@@ -167,7 +191,7 @@ function getImageSizeByID(id) {
 
 /**
  * Returns the intial scene object from the game JSON
- * 
+ *
  * NOTE : different from get_scene_by_id because there is a special type if
  * a scene is an initial scene (i.e. SceneType = 1; Final = 2; Other = 0)
  */
@@ -184,7 +208,7 @@ function getInitialScene() {
 /**
  * Returns array where each element contains the four positions of the
  * four edges of the click zone, relatively to the image size.
- * 
+ *
  * @param {number} id
  */
 function getClickZonesByScenesId(id) {
@@ -206,19 +230,29 @@ function getClickZonesByScenesId(id) {
 
 /**
  * Returns the click areas described in the game JSON for the scene object 'scene'
- * 
- * @param {Scene object} scene 
+ *
+ * @param {Scene object} scene
  */
 function getClickAreas(scene) {
   return scene.ClickAreas;
 }
 
 /**
+ * Returns the back click areas described in the game JSON for the scene object 'scene'
+ *
+ * @param {Scene object} scene
+ */
+function getBackClickAreas(scene) {
+  return scene.BackClickAreas;
+}
+
+
+/**
  * Returns the ClickArea that whose id is 'id'
  * Throws an error if not found
- * 
- * @param {number} clickArea 
- * @param {number} id 
+ *
+ * @param {number} clickArea
+ * @param {number} id
  */
 function getClickAreaByID(clickArea, id) {
   for (var i = 0; i < clickArea.length; i++) {
@@ -230,9 +264,25 @@ function getClickAreaByID(clickArea, id) {
 }
 
 /**
+ * Returns the BackClickArea that whose id is 'id'
+ * Throws an error if not found
+ *
+ * @param {number} backClickArea
+ * @param {number} id
+ */
+function getBackClickAreaByID(backClickArea, id) {
+  for (var i = 0; i < backClickArea.length; i++) {
+    if (backClickArea[i].id == id) {
+      return backClickArea[i];
+    }
+  }
+  throw "clickArea " + id + "not found";
+}
+
+/**
  * Plays the sound described in the parsed part of JSON element
- * 
- * @param {JSON object} element 
+ *
+ * @param {JSON object} element
  */
 function getSoundPath(element) {
   return element.Sound.Path;
@@ -241,8 +291,8 @@ function getSoundPath(element) {
 /**
  * Searches for the ClickArea (in game JSON) whose path matches 'path'
  * and returns the scene id to which it points
- * 
- * @param {string} clickAreaPath 
+ *
+ * @param {string} clickAreaPath
  */
 function getPointedScene(clickAreaPath) {
   let scene = GameJson.Document.Process;
@@ -262,8 +312,8 @@ function getPointedScene(clickAreaPath) {
 /**
  * Returns the start text that has to be displayed at the
  * begining of the scene whose id is 'scene_id'
- * 
- * @param {number} sceneId 
+ *
+ * @param {number} sceneId
  */
 function getSceneTextBySceneId(sceneId) {
   const scene = getSceneByID(sceneId);
@@ -274,8 +324,8 @@ function getSceneTextBySceneId(sceneId) {
 /**
  * Returns the text in the text areas of the
  * scene whose id is "sceneId"
- * 
- * @param {number} sceneId 
+ *
+ * @param {number} sceneId
  */
 function getSceneTextAreasBySceneId(sceneId) {
   const scene = getSceneByID(sceneId);

@@ -75,13 +75,13 @@ function imgsize(){
 /**
  * Check wether a mouse click is inside a click zone
  * and launches 'changeScene' if it is
- * @param {MouseEvent} event 
+ * @param {MouseEvent} event
  */
 function verifyClick(event) {
   const X = event.clientX;
   const Y = event.clientY;
   if (isOnZone(X, Y) >= 0) {
-    playSoundTest(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
+    playSoundClickZone(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone (et isOnZone renvoie 2)
     if (window.location.pathname == "/pong.html") {
       changeScene(event, "ping.html", isOnZone(X, Y));
     } else {
@@ -91,25 +91,10 @@ function verifyClick(event) {
 }
 
 /**
- * Play sound associated with clickZoneId
- * @param {*} clickZoneId 
- */
-function playSoundTest(clickZoneId){
-  var Scene = getSceneByID(scene_number);
-  console.log(Scene);
-  var clickAreas = getClickAreas(Scene);
-  console.log(clickAreas);
-  var clickArea = getClickAreaByID(clickAreas,clickZoneId);
-  console.log(clickArea);
-  var SoundPath = getSoundPath(clickArea);
-  playSound(SoundPath);
-}
-
-/**
  * Checks wether the point of coordinates (X,Y) is inside a click zone
- * @param {coordinate} X 
- * @param {coordinate} Y 
- * 
+ * @param {coordinate} X
+ * @param {coordinate} Y
+ *
  * @returns id of the corresponding click zone, -1 if there is none
  */
 function isOnZone(X,Y){
@@ -172,7 +157,7 @@ function isOnZone(X,Y){
 
 /**
  * Changes the mouse pointer icon in reponse to an event
- * @param {MouseEvent} event 
+ * @param {MouseEvent} event
  */
 function changeCursor(event) {
   let X = event.clientX;
@@ -186,8 +171,8 @@ function changeCursor(event) {
 
 /**
  * Returns the index of cookie whose name is 'cname' in 'cook'
- * @param {*} cname 
- * @param {*} cook 
+ * @param {*} cname
+ * @param {*} cook
  */
 function getIndexName(cname, cook) {
   var toSearch = cname + "=";
@@ -213,7 +198,7 @@ function getIndexName(cname, cook) {
 
 /**
  * Get the value of the cookie whose name is 'cname'
- * @param {string} cname 
+ * @param {string} cname
  */
 function getCookieValue(cname) {
   const cook = document.cookie;
