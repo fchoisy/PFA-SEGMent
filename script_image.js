@@ -8,6 +8,8 @@ let clickZones = [];
 let backClickZones = [];
 let scene_number;
 let imgSize = [];
+let digicodeClickZone = [];
+let buffer = "";
 
 
 window.onload = initialisation();
@@ -27,6 +29,7 @@ function initialisation() {
       imgsize();
       printOpeningText();
       clickzone();
+      Puzzled(scene_number);
       $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
@@ -60,6 +63,7 @@ function clickzone() {
   //if(!(backClickZones.length == 0)){
     //displayBackClickImage(backClickZones[0]);
     displayBackClickImage();
+
   //}
   // let x1,x2,y1,y2;
   // for (let i=0;i<nb_zone;i++){
@@ -107,6 +111,36 @@ function displayBackClickImage(){
   }
 }
 
+
+function Puzzled(id){
+    const puzzle = whatPuzzleItIs(id);
+    if(puzzle[0] == "Text"){
+        const scene = getSceneByID(id);
+        const sceneTextArea = scene.TextAreas;
+        const len = sceneTextArea.length;
+        let clickz = 0;
+        for(let i =0; i<len; i++){
+            let heightPourcentage = sceneTextArea[i].Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
+            if(sceneTextArea[i].Behaviour == 3){
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Validate");
+            }else if(sceneTextArea[i].Behaviour == 2){
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Delete");
+            }else{
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],sceneTextArea[i].Text);
+            }
+            digicodeClickZone.push(clickz);
+        }
+        const transition = getTransitionByID(getTransitions(),puzzle[1]);
+        const riddle = transition.Transition.SceneToScene.Riddle;
+        let array = [];
+        const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
+        array.push(riddle.Text.Expected);
+        array.push(riddle.Text.FuzzyMatches);
+        array.push(idTransition); // Attention cela doit toujours être en dernier
+        digicodeClickZone.push(array);
+    }
+}
+
 /**
  * Initializes the global field 'imgSize'
  */
@@ -142,6 +176,60 @@ function verifyClick(event) {
       changeScene(event, "pong.html", sId, true);
     }
   }
+  const digi = isOnDigicodeZone(X, Y);
+  let bool = false;
+  if(digi != -1){
+      if(digi =="Validate"){
+          bool = validatingBuffer();
+      }
+      else if(digi == "Delete"){
+          deletingBuffer();
+      }
+      else{
+          addingBuffer(digi);
+          console.log(buffer);
+      }
+  }
+  if(bool){
+    let sId = 0;
+    if (window.location.pathname == "/pong.html") {
+      sId = digicodeClickZone[digicodeClickZone.length-1]
+      sId = sId[sId.length-1];
+      changeScene(event, "ping.html", sId, false);
+    } else {
+      sId = digicodeClickZone[digicodeClickZone.length-1]
+      sId = sId[sId.length-1];
+      changeScene(event, "pong.html", sId, false);
+    }
+  }
+}
+
+function validatingBuffer(){
+    const answer = digicodeClickZone[digicodeClickZone.length-1];
+    const len = answer[1].length;
+    if(buffer == answer[0]){
+        return true;
+    }
+    for(let i=0; i<len;i++){
+        if(buffer == answer[1][i]){
+            return true ;
+        }
+    }
+    buffer = "";
+    return false;
+}
+
+function addingBuffer(digi){
+    buffer = buffer + digi;
+}
+
+function deletingBuffer(){
+    if(buffer.length == 0){
+        return;
+    }
+    else{
+        buffer = buffer.substring(0,buffer.length-1);
+    }
 }
 
 /**
@@ -239,6 +327,35 @@ function isOnBackZone(X,Y){
     return false;
 }
 
+function isOnDigicodeZone(X,Y){
+  let winWidth=parseInt(window.innerWidth);
+  let winHeight=parseInt(window.innerHeight);
+  let imgWidth=imgSize[0].width;
+  let imgHeight=imgSize[0].height;
+
+  let scale;
+  let dx=0;
+  let dy=0;
+  if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+    scale = 1.0/(imgWidth/winWidth);
+    dy = (winHeight-(imgHeight*scale))/2;
+  }else{                                        //Black borders on the left and the right of the window
+    scale=1.0/(imgHeight/winHeight);
+    dx=(winWidth-(imgWidth*scale))/2;
+  }
+
+  X = (X-dx)/(winWidth-2*dx);
+  Y = (Y-dy)/(winHeight-2*dy);
+
+  let len = digicodeClickZone.length - 1;
+  for(let i=0;i<len;i++){
+      if(X>=digicodeClickZone[i].x1 && X<=digicodeClickZone[i].x2 && Y>=digicodeClickZone[i].y1 && Y<=digicodeClickZone[i].y2){
+          return digicodeClickZone[i].id;
+      }
+  }
+  return -1;
+}
+
 /**
  * Changes the mouse pointer icon in reponse to an event
  * @param {MouseEvent} event
@@ -246,7 +363,7 @@ function isOnBackZone(X,Y){
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
-  if (isOnZone(X, Y) >= 0 || isOnBackZone(X,Y)) {
+  if (isOnZone(X, Y) >= 0 || isOnBackZone(X,Y) || isOnDigicodeZone(X,Y)!=-1) {
     document.body.style.cursor = 'pointer';
     return;
   }
@@ -388,4 +505,4 @@ function getLastElem(lst){
 
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
-window.addEventListener("resize",displayBackClickImage);
+window.onresize = displayBackClickImage;

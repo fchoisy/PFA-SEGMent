@@ -109,7 +109,7 @@ function getSceneImage(scene) {
  * Returns the id of the specified scene
  * @param {Scene object} scene
  */
-function getSceneId(scene) {
+ function getSceneId(scene) {
   return scene.id;
 }
 
@@ -245,6 +245,35 @@ function getBackClickAreaImagePath(scene){
     i++;
   }
   return path;
+}
+
+function whatPuzzleItIs(id){
+    const scene = getSceneByID(id);
+    //console.log(scene.Gifs);
+    if (!(scene.Gifs.length == 0)){
+        return ["Gif",id];
+    }
+    let transitions = getTransitions();
+    const len = transitions.length;
+    for(let i =0 ; i<len; i++){
+        if(!(transitions[i].Transition.SceneToScene === undefined)){
+            let comp_id = getLastNumberTransition(transitions[i].Transition.SceneToScene.From);
+            if(comp_id == id){
+                if(!(transitions[i].Transition.SceneToScene.Riddle === undefined)){
+                    return [transitions[i].Transition.SceneToScene.Riddle.Which,transitions[i].id];
+                }
+            }
+        }
+    }
+    return "";
+}
+
+function getLastNumberTransition(str){
+    let len = str.length;
+    while(str[len] !="."){
+          len--;
+    }
+    return parseInt(str.substring(len+1,str.length));
 }
 
 // ------------------------------------ Get <...> By Id -------------------------------------
