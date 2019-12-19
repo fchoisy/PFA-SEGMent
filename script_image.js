@@ -523,3 +523,4 @@ function getLastElem(lst){
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
 window.onresize = displayBackClickImage;
+window.onresize = printOpeningText;
