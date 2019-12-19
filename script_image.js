@@ -10,7 +10,7 @@ let scene_number;
 let imgSize = [];
 let digicodeClickZone = [];
 let buffer = "";
-//Penser à rajouter l'option remplacer sur le digicode
+//Penser à virer pong.
 
 window.onload = initialisation();
 
@@ -121,15 +121,15 @@ function Puzzled(id){
         for(let i =0; i<len; i++){
             let heightPourcentage = sceneTextArea[i].Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
             if(sceneTextArea[i].Behaviour == 3){
-                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Validate", sceneTextArea[i].id);
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Validate"], sceneTextArea[i].id);
             }else if(sceneTextArea[i].Behaviour == 2){
-                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Delete", sceneTextArea[i].id);
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Delete"], sceneTextArea[i].id);
             }else if(sceneTextArea[i].Behaviour == 1){
-                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"R-" + sceneTextArea[i].Text, sceneTextArea[i].id)
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Replace",sceneTextArea[i].Text], sceneTextArea[i].id)
             }
             else{
                 console.log(sceneTextArea[i].Behaviour)
-                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],sceneTextArea[i].Text, sceneTextArea[i].id);
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Add",sceneTextArea[i].Text], sceneTextArea[i].id);
             }
             digicodeClickZone.push(clickz);
         }
@@ -184,17 +184,17 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
   let bool = false;
   if(resDigi[0] != -1){
       playSoundText(resDigi[1]);
-      if(resDigi[0] =="Validate"){
+      if(resDigi[0][0] =="Validate"){
           bool = validatingBuffer();
       }
-      else if(resDigi[0] == "Delete"){
+      else if(resDigi[0][0] == "Delete"){
           deletingBuffer();
       }
-      else if(resDigi[0].substring(0,1) == "R"){
-          changingBuffer(resDigi[0]);
+      else if(resDigi[0][0] == "Replace"){
+          changingBuffer(resDigi[0][1]);
       }
       else{
-          addingBuffer(resDigi[0]);
+          addingBuffer(resDigi[0][1]);
           console.log(buffer);
       }
   }
@@ -228,8 +228,6 @@ function validatingBuffer(){
 }
 
 function changingBuffer(digi){
-    const len = digi.length;
-    digi = digi.substring(2,len);
     buffer = digi;
 }
 
@@ -547,5 +545,4 @@ function getLastElem(lst){
 
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
-window.onresize = displayBackClickImage;
 window.onresize = printOpeningText;
