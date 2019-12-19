@@ -19,22 +19,24 @@ const GameURL = "../Game/game.segment"
  * Holds the information of click zones in the game
  */
 class ClickZone {
-  constructor(x1, y1, x2, y2, id) {
+  constructor(x1, y1, x2, y2, id, clickzoneId) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
     this.id = id;
+    this.clickzoneId = clickzoneId;
   }
 }
 
 class BackClickZone {
-  constructor(x1, y1, x2, y2, image) {
+  constructor(x1, y1, x2, y2, image, bckclickId) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
     this.image = image;
+    this.bckclickId = bckclickId;
   }
 }
 
@@ -111,6 +113,15 @@ function getSceneImage(scene) {
  */
  function getSceneId(scene) {
   return scene.id;
+}
+
+/**
+ * Note : may replace getSceneId
+ * Returns the id of an element
+ * @param {object} element
+ */
+ function getElementId(element) {
+  return element.id;
 }
 
 /**
@@ -345,10 +356,10 @@ function getClickZonesByScenesId(id,back) {
     let clickzone = 0;
     let id;
     if(back){
-         clickzone = new BackClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getBackClickAreaImagePath(scene));
+        clickzone = new BackClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getBackClickAreaImagePath(scene), getElementId(currentArea));
         id = 0;
     }else{
-        clickzone = new ClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path));
+        clickzone = new ClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path), getElementId(currentArea));
         id = getPointedScene(currentArea.Path);
     }
     array.push(clickzone);

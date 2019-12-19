@@ -122,11 +122,11 @@ function Puzzled(id){
         for(let i =0; i<len; i++){
             let heightPourcentage = sceneTextArea[i].Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
             if(sceneTextArea[i].Behaviour == 3){
-                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Validate");
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Validate", sceneTextArea[i].id);
             }else if(sceneTextArea[i].Behaviour == 2){
-                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Delete");
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Delete", sceneTextArea[i].id);
             }else{
-                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],sceneTextArea[i].Text);
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],sceneTextArea[i].Text, sceneTextArea[i].id);
             }
             digicodeClickZone.push(clickz);
         }
@@ -154,20 +154,21 @@ function imgsize(){
  * and launches 'changeScene' if it is
  * @param {MouseEvent} event
  */
-function verifyClick(event) {
+function verifyClick(event) { // NOTE : make separate functions for each case ?
   const X = event.clientX;
   const Y = event.clientY;
-  let sId = isOnZone(X, Y);
-  if (sId >= 0) {
-    playSoundClickZone(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
+  const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
+  if (resClickZone[0] >= 0) {
+    playSoundClickZone(resClickZone[1]);
     if (window.location.pathname == "/pong.html") {
-      changeScene(event, "ping.html", sId, false);
+      changeScene(event, "ping.html", resClickZone[0], false);
     } else {
-      changeScene(event, "pong.html", sId, false);
+      changeScene(event, "pong.html", resClickZone[0], false);
     }
   }
-  if(isOnBackZone(X, Y)){
-    playSoundBackClickArea(1); // NOTE : Remplacé en dur, changer "1" par l'ID de la clickzone
+  const resBackZone = isOnBackZone(X, Y); // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
+  if(resBackZone[0]){
+    playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = 0;
     if (window.location.pathname == "/pong.html") {
@@ -176,17 +177,18 @@ function verifyClick(event) {
       changeScene(event, "pong.html", sId, true);
     }
   }
-  const digi = isOnDigicodeZone(X, Y);
+  const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
   let bool = false;
-  if(digi != -1){
-      if(digi =="Validate"){
+  if(resDigi[0] != -1){
+      playSoundText(resDigi[1]);
+      if(resDigi[0] =="Validate"){
           bool = validatingBuffer();
       }
-      else if(digi == "Delete"){
+      else if(resDigi[0] == "Delete"){
           deletingBuffer();
       }
       else{
-          addingBuffer(digi);
+          addingBuffer(resDigi[0]);
           console.log(buffer);
       }
   }
@@ -246,6 +248,7 @@ function isOnZone(X,Y){
     let winHeight=parseInt(window.innerHeight);
     let imgWidth=imgSize[0].width;
     let imgHeight=imgSize[0].height;
+    let resTab = [];
 
     let scale;
     let dx=0;
@@ -291,10 +294,14 @@ function isOnZone(X,Y){
     let len = clickZones.length;
     for(let i=0;i<len;i++){
         if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
-            return clickZones[i].id;
+            resTab[0] = clickZones[i].id; // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
+            resTab[1] = clickZones[i].clickzoneId;
+            return resTab;
         }
     }
-    return -1;
+    resTab[0] = -1
+    resTab[1] = -1
+    return resTab;
 }
 
 function isOnBackZone(X,Y){
@@ -303,6 +310,7 @@ function isOnBackZone(X,Y){
     let winHeight=parseInt(window.innerHeight);
     let imgWidth=imgSize[0].width;
     let imgHeight=imgSize[0].height;
+    let resTab = [];
 
     let scale;
     let dx=0;
@@ -321,10 +329,14 @@ function isOnBackZone(X,Y){
     let len = backClickZones.length;
     for(let i=0;i<len;i++){
         if(X>=backClickZones[i].x1 && X<=backClickZones[i].x2 && Y>=backClickZones[i].y1 && Y<=backClickZones[i].y2){
-            return true;
+            resTab[0] = true; // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
+            resTab[1] = backClickZones[i].bckclickId;
+            return resTab;
         }
     }
-    return false;
+    resTab[0] = false;
+    resTab[1] = -1;
+    return resTab;
 }
 
 function isOnDigicodeZone(X,Y){
@@ -332,6 +344,7 @@ function isOnDigicodeZone(X,Y){
   let winHeight=parseInt(window.innerHeight);
   let imgWidth=imgSize[0].width;
   let imgHeight=imgSize[0].height;
+  let resTab = [];
 
   let scale;
   let dx=0;
@@ -350,10 +363,14 @@ function isOnDigicodeZone(X,Y){
   let len = digicodeClickZone.length - 1;
   for(let i=0;i<len;i++){
       if(X>=digicodeClickZone[i].x1 && X<=digicodeClickZone[i].x2 && Y>=digicodeClickZone[i].y1 && Y<=digicodeClickZone[i].y2){
-          return digicodeClickZone[i].id;
+          resTab[0] = digicodeClickZone[i].id; // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
+          resTab[1] = digicodeClickZone[i].clickzoneId;
+          return resTab;
       }
   }
-  return -1;
+  resTab[0] = -1;
+  resTab[1] = -1;
+  return resTab;
 }
 
 /**
@@ -363,7 +380,7 @@ function isOnDigicodeZone(X,Y){
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
-  if (isOnZone(X, Y) >= 0 || isOnBackZone(X,Y) || isOnDigicodeZone(X,Y)!=-1) {
+  if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1) {
     document.body.style.cursor = 'pointer';
     return;
   }
