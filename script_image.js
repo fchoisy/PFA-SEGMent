@@ -10,7 +10,7 @@ let scene_number;
 let imgSize = [];
 let digicodeClickZone = [];
 let buffer = "";
-
+//Penser à rajouter l'option remplacer sur le digicode
 
 window.onload = initialisation();
 
@@ -62,7 +62,6 @@ function clickzone() {
   backClickZones = getClickZonesByScenesId(scene_number,true);
   //if(!(backClickZones.length == 0)){
     //displayBackClickImage(backClickZones[0]);
-    displayBackClickImage();
 
   //}
   // let x1,x2,y1,y2;
@@ -81,7 +80,7 @@ function clickzone() {
 }
 
 //function displayBackClickImage(backClick=backClickZones[0]){
-function displayBackClickImage(){
+/*function displayBackClickImage(){
   if(!(backClickZones.length == 0)){
     let backClick=backClickZones[0];
     let winWidth=parseInt(window.innerWidth);
@@ -109,7 +108,7 @@ function displayBackClickImage(){
     };
     img.src = "Game/" + backClick.image;
   }
-}
+}*/
 
 
 function Puzzled(id){
@@ -125,7 +124,11 @@ function Puzzled(id){
                 clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Validate", sceneTextArea[i].id);
             }else if(sceneTextArea[i].Behaviour == 2){
                 clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"Delete", sceneTextArea[i].id);
-            }else{
+            }else if(sceneTextArea[i].Behaviour == 1){
+                clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],"R-" + sceneTextArea[i].Text, sceneTextArea[i].id)
+            }
+            else{
+                console.log(sceneTextArea[i].Behaviour)
                 clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],sceneTextArea[i].Text, sceneTextArea[i].id);
             }
             digicodeClickZone.push(clickz);
@@ -187,6 +190,9 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
       else if(resDigi[0] == "Delete"){
           deletingBuffer();
       }
+      else if(resDigi[0].substring(0,1) == "R"){
+          changingBuffer(resDigi[0]);
+      }
       else{
           addingBuffer(resDigi[0]);
           console.log(buffer);
@@ -219,6 +225,12 @@ function validatingBuffer(){
     }
     buffer = "";
     return false;
+}
+
+function changingBuffer(digi){
+    const len = digi.length;
+    digi = digi.substring(2,len);
+    buffer = digi;
 }
 
 function addingBuffer(digi){
@@ -331,6 +343,7 @@ function isOnBackZone(X,Y){
         if(X>=backClickZones[i].x1 && X<=backClickZones[i].x2 && Y>=backClickZones[i].y1 && Y<=backClickZones[i].y2){
             resTab[0] = true; // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
             resTab[1] = backClickZones[i].bckclickId;
+            console.log(backClickZones[i].bckclickId);
             return resTab;
         }
     }
@@ -461,21 +474,29 @@ function changeScene(event, html, id, back) {
         lstSceneNumber = "";
     }
     if(getCookieValue("isback") == "false;" && back){
-        const lst = removeLastElem(lstSceneNumber);
-        document.cookie = "scene_number=" + lst + ";";
-        document.cookie = "isback=" + true +";";
+        let lst;
+        if(getLastElem(lstSceneNumber)==scene_number){
+            lst = removeLastElem(lstSceneNumber);
+            document.cookie = "scene_number=" + lst + ";";
+            document.cookie = "isback=" + true +";";
+        }
         document.location.href = html;
         return;
     }
     else{
       if(back){
-        const lst = removeLastElem(lstSceneNumber);
-        document.cookie = "scene_number=" + lst + ";";
-        document.cookie = "isback=" + "falsesecond" +";";
+        let lst;
+        if(getLastElem(lstSceneNumber)==scene_number){
+            lst = removeLastElem(lstSceneNumber);
+            document.cookie = "scene_number=" + lst + ";";
+            document.cookie = "isback=" + "falsesecond" +";";
+        }
       }
       else{
-        document.cookie = "isback=" + false +";";
-        document.cookie = "scene_number=" + lstSceneNumber + "," + id + ";"; // + stri);
+        if(getLastElem(lstSceneNumber)==scene_number){
+            document.cookie = "isback=" + false +";";
+            document.cookie = "scene_number=" + lstSceneNumber + "," + id + ";"; // + stri);
+        }
       }
     }
     //
@@ -493,7 +514,10 @@ function changeScene(event, html, id, back) {
     //     document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
     //   }
     //   document.cookie = "bckg_path="+ img +";";
+
+
     document.location.href = html;
+
     // });
   })
 };
@@ -520,6 +544,8 @@ function getLastElem(lst){
   return lst.substring(len,ret);
 }
 
+
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
-window.onresize = displayBackClickImage;
+
+//window.onresize = displayBackClickImage;

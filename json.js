@@ -30,12 +30,11 @@ class ClickZone {
 }
 
 class BackClickZone {
-  constructor(x1, y1, x2, y2, image, bckclickId) {
+  constructor(x1, y1, x2, y2, bckclickId) {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
-    this.image = image;
     this.bckclickId = bckclickId;
   }
 }
@@ -356,8 +355,7 @@ function getClickZonesByScenesId(id,back) {
     let clickzone = 0;
     let id;
     if(back){
-        clickzone = new BackClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getBackClickAreaImagePath(scene), getElementId(currentArea));
-        id = 0;
+        clickzone = new BackClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1], getElementId(currentArea));
     }else{
         clickzone = new ClickZone(currentArea.Pos[0],currentArea.Pos[1],currentArea.Size[0] + currentArea.Pos[0],heightPourcentage + currentArea.Pos[1],getPointedScene(currentArea.Path), getElementId(currentArea));
         id = getPointedScene(currentArea.Path);
