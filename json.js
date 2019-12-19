@@ -493,14 +493,43 @@ function getSceneTextAreasBySceneId(sceneId) {
 // ========================================================================================
 
 function printOpeningText(){
-  let text = getSceneTextBySceneId(scene_number);
-  let textBox = document.getElementById("textbox");
+  var text;
+  var textBox;
+  function reset() {
+    let winWidth=parseInt(window.innerWidth);
+    let winHeight=parseInt(window.innerHeight);
+    //console.log(imgSize);
+    let imgWidth=imgSize[0].width;
+    let imgHeight=imgSize[0].height;
+    let dx=0;
+    let dy=0;
+    let scale;
+    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+      scale = 1.0/(imgWidth/winWidth);
+      dy = (winHeight-(imgHeight*scale))/2;
+    }else{
+      scale = 1.0/(imgHeight/winHeight);
+      dx=(winWidth-(imgWidth*scale))/2;
+    }
+    text = getSceneTextBySceneId(scene_number);
+    textBox = document.getElementById("textbox");
+    textBox.innerHTML="";
+    textBox.style.left = (1.1 * dx) + "px";
+    textBox.style.right = (1.1 * dx) + "px";
+    textBox.style.top = (dy + 0.75 * imgHeight * scale) + "px";
+    textBox.style.fontSize = (0.06 * imgHeight * scale) + "px";
+  }
+  reset();
   let i = 0;
   function charByChar() {
     if (i < text.length) {
+      window.onresize = function () {
+        reset();
+        textBox.innerHTML = text.substring(0,i);
+      }
       textBox.innerHTML += text[i];
       i++;
-      setTimeout(charByChar, 200);
+      setTimeout(charByChar, 50);
     }
   }
   charByChar();
