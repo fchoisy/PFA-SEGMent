@@ -21,10 +21,10 @@ function initialisation() {
     //document.getElementById("canvas").height = window.innerHeight;
     //document.getElementById("canvas").width = window.innerWidth;
     scene_number = getLastElem(getCookieValue("scene_number"));
-    let isback = getCookieValue("isback");
-    if(!(isback == "true")){
-      backgroundModifier();
-    }
+    //let isback = getCookieValue("isback");
+    //if(!(isback == "true")){
+    backgroundModifier();
+    //}
       playSoundScene();
       imgsize();
       printOpeningText();
@@ -128,7 +128,6 @@ function Puzzled(id){
                 clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Replace",sceneTextArea[i].Text], sceneTextArea[i].id)
             }
             else{
-                console.log(sceneTextArea[i].Behaviour)
                 clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Add",sceneTextArea[i].Text], sceneTextArea[i].id);
             }
             digicodeClickZone.push(clickz);
@@ -163,22 +162,24 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
   const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if (resClickZone[0] >= 0) {
     playSoundClickZone(resClickZone[1]);
-    if (window.location.pathname == "/pong.html") {
-      changeScene(event, "ping.html", resClickZone[0], false);
-    } else {
-      changeScene(event, "pong.html", resClickZone[0], false);
-    }
+    changeScene(event, "ping.html", resClickZone[0], false);
+    // if (window.location.pathname == "/pong.html") {
+    //   changeScene(event, "ping.html", resClickZone[0], false);
+    // } else {
+    //   changeScene(event, "pong.html", resClickZone[0], false);
+    // }
   }
   const resBackZone = isOnBackZone(X, Y); // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
   if(resBackZone[0]){
     playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = 0;
-    if (window.location.pathname == "/pong.html") {
-      changeScene(event, "ping.html", sId, true);
-    } else {
-      changeScene(event, "pong.html", sId, true);
-    }
+    changeScene(event, "ping.html", sId, true);
+    // if (window.location.pathname == "/pong.html") {
+    //   changeScene(event, "ping.html", sId, true);
+    // } else {
+    //   changeScene(event, "pong.html", sId, true);
+    // }
   }
   const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
   let bool = false;
@@ -200,15 +201,18 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
   }
   if(bool){
     let sId = 0;
-    if (window.location.pathname == "/pong.html") {
-      sId = digicodeClickZone[digicodeClickZone.length-1]
-      sId = sId[sId.length-1];
-      changeScene(event, "ping.html", sId, false);
-    } else {
-      sId = digicodeClickZone[digicodeClickZone.length-1]
-      sId = sId[sId.length-1];
-      changeScene(event, "pong.html", sId, false);
-    }
+    sId = digicodeClickZone[digicodeClickZone.length-1]
+    sId = sId[sId.length-1];
+    changeScene(event, "ping.html", sId, false);
+    // if (window.location.pathname == "/pong.html") {
+    //   sId = digicodeClickZone[digicodeClickZone.length-1]
+    //   sId = sId[sId.length-1];
+    //   changeScene(event, "ping.html", sId, false);
+    // } else {
+    //   sId = digicodeClickZone[digicodeClickZone.length-1]
+    //   sId = sId[sId.length-1];
+    //   changeScene(event, "pong.html", sId, false);
+    // }
   }
 }
 
@@ -341,7 +345,6 @@ function isOnBackZone(X,Y){
         if(X>=backClickZones[i].x1 && X<=backClickZones[i].x2 && Y>=backClickZones[i].y1 && Y<=backClickZones[i].y2){
             resTab[0] = true; // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
             resTab[1] = backClickZones[i].bckclickId;
-            console.log(backClickZones[i].bckclickId);
             return resTab;
         }
     }
@@ -471,32 +474,31 @@ function changeScene(event, html, id, back) {
     else{
         lstSceneNumber = "";
     }
-    if(getCookieValue("isback") == "false;" && back){
-        let lst;
-        if(getLastElem(lstSceneNumber)==scene_number){
-            lst = removeLastElem(lstSceneNumber);
-            document.cookie = "scene_number=" + lst + ";";
-            document.cookie = "isback=" + true +";";
-        }
-        document.location.href = html;
-        return;
-    }
-    else{
+    // if(getCookieValue("isback") == "false;" && back){
+    //     let lst;
+    //     if(getLastElem(lstSceneNumber)==scene_number){
+    //         lst = removeLastElem(lstSceneNumber);
+    //         document.cookie = "scene_number=" + lst + ";";
+    //         document.cookie = "isback=" + true +";";
+    //     }
+    //     document.location.href = html;
+    //     return;
+    // }
+    // else{
       if(back){
         let lst;
         if(getLastElem(lstSceneNumber)==scene_number){
             lst = removeLastElem(lstSceneNumber);
             document.cookie = "scene_number=" + lst + ";";
-            document.cookie = "isback=" + "falsesecond" +";";
+            //document.cookie = "isback=" + "falsesecond" +";";
         }
-      }
-      else{
+      }else{
         if(getLastElem(lstSceneNumber)==scene_number){
-            document.cookie = "isback=" + false +";";
+            //document.cookie = "isback=" + false +";";
             document.cookie = "scene_number=" + lstSceneNumber + "," + id + ";"; // + stri);
         }
       }
-    }
+    //}
     //
     // $.getJSON( GameURL, function(data) {
     //   var scene = getSceneByID(data,id);
@@ -522,7 +524,6 @@ function changeScene(event, html, id, back) {
 
 function removeLastElem(lst){
     let len = lst.length;
-    console.log(lst);
     while(lst[len] !=","){
         len = len - 1;
     }
