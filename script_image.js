@@ -10,7 +10,6 @@ let scene_number;
 let imgSize = [];
 let digicodeClickZone = [];
 let buffer = "";
-//Penser à virer pong.
 
 window.onload = initialisation();
 
@@ -110,7 +109,9 @@ function clickzone() {
   }
 }*/
 
-
+/*
+* The function parse the different information of the JSON according to the puzzle type
+*/
 function Puzzled(id){
     const puzzle = whatPuzzleItIs(id);
     if(puzzle[0] == "Text"){
@@ -216,6 +217,9 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
   }
 }
 
+/*
+* Implements the validation behavior of a digicode click zone
+*/
 function validatingBuffer(){
     const answer = digicodeClickZone[digicodeClickZone.length-1];
     const len = answer[1].length;
@@ -231,14 +235,23 @@ function validatingBuffer(){
     return false;
 }
 
+/*
+* Implements the replacing behavior of a digicode click zone
+*/
 function changingBuffer(digi){
     buffer = digi;
 }
 
+/*
+* Implements the adding behavior of a digicode click zone
+*/
 function addingBuffer(digi){
     buffer = buffer + digi;
 }
 
+/*
+* Implements the deleting behavior of a digicode click zone
+*/
 function deletingBuffer(){
     if(buffer.length == 0){
         return;
@@ -318,6 +331,9 @@ function isOnZone(X,Y){
     return resTab;
 }
 
+/*
+* Check if the mouse cursor is on a backclick zone. If so, return true
+*/
 function isOnBackZone(X,Y){
 
     let winWidth=parseInt(window.innerWidth);
@@ -353,6 +369,9 @@ function isOnBackZone(X,Y){
     return resTab;
 }
 
+/*
+* Check if the mouse cursor is on a digicodeclick zone. If so, return true
+*/
 function isOnDigicodeZone(X,Y){
   let winWidth=parseInt(window.innerWidth);
   let winHeight=parseInt(window.innerHeight);
@@ -522,6 +541,10 @@ function changeScene(event, html, id, back) {
   })
 };
 
+/**
+ * Remove the last element from a string of this form "1,2,3,4"
+ * @param {String} lst the string you want to remove the last element
+*/
 function removeLastElem(lst){
     let len = lst.length;
     while(lst[len] !=","){
@@ -530,6 +553,10 @@ function removeLastElem(lst){
     return lst.substring(0,len);
 }
 
+/**
+ * Get the last element from a string of this form "1,2,3,4"
+ * @param {String} lst the string you want to get the last element
+*/
 function getLastElem(lst){
   let len = lst.length;
   while(lst[len] !="," && len!=0){

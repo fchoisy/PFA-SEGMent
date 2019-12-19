@@ -172,6 +172,11 @@ function getBackClickAreas(scene) {
   return scene.BackClickAreas;
 }
 
+/**
+ * Returns the FIRST back click areas described in the game JSON for the scene object 'scene'
+ *
+ * @param {Scene object} scene
+ */
 function getBackClickArea(scene){
   return scene.BackClickAreas[0];
 }
@@ -243,19 +248,26 @@ function getPointedScene(clickAreaPath) {
   return -1
 }
 
-function getBackClickAreaImagePath(scene){
-  let objects = getObjects(scene);
-  let len = objects.length;
-  let path = "";
-  let i = 0;
-  while (i < len && path == "") {
-    if(objects[i].PuzzlePiece==false){
-      path=objects[i].Image;
-    }
-    i++;
-  }
-  return path;
-}
+
+// function getBackClickAreaImagePath(scene){
+//   let objects = getObjects(scene);
+//   let len = objects.length;
+//   let path = "";
+//   let i = 0;
+//   while (i < len && path == "") {
+//     if(objects[i].PuzzlePiece==false){
+//       path=objects[i].Image;
+//     }
+//     i++;
+//   }
+//   return path;
+// }
+
+
+/**
+ * Return the type of the puzzle present in the given scene
+ * @param {Scene object} id
+*/
 
 function whatPuzzleItIs(id){
     const scene = getSceneByID(id);
@@ -278,6 +290,11 @@ function whatPuzzleItIs(id){
     return "";
 }
 
+/**
+ * Given a path (ex : "Game/Scene.14") return the last number (in the example 14)
+ *
+ * @param {String} str
+ */
 function getLastNumberTransition(str){
     let len = str.length;
     while(str[len] !="."){
