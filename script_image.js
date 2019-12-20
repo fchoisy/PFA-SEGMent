@@ -155,35 +155,81 @@ function Puzzled(id){
         array.push(idTransition); // Attention cela doit toujours être en dernier
         digicodeClickZone.push(array);
     } else if (puzzle[0] == "Puzzle") {
-    const puzzlePieces = getPuzzlepieces(id);
-    //const images = getPuzzleImages(puzzlePieces);
-    console.log(puzzlePieces);
-    let puzzleImagesZone = document.getElementById("puzzleImages");
-    puzzleImagesZone.innerHTML = "";
-    puzzleImagesZone.width = windowsValues[0];
-    puzzleImagesZone.height = windowsValues[1];
 
-    
-    var script = document.getElementById("dragPuzzleImages");
-    script.innerHTML = "$( function() {\n";
-    for (var i = 0; i < puzzlePieces.length; i++) {
-      script.innerHTML += "$( \"#draggable" + i + "\" ).draggable();\n";
-    }
-    script.innerHTML += " } );";
-    console.log(script);
-    for (var i = 0; i < puzzlePieces.length; i++) {
-      console.log(script);
+      const puzzlePieces = getPuzzlepieces(id);
+      let puzzleImagesZone = document.getElementById("puzzleImages");
+      puzzleImagesZone.innerHTML = "";
+      puzzleImagesZone.width = windowsValues[0];
+      puzzleImagesZone.height = windowsValues[1];
+      var script = document.createElement("script");
+      var scriptCode = "$( function() {\n";
+      let i;
+      for (i = 0; i < puzzlePieces.length; i++) {
+        scriptCode += "$( \"#draggable" + i + "\" ).draggable();\n";
+      }
+      scriptCode += " } );";
+      script.innerHTML = scriptCode;
+      script.id="drag";
+      document.body.appendChild(script);
+      for (i = 0; i < puzzlePieces.length; i++) {
+        var img = document.createElement("IMG");
+        img.id = "draggable" + i;
+        img.width = puzzlePieces[i].Size[0] * windowsValues[2] * windowsValues[6];
+        img.height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
+        img.src = "Game/" + puzzlePieces[i].Image;
+        puzzleImagesZone.appendChild(img);
+      }
+      let diffX=[];
+      let diffY=[];
+      var delta = 0.05;
+      let originX = windowsValues[4] + puzzlePieces[0].Pos[0] * windowsValues[2] * windowsValues[6];
+      let originY = windowsValues[5] + puzzlePieces[0].Pos[1] * windowsValues[3] * windowsValues[6];
+      let imgX;
+      let imgY;
+      let minX;
+      let maxX;
+      let minY;
+      let maxY;
+      for (i = 1; i < puzzlePieces.length; i++) {
+        imgX = windowsValues[4] + puzzlePieces[i].Pos[0] * windowsValues[2] * windowsValues[6];
+        imgY = windowsValues[5] + puzzlePieces[i].Pos[1] * windowsValues[3] * windowsValues[6];
+        minX = imgX - originX - delta * windowsValues[2] * windowsValues[6];
+        maxX = imgX - originX + delta * windowsValues[2] * windowsValues[6];
+        minY = imgY - originY - delta * windowsValues[3] * windowsValues[6];
+        maxY = imgY - originY + delta * windowsValues[3] * windowsValues[6];
+        diffX.push([minX,maxX]);
+        diffY.push([minY,maxY]);
+      }
 
-      var img = document.createElement("IMG");
-      img.id = "draggable" + i;
-      img.width = 0.50 * windowsValues[0] * windowsValues[6];
-      img.height = 0.50 * windowsValues[1] * windowsValues[6];
-      img.src = "Game/" + puzzlePieces[i].Image;
-
-      console.log(img);
-      puzzleImagesZone.appendChild(img);
+      const transition = getTransitionByID(getTransitions(),puzzle[1]);
+      const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
+      window.addEventListener("mouseup", verify, false);
+      //console.log(diffX);
+      //console.log(diffY);
+      function verify(){
+        let currentdiffX = [];
+        let currentdiffY = [];
+        let currentOriginX = parseInt(document.getElementById("draggable"+0).x);
+        let currentOriginY = parseInt(document.getElementById("draggable"+0).y);
+        let result = true ;
+        let currentX;
+        let currentY;
+        for (var i = 1; i < puzzlePieces.length; i++) {
+          currentX=parseInt(document.getElementById("draggable" + i).x);
+          currentY=parseInt(document.getElementById("draggable" + i).y);
+          //console.log(currentX - currentOriginX);
+          if (!((currentX - currentOriginX) >= diffX[i-1][0] && (currentX - currentOriginX) <= diffX[i-1][1])){
+            result = false;
+          }
+          if (!((currentY - currentOriginY) >= diffY[i-1][0] && (currentY - currentOriginY) <= diffY[i-1][1])){
+            result = false;
+          }
         }
-      console.log(puzzleImagesZone.innerHTML);
+      if (result) {
+        changeScene(event, "ping.html", idTransition, false);
+      }
+    }
+
   }
 }
 

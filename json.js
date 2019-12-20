@@ -274,14 +274,6 @@ function getPuzzlepieces(id){
   return tab;
 }
 
-function getPuzzleImages(puzzlePieces){
-  let images = [];
-  for(let i = 0; i < puzzlePieces.length; i++){
-    var img = new Image();
-    images.push(img);
-  }
-}
-
 /**
  * Return the type of the puzzle present in the given scene
  * @param {Scene object} id
