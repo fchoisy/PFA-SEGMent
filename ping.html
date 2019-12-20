@@ -57,9 +57,6 @@
       font-family: monospace;
     }
 
-      .draggable {
-        padding: 0.5em;
-     }
   </style>
 </head>
 
@@ -76,6 +73,12 @@
   <div id="puzzleImages">
   <!-- Images -->
   </div>
+
+  <script>
+    $( function() {
+      $( "#puzzleImages" ).droppable();
+    });
+  </script>
 
   <script type="text/javascript" src="json.js"></script>
   <script type="text/javascript" src="script_image.js"></script>

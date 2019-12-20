@@ -155,32 +155,46 @@ function Puzzled(id){
         array.push(idTransition); // Attention cela doit toujours être en dernier
         digicodeClickZone.push(array);
     } else if (puzzle[0] == "Puzzle") {
-
-      const puzzlePieces = getPuzzlepieces(id);
+      let puzzlePieces = getPuzzlepieces(id);
+      let diffX;
+      let diffY;
+      function displayPuzzleImage() {
+      setWindowsValues();
       let puzzleImagesZone = document.getElementById("puzzleImages");
+      puzzleImagesZone.style.position = "absolute";
+      puzzleImagesZone.style.top =  windowsValues[5] + "px";
+      puzzleImagesZone.style.bottom =  windowsValues[5] + "px";
+      puzzleImagesZone.style.left =  windowsValues[4] + "px";
+      puzzleImagesZone.style.right =  windowsValues[4] + "px";
       puzzleImagesZone.innerHTML = "";
       puzzleImagesZone.width = windowsValues[0];
       puzzleImagesZone.height = windowsValues[1];
-      var script = document.createElement("script");
-      var scriptCode = "$( function() {\n";
+      //console.log(puzzleImagesZone);
       let i;
-      for (i = 0; i < puzzlePieces.length; i++) {
-        scriptCode += "$( \"#draggable" + i + "\" ).draggable();\n";
-      }
-      scriptCode += " } );";
-      script.innerHTML = scriptCode;
-      script.id="drag";
-      document.body.appendChild(script);
       for (i = 0; i < puzzlePieces.length; i++) {
         var img = document.createElement("IMG");
         img.id = "draggable" + i;
+        let top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
+        let left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+        //console.log(top,left);
+        img.style.position = "absolute";
+        img.style.top = top + "px";
+        img.style.left = left + "px";
         img.width = puzzlePieces[i].Size[0] * windowsValues[2] * windowsValues[6];
         img.height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
         img.src = "Game/" + puzzlePieces[i].Image;
         puzzleImagesZone.appendChild(img);
       }
-      let diffX=[];
-      let diffY=[];
+      var script = document.createElement("script");
+      var scriptCode = "$( function() {\n";
+      for (i = 0; i < puzzlePieces.length; i++) {
+        scriptCode += "$( \"#draggable" + i + "\" ).draggable({ revert: \"invalid\" });\n";
+      }
+      scriptCode += " } );";
+      script.innerHTML = scriptCode;
+      document.body.appendChild(script);
+      diffX=[];
+      diffY=[];
       var delta = 0.05;
       let originX = windowsValues[4] + puzzlePieces[0].Pos[0] * windowsValues[2] * windowsValues[6];
       let originY = windowsValues[5] + puzzlePieces[0].Pos[1] * windowsValues[3] * windowsValues[6];
@@ -200,12 +214,12 @@ function Puzzled(id){
         diffX.push([minX,maxX]);
         diffY.push([minY,maxY]);
       }
-
-      const transition = getTransitionByID(getTransitions(),puzzle[1]);
-      const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
-      window.addEventListener("mouseup", verify, false);
-      //console.log(diffX);
-      //console.log(diffY);
+    }
+    displayPuzzleImage();
+    window.addEventListener("resize", displayPuzzleImage, false);
+    const transition = getTransitionByID(getTransitions(),puzzle[1]);
+    const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
+    window.addEventListener("mouseup", verify, false);
       function verify(){
         let currentdiffX = [];
         let currentdiffY = [];
