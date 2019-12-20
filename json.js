@@ -263,6 +263,24 @@ function getPointedScene(clickAreaPath) {
 //   return path;
 // }
 
+function getPuzzlepieces(id){
+  const scene = getSceneByID(id);
+  let tab = [];
+  for(let i = 0; i < scene.Objects.length; i++){
+    if(scene.Objects[i].PuzzlePiece){
+      tab.push(scene.Objects[i]);
+    }
+  }
+  return tab;
+}
+
+function getPuzzleImages(puzzlePieces){
+  let images = [];
+  for(let i = 0; i < puzzlePieces.length; i++){
+    var img = new Image();
+    images.push(img);
+  }
+}
 
 /**
  * Return the type of the puzzle present in the given scene
@@ -513,28 +531,13 @@ function printOpeningText(){
   var text;
   var textBox;
   function reset() {
-    let winWidth=parseInt(window.innerWidth);
-    let winHeight=parseInt(window.innerHeight);
-    //console.log(imgSize);
-    let imgWidth=imgSize[0].width;
-    let imgHeight=imgSize[0].height;
-    let dx=0;
-    let dy=0;
-    let scale;
-    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
-      scale = 1.0/(imgWidth/winWidth);
-      dy = (winHeight-(imgHeight*scale))/2;
-    }else{
-      scale = 1.0/(imgHeight/winHeight);
-      dx=(winWidth-(imgWidth*scale))/2;
-    }
     text = getSceneTextBySceneId(scene_number);
     textBox = document.getElementById("textbox");
     textBox.innerHTML="";
-    textBox.style.left = (1.1 * dx) + "px";
-    textBox.style.right = (1.1 * dx) + "px";
-    textBox.style.top = (dy + 0.75 * imgHeight * scale) + "px";
-    textBox.style.fontSize = (0.06 * imgHeight * scale) + "px";
+    textBox.style.left = (1.1 * windowsValues[4]) + "px";
+    textBox.style.right = (1.1 * windowsValues[4]) + "px";
+    textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
+    textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
   }
   reset();
   let i = 0;

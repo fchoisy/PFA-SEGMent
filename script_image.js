@@ -10,6 +10,7 @@ let scene_number;
 let imgSize = [];
 let digicodeClickZone = [];
 let buffer = "";
+let windowsValues;
 
 window.onload = initialisation();
 
@@ -24,12 +25,13 @@ function initialisation() {
     //if(!(isback == "true")){
     backgroundModifier();
     //}
-      playSoundScene();
-      imgsize();
-      printOpeningText();
-      clickzone();
-      Puzzled(scene_number);
-      $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+    playSoundScene();
+    imgsize();
+    setWindowsValues();
+    printOpeningText();
+    clickzone();
+    Puzzled(scene_number);
+    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
 /**
@@ -51,6 +53,32 @@ function backgroundModifier() {
   // elem.innerHTML = "html {height:100%;margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;background-color: black;-webkit-background-size: cover;background-size: contain;}"
   //return(elem.backgroundImage.width,elem.backgroundImage.height);
 };
+
+/**
+ * Store the values of the window's width, height, image's width, height,
+ * the dx (in pixels), the dy (in pixels), the scale of the resized image
+ * into an array named windowsValues
+ */
+function setWindowsValues(){
+  let winWidth=parseInt(window.innerWidth);
+  let winHeight=parseInt(window.innerHeight);
+  //console.log(imgSize);
+  let imgWidth=imgSize[0].width;
+  let imgHeight=imgSize[0].height;
+  let dx=0;
+  let dy=0;
+  let scale;
+  if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
+    scale = 1.0/(imgWidth/winWidth);
+    dy = (winHeight-(imgHeight*scale))/2;
+  }else{
+    scale = 1.0/(imgHeight/winHeight);
+    dx=(winWidth-(imgWidth*scale))/2;
+  }
+  let array = [winWidth, winHeight, imgWidth, imgHeight, dx, dy, scale];
+  windowsValues = array;
+}
+
 
 /**
  * Initializes the global array 'clickZones'
@@ -82,28 +110,13 @@ function clickzone() {
 /*function displayBackClickImage(){
   if(!(backClickZones.length == 0)){
     let backClick=backClickZones[0];
-    let winWidth=parseInt(window.innerWidth);
-    let winHeight=parseInt(window.innerHeight);
-    //console.log(imgSize);
-    let imgWidth=imgSize[0].width;
-    let imgHeight=imgSize[0].height;
-    let dx=0;
-    let dy=0;
-    let scale;
-    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
-      scale = 1.0/(imgWidth/winWidth);
-      dy = (winHeight-(imgHeight*scale))/2;
-    }else{
-      scale = 1.0/(imgHeight/winHeight);
-      dx=(winWidth-(imgWidth*scale))/2;
-    }
     var canvas = document.getElementById("canvas");
-    canvas.width  = winWidth;
-    canvas.height = winHeight;
+    canvas.width  = windowsValues[0];
+    canvas.height = windowsValues[1];
     var ctx = canvas.getContext('2d');
     var img = new Image();
     img.onload = function() {
-      ctx.drawImage(img, dx + (backClick.x1 * imgWidth * scale), dy+ (backClick.y1 * imgHeight * scale), (backClick.x2 - backClick.x1) * imgWidth * scale, (backClick.y2-backClick.y1) * imgHeight * scale);
+      ctx.drawImage(img, windowsValues[4] + (backClick.x1 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (backClick.y1 * windowsValues[3] * windowsValues[6]), (backClick.x2 - backClick.x1) * windowsValues[2] * windowsValues[6], (backClick.y2-backClick.y1) * windowsValues[3] * windowsValues[6]);
     };
     img.src = "Game/" + backClick.image;
   }
@@ -141,7 +154,37 @@ function Puzzled(id){
         array.push(riddle.Text.FuzzyMatches);
         array.push(idTransition); // Attention cela doit toujours être en dernier
         digicodeClickZone.push(array);
+    } else if (puzzle[0] == "Puzzle") {
+    const puzzlePieces = getPuzzlepieces(id);
+    //const images = getPuzzleImages(puzzlePieces);
+    console.log(puzzlePieces);
+    let puzzleImagesZone = document.getElementById("puzzleImages");
+    puzzleImagesZone.innerHTML = "";
+    puzzleImagesZone.width = windowsValues[0];
+    puzzleImagesZone.height = windowsValues[1];
+
+    
+    var script = document.getElementById("dragPuzzleImages");
+    script.innerHTML = "$( function() {\n";
+    for (var i = 0; i < puzzlePieces.length; i++) {
+      script.innerHTML += "$( \"#draggable" + i + "\" ).draggable();\n";
     }
+    script.innerHTML += " } );";
+    console.log(script);
+    for (var i = 0; i < puzzlePieces.length; i++) {
+      console.log(script);
+
+      var img = document.createElement("IMG");
+      img.id = "draggable" + i;
+      img.width = 0.50 * windowsValues[0] * windowsValues[6];
+      img.height = 0.50 * windowsValues[1] * windowsValues[6];
+      img.src = "Game/" + puzzlePieces[i].Image;
+
+      console.log(img);
+      puzzleImagesZone.appendChild(img);
+        }
+      console.log(puzzleImagesZone.innerHTML);
+  }
 }
 
 /**
@@ -269,28 +312,10 @@ function deletingBuffer(){
  * @returns id of the corresponding click zone, -1 if there is none
  */
 function isOnZone(X,Y){
-    //console.log("scene "+scene_number);
-
-    let winWidth=parseInt(window.innerWidth);
-    let winHeight=parseInt(window.innerHeight);
-    let imgWidth=imgSize[0].width;
-    let imgHeight=imgSize[0].height;
-    let resTab = [];
-
-    let scale;
-    let dx=0;
-    let dy=0;
-    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
-      scale = 1.0/(imgWidth/winWidth);
-      dy = (winHeight-(imgHeight*scale))/2;
-    }else{                                        //Black borders on the left and the right of the window
-      scale=1.0/(imgHeight/winHeight);
-      dx=(winWidth-(imgWidth*scale))/2;
-    }
     //console.log(X,Y);
-    X = (X-dx)/(winWidth-2*dx);
-    Y = (Y-dy)/(winHeight-2*dy);
-
+    X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
+    Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+    let resTab = [];
     //console.log(X,Y);
 
 /*
@@ -335,26 +360,9 @@ function isOnZone(X,Y){
 * Check if the mouse cursor is on a backclick zone. If so, return true
 */
 function isOnBackZone(X,Y){
-
-    let winWidth=parseInt(window.innerWidth);
-    let winHeight=parseInt(window.innerHeight);
-    let imgWidth=imgSize[0].width;
-    let imgHeight=imgSize[0].height;
     let resTab = [];
-
-    let scale;
-    let dx=0;
-    let dy=0;
-    if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
-      scale = 1.0/(imgWidth/winWidth);
-      dy = (winHeight-(imgHeight*scale))/2;
-    }else{                                        //Black borders on the left and the right of the window
-      scale=1.0/(imgHeight/winHeight);
-      dx=(winWidth-(imgWidth*scale))/2;
-    }
-
-    X = (X-dx)/(winWidth-2*dx);
-    Y = (Y-dy)/(winHeight-2*dy);
+    X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
+    Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
 
     let len = backClickZones.length;
     for(let i=0;i<len;i++){
@@ -373,26 +381,9 @@ function isOnBackZone(X,Y){
 * Check if the mouse cursor is on a digicodeclick zone. If so, return true
 */
 function isOnDigicodeZone(X,Y){
-  let winWidth=parseInt(window.innerWidth);
-  let winHeight=parseInt(window.innerHeight);
-  let imgWidth=imgSize[0].width;
-  let imgHeight=imgSize[0].height;
   let resTab = [];
-
-  let scale;
-  let dx=0;
-  let dy=0;
-  if (imgWidth/winWidth>=imgHeight/winHeight) { //Black borders on the top and the bottom of the window
-    scale = 1.0/(imgWidth/winWidth);
-    dy = (winHeight-(imgHeight*scale))/2;
-  }else{                                        //Black borders on the left and the right of the window
-    scale=1.0/(imgHeight/winHeight);
-    dx=(winWidth-(imgWidth*scale))/2;
-  }
-
-  X = (X-dx)/(winWidth-2*dx);
-  Y = (Y-dy)/(winHeight-2*dy);
-
+  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
+  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
   let len = digicodeClickZone.length - 1;
   for(let i=0;i<len;i++){
       if(X>=digicodeClickZone[i].x1 && X<=digicodeClickZone[i].x2 && Y>=digicodeClickZone[i].y1 && Y<=digicodeClickZone[i].y2){
@@ -574,3 +565,4 @@ function getLastElem(lst){
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
 window.onresize = printOpeningText;
+window.onresize = setWindowsValues;

@@ -56,6 +56,10 @@
       -webkit-text-stroke: 1px white;
       font-family: monospace;
     }
+
+      .draggable {
+        padding: 0.5em;
+     }
   </style>
 </head>
 
@@ -69,8 +73,24 @@
   <!-- Text displayed when scene is open -->
   </div>
 
+  <script id="dragPuzzleImages" >
+  $( function() {
+    $( "#draggable0" ).draggable();
+    $( "#draggable1" ).draggable();
+    $( "#draggable2" ).draggable();
+    $( "#draggable3" ).draggable();
+  } );
+  </script>
+
+
+  <div id="puzzleImages">
+  <!-- Images -->
+  </div>
+
   <script type="text/javascript" src="json.js"></script>
   <script type="text/javascript" src="script_image.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 </body>
 
