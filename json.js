@@ -263,6 +263,8 @@ function getPointedScene(clickAreaPath) {
 //   return path;
 // }
 
+
+
 function getPuzzlepieces(id){
   const scene = getSceneByID(id);
   let tab = [];
