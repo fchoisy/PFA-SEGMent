@@ -9,10 +9,14 @@ let backClickZones = [];
 let scene_number;
 let imgSize = [];
 let digicodeClickZone = [];
+let gifClickZone = [];
+let gifOnScene = [];
 let buffer = "";
 let windowsValues;
 
 window.onload = initialisation();
+//Penser à remplir gifOnScene
+
 
 /**
  * Function to be called when scene is opened
@@ -213,7 +217,7 @@ function Puzzled(id){
         maxY = imgY - originY + delta * windowsValues[3] * windowsValues[6];
         diffX.push([minX,maxX]);
         diffY.push([minY,maxY]);
-      }
+      } else if ()
     }
     displayPuzzleImage();
     window.addEventListener("resize", displayPuzzleImage, false);
@@ -243,6 +247,32 @@ function Puzzled(id){
         changeScene(event, "ping.html", idTransition, false);
       }
     }
+
+
+  }else if(puzzle[0] == "GIF"){
+      const scene = getSceneByID(id);
+      let gifs = scene.Gifs;
+      let clickz=[];
+      let currentGif = [];
+      let img;
+      let gif;
+      for(let i=0;i<gifs.length;i++){
+          currentGif = gifs[i];
+          let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
+          clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames], currentGif.id);
+          gifClickZone.push(clickz);
+          img = document.createElement("img");
+          img.setAttribute("id","gif"+i);
+          img.setAttribute("src",currentGif.Image);
+          let top = Math.floor(clickz[0] * 65) / 100 * windowsValues[3] * windowsValues[6];
+          let left = Math.floor(clickz[1] * 65) / 100 * windowsValues[2] * windowsValues[6];
+          img.style.position = "absolute";
+          img.style.top = top + "px";
+          img.style.left = left + "px";
+          document.getElementById("body").appendChild(img);
+          gif = new SuperGif({ gif: img } );
+          gifOnScene.push(gif);
+      }
 
   }
 }
@@ -303,6 +333,13 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
           console.log(buffer);
       }
   }
+  const resGif = isOnGifZone(X,Y);
+  if(resGif!=-1){
+      const currentFrame = gifOnScene[resGif].get_curent_frame();
+      let newFrame = (currentFrame + 1) % gifClickZone[resGif][0];
+      gifOnScene[resGif].move_to(newFrame);
+      areGifWellSet();
+  }
   if(bool){
     let sId = 0;
     sId = digicodeClickZone[digicodeClickZone.length-1]
@@ -362,6 +399,22 @@ function deletingBuffer(){
     else{
         buffer = buffer.substring(0,buffer.length-1);
     }
+}
+
+/*
+* Check if all the gifs are set to the right frame.
+*/
+function areGifWellSet(){
+    let bool = true;
+    let i = 0 ;
+    const len = gifClickZone.length;
+    while(i<len && bool){
+        if(gifClickZone[1][gifOnScene[i].get_current_frame()] != 2){
+            bool = false;
+        }
+        i++;
+    }
+    return bool;
 }
 
 /**
@@ -441,20 +494,32 @@ function isOnBackZone(X,Y){
 * Check if the mouse cursor is on a digicodeclick zone. If so, return true
 */
 function isOnDigicodeZone(X,Y){
-  let resTab = [];
-  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
-  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
-  let len = digicodeClickZone.length - 1;
-  for(let i=0;i<len;i++){
-      if(X>=digicodeClickZone[i].x1 && X<=digicodeClickZone[i].x2 && Y>=digicodeClickZone[i].y1 && Y<=digicodeClickZone[i].y2){
-          resTab[0] = digicodeClickZone[i].id; // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
-          resTab[1] = digicodeClickZone[i].clickzoneId;
-          return resTab;
-      }
-  }
-  resTab[0] = -1;
-  resTab[1] = -1;
-  return resTab;
+    let resTab = [];
+    X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
+    Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+    let len = digicodeClickZone.length - 1;
+    for(let i=0;i<len;i++){
+        if(X>=digicodeClickZone[i].x1 && X<=digicodeClickZone[i].x2 && Y>=digicodeClickZone[i].y1 && Y<=digicodeClickZone[i].y2){
+            resTab[0] = digicodeClickZone[i].id; // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
+            resTab[1] = digicodeClickZone[i].clickzoneId;
+            return resTab;
+        }
+    }
+    resTab[0] = -1;
+    resTab[1] = -1;
+    return resTab;
+}
+
+function isOnGifZone(X,Y){
+    X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
+    Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+    let len = gifClickZone.length - 1;
+    for(let i=0;i<len;i++){
+        if(X>=gifClickZone[i].x1 && X<=gifClickZone[i].x2 && Y>=gifClickZone[i].y1 && Y<=gifClickZone[i].y2){
+            return i;
+        }
+    }
+    return -1;
 }
 
 /**
