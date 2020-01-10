@@ -134,11 +134,6 @@ function loadObjects(){
   let scene = getSceneByID(scene_number);
   let transitions = getTransitions();
   let objects = getObjects(scene);
-<<<<<<< HEAD
-=======
-  //console.log(objects);
-
->>>>>>> 999288b5a8881d76a2072f29432f7d0a9d303e40
   setWindowsValues();
   let objectsZone = document.getElementById("objects");
   objectsZone.innerHTML = "";
@@ -147,12 +142,7 @@ function loadObjects(){
   }
 }
 
-<<<<<<< HEAD
 function displayObject(object,transitions,scene){
-=======
-function displayObject(object){
-
->>>>>>> 999288b5a8881d76a2072f29432f7d0a9d303e40
   var canvas = document.getElementById("canvas");
   canvas.style.position = "absolute";
   canvas.width  = windowsValues[0];
