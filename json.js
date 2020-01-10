@@ -525,6 +525,7 @@ function printOpeningText(){
   var text;
   var textBox;
   function reset() {
+    clearTimeout();
     text = getSceneTextBySceneId(scene_number);
     textBox = document.getElementById("textbox");
     textBox.innerHTML="";

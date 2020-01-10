@@ -14,6 +14,13 @@ let windowsValues;
 
 window.onload = initialisation();
 
+function resize(){
+  console.log("resize");
+  printOpeningText();
+  setWindowsValues();
+  loadObjects();
+}
+
 /**
  * Function to be called when scene is opened
  */
@@ -124,7 +131,6 @@ function clickzone() {
 }*/
 
 function loadObjects(){
-  console.log("here1");
   let scene = getSceneByID(scene_number);
   let transitions = getTransitions();
   let objects = getObjects(scene);
@@ -132,45 +138,26 @@ function loadObjects(){
 
   setWindowsValues();
   let objectsZone = document.getElementById("objects");
-  objectsZone.style.position = "absolute";
-  objectsZone.style.top =  windowsValues[4] + "px";
-  objectsZone.style.bottom =  windowsValues[5] + "px";
-  objectsZone.style.left =  windowsValues[4] + "px";
-  objectsZone.style.right =  windowsValues[4] + "px";
   objectsZone.innerHTML = "";
-  objectsZone.width = windowsValues[0];
-  objectsZone.height = windowsValues[1];
 
   for (var i = 0; i < objects.length; i++) {
-    console.log("herei : " + i);
     displayObject(objects[i]);
   }
-  console.log("here2");
 }
 
 function displayObject(object){
-  let objectsZone = document.getElementById("objects");
-  console.log("here : object");
-  var objectZone = document.createElement("IMG");
-
-  // objectZone.width  = windowsValues[0] * object.Size[0];
-  // objectZone.height = windowsValues[1] * object.Size[1];
-  // var ctx = objectZone.getContext('2d');
-  // var img = new Image();
-  // img.src = "Game/" + object.Image;
-  // img.onload = function() {
-  //   ctx.drawImage(img, object.Pos[0] * windowsValues[2] * windowsValues[6], object.Pos[1] * windowsValues[3] * windowsValues[6]);
-  //   //ctx.drawImage(img, windowsValues[4] + (object.Pos[0] * windowsValues[2] * windowsValues[6]), windowsValues[5] + (object.Pos[1] * windowsValues[3] * windowsValues[6]), object.Size[0] * windowsValues[2] * windowsValues[6], object.Size[1] * windowsValues[3] * windowsValues[6]);
-  // };
-
-  objectZone.style.position = "absolute";
-  objectZone.style.top = object.Pos[0] * windowsValues[5] * windowsValues[6] + "px";
-  objectZone.style.left = object.Pos[1] * windowsValues[4] * windowsValues[6] + "px";
-  objectZone.src = "Game/" + object.Image;
-  objectZone.width = object.Size[0] * windowsValues[2];
-  objectZone.height = object.Size[1] * windowsValues[3];
-
-  objectsZone.appendChild(objectZone);
+  
+  var canvas = document.getElementById("canvas");
+  canvas.style.position = "absolute";
+  canvas.width  = windowsValues[0];
+  canvas.height = windowsValues[1];
+  var ctx = canvas.getContext('2d');
+  var img = new Image();
+  console.log(object);
+  img.onload = function() {
+    ctx.drawImage(img, windowsValues[4] + (object.Pos[0] * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (object.Pos[1] * windowsValues[3] * windowsValues[6]), object.Size[0] * windowsValues[2] * windowsValues[6], object.Size[1] * windowsValues[2] * windowsValues[6]);
+  };
+  img.src = "Game/" + object.Image;
 }
 
 /*
@@ -675,5 +662,4 @@ function getLastElem(lst){
 
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
-window.onresize = printOpeningText;
-window.onresize = setWindowsValues;
+ window.addEventListener("resize", resize);
