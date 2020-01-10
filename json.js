@@ -524,8 +524,11 @@ function getSceneTextAreasBySceneId(sceneId) {
 function printOpeningText(){
   var text;
   var textBox;
+  var i=0;
+  var t;
   function reset() {
-    clearTimeout();
+    i = 0;
+    clearTimeout(t);
     text = getSceneTextBySceneId(scene_number);
     textBox = document.getElementById("textbox");
     textBox.innerHTML="";
@@ -535,19 +538,19 @@ function printOpeningText(){
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
   }
   reset();
-  let i = 0;
   function charByChar() {
-    if (i < text.length) {
-      window.onresize = function () {
-        reset();
-        textBox.innerHTML = text.substring(0,i);
-      }
-      textBox.innerHTML += text[i];
-      i++;
-      setTimeout(charByChar, 50);
+      if (i < text.length) {
+        window.onresize = function () {
+          reset();
+          textBox.innerHTML = text.substring(0,i);
+        }
+        textBox.innerHTML += text[i];
+        i++;
+        t=setTimeout(charByChar, 50);
     }
   }
   charByChar();
+
 }
 
 // ========================================================================================

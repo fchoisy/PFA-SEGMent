@@ -15,9 +15,8 @@ let windowsValues;
 window.onload = initialisation();
 
 function resize(){
-  console.log("resize");
-  printOpeningText();
   setWindowsValues();
+  printOpeningText();
   loadObjects();
 }
 
@@ -134,7 +133,7 @@ function loadObjects(){
   let scene = getSceneByID(scene_number);
   let transitions = getTransitions();
   let objects = getObjects(scene);
-  console.log(objects);
+  //console.log(objects);
 
   setWindowsValues();
   let objectsZone = document.getElementById("objects");
@@ -146,14 +145,13 @@ function loadObjects(){
 }
 
 function displayObject(object){
-  
+
   var canvas = document.getElementById("canvas");
   canvas.style.position = "absolute";
   canvas.width  = windowsValues[0];
   canvas.height = windowsValues[1];
   var ctx = canvas.getContext('2d');
   var img = new Image();
-  console.log(object);
   img.onload = function() {
     ctx.drawImage(img, windowsValues[4] + (object.Pos[0] * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (object.Pos[1] * windowsValues[3] * windowsValues[6]), object.Size[0] * windowsValues[2] * windowsValues[6], object.Size[1] * windowsValues[2] * windowsValues[6]);
   };
