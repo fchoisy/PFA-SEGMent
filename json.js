@@ -536,21 +536,26 @@ function printOpeningText(){
     textBox.style.right = (1.1 * windowsValues[4]) + "px";
     textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    function instantPrinting(){
+      clearTimeout(t);
+      i = text.length;
+      textBox.innerHTML = text;
+    }
+    textBox.addEventListener("click", instantPrinting);
   }
   reset();
   function charByChar() {
       if (i < text.length) {
-        window.onresize = function () {
+        window.addEventListener("resize", function () {
           reset();
-          textBox.innerHTML = text.substring(0,i);
-        }
+          textBox.innerHTML = text.substring(0,i+1);
+        });
         textBox.innerHTML += text[i];
         i++;
-        t=setTimeout(charByChar, 50);
+        t=setTimeout(charByChar, 100);
     }
   }
   charByChar();
-
 }
 
 // ========================================================================================
