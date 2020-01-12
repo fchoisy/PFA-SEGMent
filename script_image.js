@@ -138,7 +138,9 @@ function loadObjects(){
   let objectsZone = document.getElementById("objects");
   objectsZone.innerHTML = "";
   for (var i = 0; i < objects.length; i++) {
-    displayObject(objects[i],transitions,scene);
+    if (!objects[i].PuzzlePiece){
+      displayObject(objects[i],transitions,scene);
+    }
   }
 }
 
