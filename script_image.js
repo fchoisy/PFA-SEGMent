@@ -270,6 +270,7 @@ function Puzzled(id){
     const transition = getTransitionByID(getTransitions(),puzzle[1]);
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
     window.addEventListener("mouseup", verify, false);
+    window.addEventListener("touchend", verify, false);
       function verify(){
         let currentdiffX = [];
         let currentdiffY = [];
@@ -704,4 +705,4 @@ function getLastElem(lst){
 
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
- window.addEventListener("resize", resize);
+window.addEventListener("resize", resize);
