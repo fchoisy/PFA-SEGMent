@@ -274,15 +274,14 @@ function Puzzled(id){
       function verify(){
         let currentdiffX = [];
         let currentdiffY = [];
-        let currentOriginX = parseInt(document.getElementById("draggable"+0).x);
-        let currentOriginY = parseInt(document.getElementById("draggable"+0).y);
+        let currentOriginX = parseInt(document.getElementById("draggable"+0).x) * windowsValues[6];
+        let currentOriginY = parseInt(document.getElementById("draggable"+0).y) * windowsValues[6];
         let result = true ;
         let currentX;
         let currentY;
         for (var i = 1; i < puzzlePieces.length; i++) {
-          currentX=parseInt(document.getElementById("draggable" + i).x);
-          currentY=parseInt(document.getElementById("draggable" + i).y);
-          //console.log(currentX - currentOriginX);
+          currentX = parseInt(document.getElementById("draggable" + i).x) * windowsValues[6];
+          currentY = parseInt(document.getElementById("draggable" + i).y) * windowsValues[6];
           if (!((currentX - currentOriginX) >= diffX[i-1][0] && (currentX - currentOriginX) <= diffX[i-1][1])){
             result = false;
           }
