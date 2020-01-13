@@ -312,7 +312,7 @@ function getLastNumberTransition(str){
     while(str[len] !="."){
           len--;
     }
-    return parseInt(str.substring(len+1,str.length));
+    return parseInt(str.substring(len,str.length));
 }
 
 // ------------------------------------ Get <...> By Id -------------------------------------
