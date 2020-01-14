@@ -276,6 +276,22 @@ function getPuzzlepieces(id){
   return tab;
 }
 
+function getGifPointedScene(id){
+    const scene = getSceneByID(id);
+    let transitions = getTransitions();
+    const len = transitions.length;
+    for(let i =0 ; i<len; i++){
+        let sceneto = transitions[i].Transition.SceneToScene;
+        if(!(sceneto === undefined)){
+            if(!(sceneto.Riddle === undefined)){
+                if(sceneto.Riddle.Which=="Gif" && getLastNumberTransition(sceneto.From) == id){
+                    return getLastNumberTransition(sceneto.To);
+                }
+            }
+        }
+    }
+    return 2000000;
+}
 /**
  * Return the type of the puzzle present in the given scene
  * @param {Scene object} id
@@ -284,7 +300,7 @@ function getPuzzlepieces(id){
 function whatPuzzleItIs(id){
     const scene = getSceneByID(id);
     //console.log(scene.Gifs);
-    if (!(scene.Gifs.length == 0)){
+    if (scene.Gifs.length != 0){
         return ["Gif",id];
     }
     let transitions = getTransitions();

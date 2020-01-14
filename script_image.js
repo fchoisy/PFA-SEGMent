@@ -16,7 +16,14 @@ let windowsValues;
 
 window.onload = initialisation();
 //Penser à remplir gifOnScene
+// Verifier pour le changement de scene que tous les gifs sont sur la bonne frame
+// Faire les images que l'on passe pour les état d'objets
 
+function resize(){
+  setWindowsValues();
+  printOpeningText();
+  resizeGif();
+}
 
 /**
  * Function to be called when scene is opened
@@ -58,6 +65,17 @@ function backgroundModifier() {
   // elem.innerHTML = "html {height:100%;margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;background-color: black;-webkit-background-size: cover;background-size: contain;}"
   //return(elem.backgroundImage.width,elem.backgroundImage.height);
 };
+
+function resizeGif(){
+    for(let i=0;i<gifOnScene.length;i++){
+        let top = windowsValues[5] + gifClickZone[i].y1 * windowsValues[3] * windowsValues[6];
+        let left = windowsValues[4] + gifClickZone[i].x1* windowsValues[2] * windowsValues[6];
+        let width = windowsValues[2] * windowsValues[6] * (gifClickZone[i].x2-gifClickZone[i].x1);
+        let height = windowsValues[3] * windowsValues[6] * (gifClickZone[i].y2-gifClickZone[i].y1);
+        console.log(width,height,top,left);
+        gifOnScene[i].resize(width,height,left,top);
+    }
+}
 
 /**
  * Store the values of the window's width, height, image's width, height,
@@ -268,7 +286,7 @@ function Puzzled(id){
         maxY = imgY - originY + delta * windowsValues[3] * windowsValues[6];
         diffX.push([minX,maxX]);
         diffY.push([minY,maxY]);
-      } else if ()
+      }
     }
     displayPuzzleImage();
     window.addEventListener("resize", displayPuzzleImage, false);
@@ -300,29 +318,38 @@ function Puzzled(id){
     }
 
 
-  }else if(puzzle[0] == "GIF"){
+}else if(puzzle[0] == "Gif"){
       const scene = getSceneByID(id);
       let gifs = scene.Gifs;
       let clickz=[];
       let currentGif = [];
       let img;
       let gif;
+      //let canvas = getElementById("canvas");
+      const ctx = canvas.getContext("2d");
       for(let i=0;i<gifs.length;i++){
           currentGif = gifs[i];
           let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
-          clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames], currentGif.id);
+          clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames,getGifPointedScene(scene_number)], currentGif.id);
           gifClickZone.push(clickz);
           img = document.createElement("img");
           img.setAttribute("id","gif"+i);
-          img.setAttribute("src",currentGif.Image);
-          let top = Math.floor(clickz[0] * 65) / 100 * windowsValues[3] * windowsValues[6];
-          let left = Math.floor(clickz[1] * 65) / 100 * windowsValues[2] * windowsValues[6];
-          img.style.position = "absolute";
-          img.style.top = top + "px";
-          img.style.left = left + "px";
-          document.getElementById("body").appendChild(img);
-          gif = new SuperGif({ gif: img } );
-          gifOnScene.push(gif);
+          img.setAttribute("rel:auto_play","-1");
+          img.setAttribute("src","Game/"+currentGif.Image);
+          let top = windowsValues[5] + clickz.y1 * windowsValues[3] * windowsValues[6];
+          let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
+          let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);
+          let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
+          console.log("ICI :" + clickz.id[3]);
+          //img.setAttribute("style","position:absolute;"+"top:"+i*100 + "px;" +"left:"+left + "px") ;
+          document.getElementById("gifImages").appendChild(img);
+          let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
+          gifl.load(function(){
+              //canvas = gifl.get_canvas();
+              //let cont = canvas.getContext("2d");
+              //canvas.setAttribute("width", 200);
+              gifOnScene.push(gifl);
+          });
       }
 
   }
@@ -386,10 +413,18 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
   }
   const resGif = isOnGifZone(X,Y);
   if(resGif!=-1){
-      const currentFrame = gifOnScene[resGif].get_curent_frame();
-      let newFrame = (currentFrame + 1) % gifClickZone[resGif][0];
-      gifOnScene[resGif].move_to(newFrame);
-      areGifWellSet();
+      let currentFrame = gifOnScene[resGif].get_current_frame();
+      let first = true;
+      while(first || gifClickZone[resGif].id[2][currentFrame] == 0){
+        let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
+        gifOnScene[resGif].move_to(newFrame);
+        currentFrame = gifOnScene[resGif].get_current_frame();
+        first = false;
+    }
+      if(areGifWellSet()){
+            //console.log(gifClickZone[resGif].id[3]);
+            changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false);
+      }
   }
   if(bool){
     let sId = 0;
@@ -460,7 +495,8 @@ function areGifWellSet(){
     let i = 0 ;
     const len = gifClickZone.length;
     while(i<len && bool){
-        if(gifClickZone[1][gifOnScene[i].get_current_frame()] != 2){
+        if(gifClickZone[i].id[2][gifOnScene[i].get_current_frame()] != 2){
+            console.log(i);
             bool = false;
         }
         i++;
@@ -564,9 +600,10 @@ function isOnDigicodeZone(X,Y){
 function isOnGifZone(X,Y){
     X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
     Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
-    let len = gifClickZone.length - 1;
+    let len = gifClickZone.length;
     for(let i=0;i<len;i++){
         if(X>=gifClickZone[i].x1 && X<=gifClickZone[i].x2 && Y>=gifClickZone[i].y1 && Y<=gifClickZone[i].y2){
+            console.log("salut");
             return i;
         }
     }
@@ -580,7 +617,7 @@ function isOnGifZone(X,Y){
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
-  if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1) {
+  if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1) {
     document.body.style.cursor = 'pointer';
     return;
   }
@@ -740,5 +777,6 @@ function getLastElem(lst){
 
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
+window.addEventListener("resize", resize);
 window.onresize = printOpeningText;
 window.onresize = setWindowsValues;
