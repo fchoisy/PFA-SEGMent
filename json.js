@@ -304,7 +304,7 @@ function getGifPointedScene(id){
 function whatPuzzleItIs(id){
     const scene = getSceneByID(id);
     //console.log(scene.Gifs);
-    if (scene.Gifs.length != 0){
+    if (!(scene.Gifs.length == 0)){
         return ["Gif",id];
     }
     let transitions = getTransitions();
