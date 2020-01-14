@@ -74,7 +74,6 @@ function resizeGif(){
         let left = windowsValues[4] + gifClickZone[i].x1* windowsValues[2] * windowsValues[6];
         let width = windowsValues[2] * windowsValues[6] * (gifClickZone[i].x2-gifClickZone[i].x1);
         let height = windowsValues[3] * windowsValues[6] * (gifClickZone[i].y2-gifClickZone[i].y1);
-        console.log(width,height,top,left);
         gifOnScene[i].resize(width,height,left,top);
     }
 }
@@ -334,7 +333,6 @@ function Puzzled(id){
           let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
           let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);
           let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
-          console.log("ICI :" + clickz.id[3]);
           //img.setAttribute("style","position:absolute;"+"top:"+i*100 + "px;" +"left:"+left + "px") ;
           document.getElementById("gifImages").appendChild(img);
           let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
@@ -498,7 +496,6 @@ function areGifWellSet(){
     const len = gifClickZone.length;
     while(i<len && bool){
         if(gifClickZone[i].id[2][gifOnScene[i].get_current_frame()] != 2){
-            console.log(i);
             bool = false;
         }
         i++;
@@ -605,7 +602,6 @@ function isOnGifZone(X,Y){
     let len = gifClickZone.length;
     for(let i=0;i<len;i++){
         if(X>=gifClickZone[i].x1 && X<=gifClickZone[i].x2 && Y>=gifClickZone[i].y1 && Y<=gifClickZone[i].y2){
-            console.log("salut");
             return i;
         }
     }

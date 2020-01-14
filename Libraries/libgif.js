@@ -687,7 +687,6 @@
             // We could use the on-page canvas directly, except that we draw a progress
             // bar for each image chunk (not just the final image).
             if (drawWhileLoading) {
-                console.log("ccoucou");
                 ctx.drawImage(tmpCanvas, positionX, positionY);
                 drawWhileLoading = options.auto_play;
             }
@@ -756,7 +755,6 @@
             }());
 
             var resize = function(width, height, left, top){
-                console.log("C est left :" + left)
                 canvas.style.left = left+"px";
                 canvas.style.top = top+"px";
                 canvas.width = width;
@@ -779,7 +777,6 @@
 
                 tmpCanvas.getContext("2d").putImageData(frames[i].data, offset.x, offset.y);
                 ctx.globalCompositeOperation = "copy";
-                console.log(positionX);
                 ctx.drawImage(tmpCanvas, 0, 0);
             };
 
