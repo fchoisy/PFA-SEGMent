@@ -6,6 +6,7 @@ const FADE_IN_TIME = 1500;
 let img_path;
 let clickZones = [];
 let backClickZones = [];
+let objectClickZones = [];
 let scene_number;
 let imgSize = [];
 let digicodeClickZone = [];
@@ -23,6 +24,7 @@ function resize(){
   setWindowsValues();
   printOpeningText();
   resizeGif();
+  loadObjects();
 }
 
 /**
@@ -146,53 +148,45 @@ function clickzone() {
 }*/
 
 function loadObjects(){
-  console.log("here1");
   let scene = getSceneByID(scene_number);
   let transitions = getTransitions();
   let objects = getObjects(scene);
-  console.log(objects);
-
   setWindowsValues();
   let objectsZone = document.getElementById("objects");
-  objectsZone.style.position = "absolute";
-  objectsZone.style.top =  windowsValues[4] + "px";
-  objectsZone.style.bottom =  windowsValues[5] + "px";
-  objectsZone.style.left =  windowsValues[4] + "px";
-  objectsZone.style.right =  windowsValues[4] + "px";
   objectsZone.innerHTML = "";
-  objectsZone.width = windowsValues[0];
-  objectsZone.height = windowsValues[1];
-
   for (var i = 0; i < objects.length; i++) {
-    console.log("herei : " + i);
-    displayObject(objects[i]);
+    if (!objects[i].PuzzlePiece){
+      displayObject(objects[i],transitions,scene);
+    }
   }
-  console.log("here2");
 }
 
-function displayObject(object){
-  let objectsZone = document.getElementById("objects");
-  console.log("here : object");
-  var objectZone = document.createElement("IMG");
+function displayObject(object,transitions,scene){
+  var canvas = document.getElementById("canvas");
+  canvas.style.position = "absolute";
+  canvas.width  = windowsValues[0];
+  canvas.height = windowsValues[1];
+  var ctx = canvas.getContext('2d');
+  var img = new Image();
+  img.onload = function() {
+    ctx.drawImage(img, windowsValues[4] + (object.Pos[0] * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (object.Pos[1] * windowsValues[3] * windowsValues[6]), object.Size[0] * windowsValues[2] * windowsValues[6], object.Size[1] * windowsValues[2] * windowsValues[6]);
+  };
+  img.src = "Game/" + object.Image;
 
-  // objectZone.width  = windowsValues[0] * object.Size[0];
-  // objectZone.height = windowsValues[1] * object.Size[1];
-  // var ctx = objectZone.getContext('2d');
-  // var img = new Image();
-  // img.src = "Game/" + object.Image;
-  // img.onload = function() {
-  //   ctx.drawImage(img, object.Pos[0] * windowsValues[2] * windowsValues[6], object.Pos[1] * windowsValues[3] * windowsValues[6]);
-  //   //ctx.drawImage(img, windowsValues[4] + (object.Pos[0] * windowsValues[2] * windowsValues[6]), windowsValues[5] + (object.Pos[1] * windowsValues[3] * windowsValues[6]), object.Size[0] * windowsValues[2] * windowsValues[6], object.Size[1] * windowsValues[3] * windowsValues[6]);
-  // };
-
-  objectZone.style.position = "absolute";
-  objectZone.style.top = object.Pos[0] * windowsValues[5] * windowsValues[6] + "px";
-  objectZone.style.left = object.Pos[1] * windowsValues[4] * windowsValues[6] + "px";
-  objectZone.src = "Game/" + object.Image;
-  objectZone.width = object.Size[0] * windowsValues[2];
-  objectZone.height = object.Size[1] * windowsValues[3];
-
-  objectsZone.appendChild(objectZone);
+  for (var i = 0; i < transitions.length; i++) {
+    console.log(transitions[i].Transition.ObjectToScene);
+    if(transitions[i].Transition.ObjectToScene != undefined) {
+      if (transitions[i].Transition.ObjectToScene.From == object.Path) {
+        let heightPourcentage = object.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
+        let transitionSceneId = getLastNumberTransition(transitions[i].Transition.ObjectToScene.To);
+        let clickZoneId = object.id
+        let objectClickZone = new ClickZone(object.Pos[0],object.Pos[1],object.Size[0] + object.Pos[0], object.Pos[1] + heightPourcentage ,transitionSceneId,clickZoneId);
+        objectClickZones.push(objectClickZone);
+      }
+    }
+  }
+  console.log("Object click zone : ");
+  console.log(objectClickZones);
 }
 
 /*
@@ -293,18 +287,18 @@ function Puzzled(id){
     const transition = getTransitionByID(getTransitions(),puzzle[1]);
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
     window.addEventListener("mouseup", verify, false);
+    window.addEventListener("touchend", verify, false);
       function verify(){
         let currentdiffX = [];
         let currentdiffY = [];
-        let currentOriginX = parseInt(document.getElementById("draggable"+0).x);
-        let currentOriginY = parseInt(document.getElementById("draggable"+0).y);
+        let currentOriginX = parseInt(document.getElementById("draggable"+0).x) * windowsValues[6];
+        let currentOriginY = parseInt(document.getElementById("draggable"+0).y) * windowsValues[6];
         let result = true ;
         let currentX;
         let currentY;
         for (var i = 1; i < puzzlePieces.length; i++) {
-          currentX=parseInt(document.getElementById("draggable" + i).x);
-          currentY=parseInt(document.getElementById("draggable" + i).y);
-          //console.log(currentX - currentOriginX);
+          currentX = parseInt(document.getElementById("draggable" + i).x) * windowsValues[6];
+          currentY = parseInt(document.getElementById("draggable" + i).y) * windowsValues[6];
           if (!((currentX - currentOriginX) >= diffX[i-1][0] && (currentX - currentOriginX) <= diffX[i-1][1])){
             result = false;
           }
@@ -425,6 +419,14 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
             //console.log(gifClickZone[resGif].id[3]);
             changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false);
       }
+  }
+  const resObject = isOnObjectZone(X, Y);
+  if(resObject[0] != -1){
+    console.log("resObject[0] : ", resObject[0]);
+    console.log("resObject[1] : ", resObject[1]);
+    playSoundObject(resObject[1]);
+    let sId = resObject[0];
+    changeScene(event, "ping.html", sId, false);
   }
   if(bool){
     let sId = 0;
@@ -610,6 +612,27 @@ function isOnGifZone(X,Y){
     return -1;
 }
 
+/*
+* Check if the mouse cursor is on a objectClickZones zone. If so, return true
+*/
+function isOnObjectZone(X,Y){
+  let resTab = [];
+  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
+  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+  let len = objectClickZones.length ;
+  for(let i=0;i<len;i++){
+      if(X>=objectClickZones[i].x1 && X<=objectClickZones[i].x2 && Y>=objectClickZones[i].y1 && Y<=objectClickZones[i].y2){
+          console.log("Aled");
+          resTab[0] = objectClickZones[i].id; // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
+          resTab[1] = objectClickZones[i].clickzoneId;
+          return resTab;
+      }
+  }
+  resTab[0] = -1;
+  resTab[1] = -1;
+  return resTab;
+}
+
 /**
  * Changes the mouse pointer icon in reponse to an event
  * @param {MouseEvent} event
@@ -617,7 +640,7 @@ function isOnGifZone(X,Y){
 function changeCursor(event) {
   let X = event.clientX;
   let Y = event.clientY;
-  if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1) {
+  if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1) {
     document.body.style.cursor = 'pointer';
     return;
   }
@@ -778,5 +801,3 @@ function getLastElem(lst){
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
 window.addEventListener("resize", resize);
-window.onresize = printOpeningText;
-window.onresize = setWindowsValues;

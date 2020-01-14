@@ -239,9 +239,13 @@ function getPointedScene(clickAreaPath) {
   for (let i = 0; i < len; i++) {
     if (scene.Transitions[i].Transition.Which == "ClickAreaToScene") {
       let elem = scene.Transitions[i].Transition;
+      len = elem.ClickAreaToScene.To.length;
       if (elem.ClickAreaToScene.From == clickAreaPath) {
-        len = elem.ClickAreaToScene.To.length - 1;
-        return parseInt(elem.ClickAreaToScene.To.substring(len, elem.ClickAreaToScene.To.length));
+        while (elem.ClickAreaToScene.To[len]!=".") {
+          len--;
+        }
+        //console.log(elem.ClickAreaToScene.To.substring(len+1, elem.ClickAreaToScene.To.length));
+        return parseInt(elem.ClickAreaToScene.To.substring(len+1, elem.ClickAreaToScene.To.length));
       }
     }
   }
@@ -307,7 +311,9 @@ function whatPuzzleItIs(id){
     const len = transitions.length;
     for(let i =0 ; i<len; i++){
         if(!(transitions[i].Transition.SceneToScene === undefined)){
+            //console.log(transitions[i].Transition.SceneToScene);
             let comp_id = getLastNumberTransition(transitions[i].Transition.SceneToScene.From);
+            //console.log(comp_id,id);
             if(comp_id == id){
                 if(!(transitions[i].Transition.SceneToScene.Riddle === undefined)){
                     return [transitions[i].Transition.SceneToScene.Riddle.Which,transitions[i].id];
@@ -394,6 +400,7 @@ function getClickZonesByScenesId(id,back) {
   Le size est calculé proportionnellement par rapport à la longueur de l'image.
   */
   let array = [];
+  //console.log(areas);
   for(var i = 0; i < areas.length; i++){
     let currentArea = areas[i];
     let heightPourcentage = currentArea.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
@@ -530,6 +537,7 @@ function getSceneTextAreasBySceneId(sceneId) {
   for (var i = 0; i < scene.TextAreas.length; i++) {
     text_areas[i] = scene.TextAreas[i].Text;
   }
+  console.log(text_areas);
   return text_areas;
 }
 
@@ -540,7 +548,11 @@ function getSceneTextAreasBySceneId(sceneId) {
 function printOpeningText(){
   var text;
   var textBox;
+  var i=0;
+  var t;
   function reset() {
+    i = 0;
+    clearTimeout(t);
     text = getSceneTextBySceneId(scene_number);
     textBox = document.getElementById("textbox");
     textBox.innerHTML="";
@@ -548,18 +560,23 @@ function printOpeningText(){
     textBox.style.right = (1.1 * windowsValues[4]) + "px";
     textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    function instantPrinting(){
+      clearTimeout(t);
+      i = text.length;
+      textBox.innerHTML = text;
+    }
+    textBox.addEventListener("click", instantPrinting);
   }
   reset();
-  let i = 0;
   function charByChar() {
-    if (i < text.length) {
-      window.onresize = function () {
-        reset();
-        textBox.innerHTML = text.substring(0,i);
-      }
-      textBox.innerHTML += text[i];
-      i++;
-      setTimeout(charByChar, 50);
+      if (i < text.length) {
+        window.addEventListener("resize", function () {
+          reset();
+          textBox.innerHTML = text.substring(0,i+1);
+        });
+        textBox.innerHTML += text[i];
+        i++;
+        t=setTimeout(charByChar, 100);
     }
   }
   charByChar();
