@@ -1122,8 +1122,8 @@
                             "ObjectName": "BackClickArea",
                             "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/BackClickArea.1",
                             "Pos": [
-                                0.0271434552379928,
-                                0.6595699228680473
+                                0,
+                                0.6965517241379311
                             ],
                             "Size": [
                                 0.2,
@@ -1201,8 +1201,8 @@
                             "ObjectName": "SimpleObject",
                             "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/SimpleObject.2",
                             "Pos": [
-                                0.023502028561871287,
-                                0.6891358573631458
+                                0,
+                                0.7632588737078002
                             ],
                             "PuzzlePiece": false,
                             "Size": [
@@ -1217,42 +1217,12 @@
                             },
                             "Z": 0,
                             "id": 2
-                        },
-                        {
-                            "Components": [
-                            ],
-                            "Image": "Objects/back - Copie.png",
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/SimpleObject.1",
-                            "Pos": [
-                                0.02285824746252754,
-                                0.6758209286282915
-                            ],
-                            "PuzzlePiece": false,
-                            "Size": [
-                                0.2,
-                                0.15547169811320755
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 1
                         }
                     ],
                     "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4",
                     "Rect": [
-                        -255.99293839613085,
-                        -482.6310223804701,
+                        -222.93009793161167,
+                        -515.6938628449892,
                         400,
                         400
                     ],
@@ -1304,8 +1274,8 @@
                             "ObjectName": "TextArea",
                             "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/TextArea.12",
                             "Pos": [
-                                0.39044423266369516,
-                                0.7652864349722204
+                                0.39361008941376563,
+                                0.760543714706789
                             ],
                             "Size": [
                                 0.08989753658058655,
@@ -1752,7 +1722,7 @@
                             "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3/SimpleObject.2",
                             "Pos": [
                                 0,
-                                0.7357575831223069
+                                0.7405003033877381
                             ],
                             "PuzzlePiece": false,
                             "Size": [
@@ -1767,36 +1737,6 @@
                             },
                             "Z": 0,
                             "id": 2
-                        },
-                        {
-                            "Components": [
-                            ],
-                            "Image": "Objects/back - Copie.png",
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3/SimpleObject.1",
-                            "Pos": [
-                                0,
-                                0.752290754999834
-                            ],
-                            "PuzzlePiece": false,
-                            "Size": [
-                                0.2,
-                                0.15547169811320755
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 1
                         }
                     ],
                     "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3",
@@ -2026,8 +1966,8 @@
                             "ObjectName": "TextArea",
                             "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.1",
                             "Pos": [
-                                0.6289139305955446,
-                                0.6652968897196884
+                                0.415112685654331,
+                                0.36639395742729125
                             ],
                             "Size": [
                                 0.2,

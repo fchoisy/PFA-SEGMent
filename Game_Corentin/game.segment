@@ -20,6 +20,380 @@
                         "Volume": 0.7
                     },
                     "BackClickAreas": [
+                    ],
+                    "ClickAreas": [
+                    ],
+                    "Components": [
+                    ],
+                    "Gifs": [
+                    ],
+                    "Image": "Scenes/Door.png",
+                    "ImageSize": [
+                        1000,
+                        750
+                    ],
+                    "Metadata": {
+                        "Color": "Base1",
+                        "Comment": "",
+                        "Label": "Door",
+                        "ScriptingName": ""
+                    },
+                    "ObjectName": "Scene",
+                    "Objects": [
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/post-it_far.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/SimpleObject.1",
+                            "Pos": [
+                                0.1759975049040245,
+                                0.4785849579064637
+                            ],
+                            "PuzzlePiece": false,
+                            "Size": [
+                                0.1427440000086254,
+                                0.12893006452391964
+                            ],
+                            "Sound": {
+                                "Path": "Sounds/Sound.mp3",
+                                "Range": 0,
+                                "Repeat": false,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 1
+                        }
+                    ],
+                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1",
+                    "Rect": [
+                        -236.18502296272294,
+                        -232,
+                        400,
+                        400
+                    ],
+                    "RepeatText": false,
+                    "SceneType": 1,
+                    "Sonar": false,
+                    "StartText": "Je suis arrivé au casting de \"des int et des strings !\", mais je dois d'abord résoudre cette énigme...",
+                    "TextAreas": [
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.1",
+                            "Pos": [
+                                0.24658823753191758,
+                                0.31622163500272454
+                            ],
+                            "Size": [
+                                0.11617709975080139,
+                                0.04891932622244581
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "1",
+                            "Z": 0,
+                            "id": 1
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.2",
+                            "Pos": [
+                                0.30732395909188054,
+                                0.2787129526724665
+                            ],
+                            "Size": [
+                                0.09421537778235872,
+                                0.029702819500058465
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "2",
+                            "Z": 0,
+                            "id": 2
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.3",
+                            "Pos": [
+                                0.3641177388456837,
+                                0.32399166823761066
+                            ],
+                            "Size": [
+                                0.09284277015933105,
+                                0.040683680484279776
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "3",
+                            "Z": 0,
+                            "id": 3
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.4",
+                            "Pos": [
+                                0.41010522865959037,
+                                0.2816381397339832
+                            ],
+                            "Size": [
+                                0.09421537778235872,
+                                0.02833021187703079
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "4",
+                            "Z": 0,
+                            "id": 4
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.5",
+                            "Pos": [
+                                0.46079244482366444,
+                                0.321510605172313
+                            ],
+                            "Size": [
+                                0.1024510235205247,
+                                0.02833021187703079
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "5",
+                            "Z": 0,
+                            "id": 5
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.6",
+                            "Pos": [
+                                0.505848889067837,
+                                0.28390536531961985
+                            ],
+                            "Size": [
+                                0.10656884638960772,
+                                0.03244803474611381
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "6",
+                            "Z": 0,
+                            "id": 6
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.7",
+                            "Pos": [
+                                0.5598324173041693,
+                                0.32545563252144366
+                            ],
+                            "Size": [
+                                0.11068666925869072,
+                                0.02833021187703079
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "7",
+                            "Z": 0,
+                            "id": 7
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.8",
+                            "Pos": [
+                                0.6153562782845478,
+                                0.27410448083515676
+                            ],
+                            "Size": [
+                                0.09558798540538632,
+                                0.035193249992169155
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "8",
+                            "Z": 0,
+                            "id": 8
+                        },
+                        {
+                            "Behaviour": 0,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.9",
+                            "Pos": [
+                                0.6668992348619807,
+                                0.33174464762839695
+                            ],
+                            "Size": [
+                                0.10519623876658003,
+                                0.0200945661388649
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "9",
+                            "Z": 0,
+                            "id": 9
+                        },
+                        {
+                            "Behaviour": 3,
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "TextArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.10",
+                            "Pos": [
+                                0.7163507618691644,
+                                0.28002887562422657
+                            ],
+                            "Size": [
+                                0.10656884638960779,
+                                0.03244803474611381
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Text": "",
+                            "Z": 0,
+                            "id": 10
+                        }
+                    ],
+                    "id": 1
+                },
+                {
+                    "Ambience": {
+                        "Path": "",
+                        "Range": 0,
+                        "Repeat": true,
+                        "Volume": 0.7
+                    },
+                    "BackClickAreas": [
                         {
                             "Components": [
                             ],
@@ -30,14 +404,266 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "BackClickArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.8/BackClickArea.1",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2/BackClickArea.1",
                             "Pos": [
-                                0.01089653684324093,
-                                0.8579706207214284
+                                0.025052319479999627,
+                                0.805125655899422
                             ],
                             "Size": [
-                                0.1168797953964194,
-                                0.1219948849104859
+                                0.13666422466601408,
+                                0.13666422466601408
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 1
+                        }
+                    ],
+                    "ClickAreas": [
+                    ],
+                    "Components": [
+                    ],
+                    "Gifs": [
+                    ],
+                    "Image": "Scenes/WhiteScene.png",
+                    "ImageSize": [
+                        1000,
+                        750
+                    ],
+                    "Metadata": {
+                        "Color": "Base1",
+                        "Comment": "",
+                        "Label": "WhiteScene",
+                        "ScriptingName": ""
+                    },
+                    "ObjectName": "Scene",
+                    "Objects": [
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/Post-it_p1.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2/SimpleObject.1",
+                            "Pos": [
+                                0.2835171112357813,
+                                0.2881785502429177
+                            ],
+                            "PuzzlePiece": true,
+                            "Size": [
+                                0.13514801238845955,
+                                0.12695722375885587
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 1
+                        },
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/Post-it_p3.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2/SimpleObject.2",
+                            "Pos": [
+                                0.3432428324180576,
+                                0.3406861806035168
+                            ],
+                            "PuzzlePiece": true,
+                            "Size": [
+                                0.2148939288470577,
+                                0.13978537119177542
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 2
+                        },
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/Post-it_p2.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2/SimpleObject.3",
+                            "Pos": [
+                                0.38730657306895516,
+                                0.29108911386427133
+                            ],
+                            "PuzzlePiece": true,
+                            "Size": [
+                                0.17727225417259965,
+                                0.10417622728974198
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 3
+                        },
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/Post-it_p4.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2/SimpleObject.4",
+                            "Pos": [
+                                0.3818351413317597,
+                                0.4663944195110805
+                            ],
+                            "PuzzlePiece": true,
+                            "Size": [
+                                0.18766361590997555,
+                                0.14943584229868417
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 4
+                        },
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/Post-it_p5.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2/SimpleObject.5",
+                            "Pos": [
+                                0.29644185475520207,
+                                0.4457932130331053
+                            ],
+                            "PuzzlePiece": true,
+                            "Size": [
+                                0.15070819120964948,
+                                0.15872458435909914
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 5
+                        },
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/Back.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2/SimpleObject.6",
+                            "Pos": [
+                                0.017703294644555674,
+                                0.8134252860294379
+                            ],
+                            "PuzzlePiece": false,
+                            "Size": [
+                                0.13476198559454927,
+                                0.13476198559454927
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 6
+                        }
+                    ],
+                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2",
+                    "Rect": [
+                        -273.07304478683847,
+                        273.3063913835641,
+                        400,
+                        400
+                    ],
+                    "RepeatText": false,
+                    "SceneType": 0,
+                    "Sonar": false,
+                    "StartText": "",
+                    "TextAreas": [
+                    ],
+                    "id": 2
+                },
+                {
+                    "Ambience": {
+                        "Path": "",
+                        "Range": 0,
+                        "Repeat": true,
+                        "Volume": 0.7
+                    },
+                    "BackClickAreas": [
+                        {
+                            "Components": [
+                            ],
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "BackClickArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3/BackClickArea.1",
+                            "Pos": [
+                                0.017504731076141818,
+                                0.8453822809651458
+                            ],
+                            "Size": [
+                                0.14083290516359498,
+                                0.13041120391964298
                             ],
                             "Sound": {
                                 "Path": "",
@@ -79,15 +705,15 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.8/SimpleObject.1",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3/SimpleObject.1",
                             "Pos": [
-                                0,
-                                0.8626598465473146
+                                0.005321342942717396,
+                                0.8387344264061892
                             ],
                             "PuzzlePiece": false,
                             "Size": [
-                                0.13478260869565215,
-                                0.13478260869565215
+                                0.1587080288367775,
+                                0.1587080288367775
                             ],
                             "Sound": {
                                 "Path": "",
@@ -99,19 +725,20 @@
                             "id": 1
                         }
                     ],
-                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.8",
+                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3",
                     "Rect": [
-                        2324,
-                        3438,
+                        -234.4125809435708,
+                        827.937095282146,
                         400,
                         400
                     ],
                     "RepeatText": false,
                     "SceneType": 0,
+                    "Sonar": false,
                     "StartText": "",
                     "TextAreas": [
                     ],
-                    "id": 8
+                    "id": 3
                 },
                 {
                     "Ambience": {
@@ -131,14 +758,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "BackClickArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7/BackClickArea.1",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/BackClickArea.1",
                             "Pos": [
-                                0.01278772378516624,
-                                0.8017035775127769
+                                0.006253020746371162,
+                                0.8328931869821151
                             ],
                             "Size": [
-                                0.13734015345268538,
-                                0.14501278772378515
+                                0.1304112039196429,
+                                0.11373648192931979
                             ],
                             "Sound": {
                                 "Path": "",
@@ -151,164 +778,24 @@
                         }
                     ],
                     "ClickAreas": [
-                    ],
-                    "Components": [
-                    ],
-                    "Gifs": [
-                    ],
-                    "Image": "Scenes/WhiteScene.png",
-                    "ImageSize": [
-                        1000,
-                        750
-                    ],
-                    "Metadata": {
-                        "Color": "Base1",
-                        "Comment": "",
-                        "Label": "WhiteScene",
-                        "ScriptingName": ""
-                    },
-                    "ObjectName": "Scene",
-                    "Objects": [
                         {
                             "Components": [
                             ],
-                            "Image": "Objects/Post-it_p3.png",
                             "Metadata": {
                                 "Color": "Base1",
                                 "Comment": "",
                                 "Label": "",
                                 "ScriptingName": ""
                             },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7/SimpleObject.5",
+                            "ObjectName": "ClickArea",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/ClickArea.1",
                             "Pos": [
-                                0.3051918793194265,
-                                0.1988082574001528
+                                0.35816948861979686,
+                                0.09505913554593068
                             ],
-                            "PuzzlePiece": true,
                             "Size": [
-                                0.2012787723785166,
-                                0.36864244025369364
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 5
-                        },
-                        {
-                            "Components": [
-                            ],
-                            "Image": "Objects/Post-it_p1.png",
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7/SimpleObject.4",
-                            "Pos": [
-                                0.11399161023779457,
-                                0.17963983680184425
-                            ],
-                            "PuzzlePiece": true,
-                            "Size": [
-                                0.1629156010230179,
-                                0.23785677749360626
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 4
-                        },
-                        {
-                            "Components": [
-                            ],
-                            "Image": "Objects/Post-it_p4.png",
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7/SimpleObject.3",
-                            "Pos": [
-                                0.21124811991902173,
-                                0.1720080126536965
-                            ],
-                            "PuzzlePiece": true,
-                            "Size": [
-                                0.2,
-                                0.1589519650655022
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 3
-                        },
-                        {
-                            "Components": [
-                            ],
-                            "Image": "Objects/Post-it_p2.png",
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7/SimpleObject.2",
-                            "Pos": [
-                                0.1162572268091615,
-                                0.36573346501572823
-                            ],
-                            "PuzzlePiece": true,
-                            "Size": [
-                                0.2,
-                                0.2550185873605948
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 2
-                        },
-                        {
-                            "Components": [
-                            ],
-                            "Image": "Objects/Back.png",
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7/SimpleObject.1",
-                            "Pos": [
-                                0.005007203010668063,
-                                0.8136286201022146
-                            ],
-                            "PuzzlePiece": false,
-                            "Size": [
-                                0.13734015345268547,
-                                0.13734015345268547
+                                0.23879689685674385,
+                                0.21378481387125914
                             ],
                             "Sound": {
                                 "Path": "",
@@ -320,19 +807,68 @@
                             "id": 1
                         }
                     ],
-                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7",
+                    "Components": [
+                    ],
+                    "Gifs": [
+                    ],
+                    "Image": "Scenes/Piece2.png",
+                    "ImageSize": [
+                        1000,
+                        750
+                    ],
+                    "Metadata": {
+                        "Color": "Base1",
+                        "Comment": "",
+                        "Label": "Piece2",
+                        "ScriptingName": ""
+                    },
+                    "ObjectName": "Scene",
+                    "Objects": [
+                        {
+                            "Components": [
+                            ],
+                            "Image": "Objects/Back.png",
+                            "Metadata": {
+                                "Color": "Base1",
+                                "Comment": "",
+                                "Label": "",
+                                "ScriptingName": ""
+                            },
+                            "ObjectName": "SimpleObject",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/SimpleObject.1",
+                            "Pos": [
+                                0,
+                                0.8311896094693383
+                            ],
+                            "PuzzlePiece": false,
+                            "Size": [
+                                0.12415818317327167,
+                                0.12415818317327167
+                            ],
+                            "Sound": {
+                                "Path": "",
+                                "Range": 0,
+                                "Repeat": true,
+                                "Volume": 0.7
+                            },
+                            "Z": 0,
+                            "id": 1
+                        }
+                    ],
+                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4",
                     "Rect": [
-                        2092,
-                        2946,
+                        444.9583718778908,
+                        -207.77058279370948,
                         400,
-                        332.5
+                        400
                     ],
                     "RepeatText": false,
                     "SceneType": 0,
-                    "StartText": "",
+                    "Sonar": false,
+                    "StartText": "Me voila dans la pièce ! Mais qu'est-ce que ce poster fait là ?",
                     "TextAreas": [
                     ],
-                    "id": 7
+                    "id": 4
                 },
                 {
                     "Ambience": {
@@ -352,14 +888,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "BackClickArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/BackClickArea.1",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/BackClickArea.1",
                             "Pos": [
-                                0.017111685986537808,
-                                0.78626449669881
+                                0.012506041492742323,
+                                0.8328931869821151
                             ],
                             "Size": [
-                                0.13618537403424502,
-                                0.13618537403424516
+                                0.10956780143173883,
+                                0.1116521416805292
                             ],
                             "Sound": {
                                 "Path": "",
@@ -401,15 +937,15 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/SimpleObject.1",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/SimpleObject.1",
                             "Pos": [
-                                0.0029167455214462006,
-                                0.7845609191860332
+                                0,
+                                0.828412856361069
                             ],
                             "PuzzlePiece": false,
                             "Size": [
-                                0.15915951462634081,
-                                0.15915951462634081
+                                0.1262425234220621,
+                                0.1262425234220621
                             ],
                             "Sound": {
                                 "Path": "",
@@ -421,19 +957,20 @@
                             "id": 1
                         }
                     ],
-                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6",
+                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5",
                     "Rect": [
-                        3045.95370975562,
-                        2131.738955069135,
+                        438.29787234042544,
+                        -731.7298797409806,
                         400,
-                        332.5
+                        400
                     ],
                     "RepeatText": false,
                     "SceneType": 0,
+                    "Sonar": false,
                     "StartText": "",
                     "TextAreas": [
                         {
-                            "Behaviour": 3,
+                            "Behaviour": 0,
                             "Components": [
                             ],
                             "Metadata": {
@@ -443,14 +980,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/TextArea.7",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/TextArea.1",
                             "Pos": [
-                                0.38594236052485975,
-                                0.4934701131678249
+                                0.10342514161072584,
+                                0.2533503226531345
                             ],
                             "Size": [
-                                0.20349146737186785,
-                                0.10613288766441495
+                                0.09080873919262514,
+                                0.0866400586950444
                             ],
                             "Sound": {
                                 "Path": "",
@@ -458,9 +995,9 @@
                                 "Repeat": true,
                                 "Volume": 0.7
                             },
-                            "Text": "",
+                            "Text": "I",
                             "Z": 0,
-                            "id": 7
+                            "id": 1
                         },
                         {
                             "Behaviour": 0,
@@ -473,134 +1010,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/TextArea.6",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/TextArea.2",
                             "Pos": [
-                                0.7747074853746484,
-                                0.24259092498980248
+                                0.23922952485298737,
+                                0.25146446184646915
                             ],
                             "Size": [
-                                0.10613288766441495,
-                                0.10392019267106362
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "D",
-                            "Z": 0,
-                            "id": 6
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/TextArea.5",
-                            "Pos": [
-                                0.6454426172761202,
-                                0.24332456693884152
-                            ],
-                            "Size": [
-                                0.10170749767771259,
-                                0.10392019267106377
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "E",
-                            "Z": 0,
-                            "id": 5
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/TextArea.4",
-                            "Pos": [
-                                0.5036214964863894,
-                                0.23964317799695636
-                            ],
-                            "Size": [
-                                0.11055827765111731,
-                                0.10392019267106369
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "L",
-                            "Z": 0,
-                            "id": 4
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/TextArea.3",
-                            "Pos": [
-                                0.363156543595809,
-                                0.24479624390248292
-                            ],
-                            "Size": [
-                                0.10392019267106369,
-                                0.1017074976777125
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "A",
-                            "Z": 0,
-                            "id": 3
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/TextArea.2",
-                            "Pos": [
-                                0.2285664880821168,
-                                0.24480708004347942
-                            ],
-                            "Size": [
-                                0.10834558265776606,
-                                0.10613288766441495
+                                0.08872439894383484,
+                                0.09289307944141557
                             ],
                             "Sound": {
                                 "Path": "",
@@ -623,14 +1040,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6/TextArea.1",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/TextArea.3",
                             "Pos": [
-                                0.09246103847868521,
-                                0.24553867198264856
+                                0.3665925899804464,
+                                0.2426887563708587
                             ],
                             "Size": [
-                                0.10613288766441488,
-                                0.09949480268436126
+                                0.09706175993899645,
+                                0.09497741969020601
                             ],
                             "Sound": {
                                 "Path": "",
@@ -638,200 +1055,7 @@
                                 "Repeat": true,
                                 "Volume": 0.7
                             },
-                            "Text": "I",
-                            "Z": 0,
-                            "id": 1
-                        }
-                    ],
-                    "id": 6
-                },
-                {
-                    "Ambience": {
-                        "Path": "",
-                        "Range": 0,
-                        "Repeat": true,
-                        "Volume": 0.7
-                    },
-                    "BackClickAreas": [
-                    ],
-                    "ClickAreas": [
-                    ],
-                    "Components": [
-                    ],
-                    "Gifs": [
-                    ],
-                    "Image": "Scenes/Door.png",
-                    "ImageSize": [
-                        1000,
-                        750
-                    ],
-                    "Metadata": {
-                        "Color": "Base1",
-                        "Comment": "",
-                        "Label": "Door",
-                        "ScriptingName": ""
-                    },
-                    "ObjectName": "Scene",
-                    "Objects": [
-                        {
-                            "Components": [
-                            ],
-                            "Image": "Objects/post-it_far.png",
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "SimpleObject",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/SimpleObject.1",
-                            "Pos": [
-                                0.22396894786372162,
-                                0.5060694466901068
-                            ],
-                            "PuzzlePiece": false,
-                            "Size": [
-                                0.0914152240528181,
-                                0.08256858946706144
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 1
-                        }
-                    ],
-                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1",
-                    "Rect": [
-                        2319,
-                        2385,
-                        377.4032024005595,
-                        315.55240180041966
-                    ],
-                    "RepeatText": false,
-                    "SceneType": 1,
-                    "StartText": "Me voici enfin au casting de \"Des int et des string\" !\nMais je dois d'abord résoudre cette énigme pour participer ...",
-                    "TextAreas": [
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.11",
-                            "Pos": [
-                                0.4677519505973966,
-                                0.32681647316526985
-                            ],
-                            "Size": [
-                                0.10106730509019511,
-                                0.02881543911013852
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "5",
-                            "Z": 0,
-                            "id": 11
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.1",
-                            "Pos": [
-                                0.2472122286829329,
-                                0.32890807933008265
-                            ],
-                            "Size": [
-                                0.11885162018721836,
-                                0.041955899954836895
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "1",
-                            "Z": 0,
-                            "id": 1
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.2",
-                            "Pos": [
-                                0.2938064217784128,
-                                0.25427422719453935
-                            ],
-                            "Size": [
-                                0.10634855930263881,
-                                0.04716904183819516
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "2",
-                            "Z": 0,
-                            "id": 2
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.3",
-                            "Pos": [
-                                0.3583322322699172,
-                                0.3148138750104321
-                            ],
-                            "Size": [
-                                0.11029605168192869,
-                                0.0449188108070817
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "3",
+                            "Text": "A",
                             "Z": 0,
                             "id": 3
                         },
@@ -846,14 +1070,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.4",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/TextArea.4",
                             "Pos": [
-                                0.4002502705608054,
-                                0.2684683372076993
+                                0.5033845658592921,
+                                0.2500198841424666
                             ],
                             "Size": [
-                                0.1196356575211925,
-                                0.04141645861735778
+                                0.09914610018778673,
+                                0.09080873919262514
                             ],
                             "Sound": {
                                 "Path": "",
@@ -861,7 +1085,7 @@
                                 "Repeat": true,
                                 "Volume": 0.7
                             },
-                            "Text": "4",
+                            "Text": "L",
                             "Z": 0,
                             "id": 4
                         },
@@ -876,14 +1100,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.5",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/TextArea.5",
                             "Pos": [
-                                0.46176468948506505,
-                                0.3237023346355119
+                                0.6423128605467482,
+                                0.23924591556045588
                             ],
                             "Size": [
-                                0.12080310825110052,
-                                0
+                                0.10123044043657717,
+                                0.1033147806853676
                             ],
                             "Sound": {
                                 "Path": "",
@@ -891,7 +1115,7 @@
                                 "Repeat": true,
                                 "Volume": 0.7
                             },
-                            "Text": "",
+                            "Text": "E",
                             "Z": 0,
                             "id": 5
                         },
@@ -906,14 +1130,14 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.6",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/TextArea.6",
                             "Pos": [
-                                0.5130896483603193,
-                                0.273932727134082
+                                0.7764487320187814,
+                                0.25024052569379857
                             ],
                             "Size": [
-                                0.10591101514940465,
-                                0.037880217679423574
+                                0.10331478068536745,
+                                0.1033147806853676
                             ],
                             "Sound": {
                                 "Path": "",
@@ -921,99 +1145,9 @@
                                 "Repeat": true,
                                 "Volume": 0.7
                             },
-                            "Text": "6",
+                            "Text": "D",
                             "Z": 0,
                             "id": 6
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.7",
-                            "Pos": [
-                                0.5642295439898934,
-                                0.3281006486499642
-                            ],
-                            "Size": [
-                                0.09778793485448153,
-                                0.03178790745823119
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "7",
-                            "Z": 0,
-                            "id": 7
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.8",
-                            "Pos": [
-                                0.6144681621671636,
-                                0.2754807802674006
-                            ],
-                            "Size": [
-                                0.09698837135042532,
-                                0.041449830759270535
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "8",
-                            "Z": 0,
-                            "id": 8
-                        },
-                        {
-                            "Behaviour": 0,
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.9",
-                            "Pos": [
-                                0.6672703522228418,
-                                0.32452012948799425
-                            ],
-                            "Size": [
-                                0.10692640018627002,
-                                0.04295714286375055
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Text": "9",
-                            "Z": 0,
-                            "id": 9
                         },
                         {
                             "Behaviour": 3,
@@ -1026,98 +1160,27 @@
                                 "ScriptingName": ""
                             },
                             "ObjectName": "TextArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/TextArea.10",
+                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5/TextArea.7",
                             "Pos": [
-                                0.7213291761917026,
-                                0.2716956632905948
+                                0.3864380041198027,
+                                0.5071630415511323
                             ],
                             "Size": [
-                                0.10117591354296364,
-                                0.048179519882097635
+                                0.192941411383355,
+                                0.0970617599389963
                             ],
                             "Sound": {
-                                "Path": "",
+                                "Path": "Sounds/Sound.mp3",
                                 "Range": 0,
-                                "Repeat": true,
+                                "Repeat": false,
                                 "Volume": 0.7
                             },
                             "Text": "",
                             "Z": 0,
-                            "id": 10
+                            "id": 7
                         }
                     ],
-                    "id": 1
-                },
-                {
-                    "Ambience": {
-                        "Path": "",
-                        "Range": 0,
-                        "Repeat": true,
-                        "Volume": 0.7
-                    },
-                    "BackClickAreas": [
-                    ],
-                    "ClickAreas": [
-                        {
-                            "Components": [
-                            ],
-                            "Metadata": {
-                                "Color": "Base1",
-                                "Comment": "",
-                                "Label": "",
-                                "ScriptingName": ""
-                            },
-                            "ObjectName": "ClickArea",
-                            "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3/ClickArea.1",
-                            "Pos": [
-                                0.3573188554275861,
-                                0.10537879281760094
-                            ],
-                            "Size": [
-                                0.23131818060563697,
-                                0.19841787635688615
-                            ],
-                            "Sound": {
-                                "Path": "",
-                                "Range": 0,
-                                "Repeat": true,
-                                "Volume": 0.7
-                            },
-                            "Z": 0,
-                            "id": 1
-                        }
-                    ],
-                    "Components": [
-                    ],
-                    "Gifs": [
-                    ],
-                    "Image": "Scenes/Piece2.png",
-                    "ImageSize": [
-                        1000,
-                        750
-                    ],
-                    "Metadata": {
-                        "Color": "Base1",
-                        "Comment": "",
-                        "Label": "Piece2",
-                        "ScriptingName": ""
-                    },
-                    "ObjectName": "Scene",
-                    "Objects": [
-                    ],
-                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3",
-                    "Rect": [
-                        2955.7538125527067,
-                        2624.437901038282,
-                        400,
-                        400
-                    ],
-                    "RepeatText": false,
-                    "SceneType": 0,
-                    "StartText": "Me voici dans la pièce ! Qu'est-ce que c'est que ce poster ?",
-                    "TextAreas": [
-                    ],
-                    "id": 3
+                    "id": 5
                 },
                 {
                     "Ambience": {
@@ -1148,61 +1211,23 @@
                     "ObjectName": "Scene",
                     "Objects": [
                     ],
-                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5",
+                    "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6",
                     "Rect": [
-                        3053.9597399510035,
-                        1587.308622283369,
+                        427.19703977798326,
+                        -1203.5152636447733,
                         400,
-                        332.5
+                        400
                     ],
                     "RepeatText": false,
-                    "SceneType": 2,
+                    "SceneType": 0,
+                    "Sonar": false,
                     "StartText": "",
                     "TextAreas": [
                     ],
-                    "id": 5
+                    "id": 6
                 }
             ],
             "Transitions": [
-                {
-                    "Color": [
-                        0,
-                        0,
-                        0,
-                        255
-                    ],
-                    "Components": [
-                    ],
-                    "Fade": 1,
-                    "Metadata": {
-                        "Color": "Base1",
-                        "Comment": "",
-                        "Label": "",
-                        "ScriptingName": ""
-                    },
-                    "ObjectName": "Transition",
-                    "Sound": {
-                        "Path": "",
-                        "Range": 0,
-                        "Repeat": true,
-                        "Volume": 0.7
-                    },
-                    "Transition": {
-                        "SceneToScene": {
-                            "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7",
-                            "Riddle": {
-                                "Puzzle": {
-                                },
-                                "Which": "Puzzle"
-                            },
-                            "Source": 8,
-                            "Target": 0,
-                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.8"
-                        },
-                        "Which": "SceneToScene"
-                    },
-                    "id": 6
-                },
                 {
                     "Color": [
                         0,
@@ -1229,98 +1254,14 @@
                     "Transition": {
                         "ObjectToScene": {
                             "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1/SimpleObject.1",
-                            "Source": 8,
-                            "Target": 2,
-                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.7"
+                            "Source": 7,
+                            "Target": 0,
+                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2"
                         },
                         "Which": "ObjectToScene"
                     },
-                    "id": 5
-                },
-                {
-                    "Color": [
-                        0,
-                        0,
-                        0,
-                        255
-                    ],
-                    "Components": [
-                    ],
-                    "Fade": 1,
-                    "Metadata": {
-                        "Color": "Base1",
-                        "Comment": "",
-                        "Label": "",
-                        "ScriptingName": ""
-                    },
-                    "ObjectName": "Transition",
-                    "Sound": {
-                        "Path": "",
-                        "Range": 0,
-                        "Repeat": true,
-                        "Volume": 0.7
-                    },
-                    "Transition": {
-                        "SceneToScene": {
-                            "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6",
-                            "Riddle": {
-                                "Text": {
-                                    "Expected": "DELAI",
-                                    "FuzzyMatches": [
-                                        "DELIA",
-                                        "ELIDA",
-                                        "HELAI",
-                                        "IDEAL",
-                                        "LAIDE"
-                                    ],
-                                    "IfCorrect": "Admis !",
-                                    "IfWrong": "Essaie encore ...",
-                                    "Question": "Mot le plus long ?",
-                                    "UseStars": false
-                                },
-                                "Which": "Text"
-                            },
-                            "Source": 1,
-                            "Target": 7,
-                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5"
-                        },
-                        "Which": "SceneToScene"
-                    },
-                    "id": 4
-                },
-                {
-                    "Color": [
-                        0,
-                        0,
-                        0,
-                        255
-                    ],
-                    "Components": [
-                    ],
-                    "Fade": 1,
-                    "Metadata": {
-                        "Color": "Base1",
-                        "Comment": "",
-                        "Label": "",
-                        "ScriptingName": ""
-                    },
-                    "ObjectName": "Transition",
-                    "Sound": {
-                        "Path": "",
-                        "Range": 0,
-                        "Repeat": true,
-                        "Volume": 0.7
-                    },
-                    "Transition": {
-                        "ClickAreaToScene": {
-                            "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3/ClickArea.1",
-                            "Source": 1,
-                            "Target": 6,
-                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6"
-                        },
-                        "Which": "ClickAreaToScene"
-                    },
-                    "id": 3
+                    "Unique": false,
+                    "id": 1
                 },
                 {
                     "Color": [
@@ -1342,31 +1283,162 @@
                     "Sound": {
                         "Path": "Sounds/GoodAnswer.mp3",
                         "Range": 0,
-                        "Repeat": true,
+                        "Repeat": false,
+                        "Volume": 0.7
+                    },
+                    "Transition": {
+                        "SceneToScene": {
+                            "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2",
+                            "Riddle": {
+                                "MaxTime": "none",
+                                "Puzzle": {
+                                },
+                                "Which": "Puzzle"
+                            },
+                            "Source": 7,
+                            "Target": 1,
+                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3"
+                        },
+                        "Which": "SceneToScene"
+                    },
+                    "Unique": true,
+                    "id": 2
+                },
+                {
+                    "Color": [
+                        0,
+                        0,
+                        0,
+                        255
+                    ],
+                    "Components": [
+                    ],
+                    "Fade": 1,
+                    "Metadata": {
+                        "Color": "Base1",
+                        "Comment": "",
+                        "Label": "",
+                        "ScriptingName": ""
+                    },
+                    "ObjectName": "Transition",
+                    "Sound": {
+                        "Path": "Sounds/GoodAnswer.mp3",
+                        "Range": 0,
+                        "Repeat": false,
                         "Volume": 0.7
                     },
                     "Transition": {
                         "SceneToScene": {
                             "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1",
                             "Riddle": {
+                                "MaxTime": "none",
                                 "Text": {
                                     "Expected": "1347",
                                     "FuzzyMatches": [
                                     ],
-                                    "IfCorrect": "Réponse correcte !",
-                                    "IfWrong": "Réponse incorrecte ...",
-                                    "Question": "Réponse ?",
+                                    "IfCorrect": "Le compte est bon !",
+                                    "IfWrong": "Rééssayez",
+                                    "Question": "Code ?",
                                     "UseStars": false
                                 },
                                 "Which": "Text"
                             },
                             "Source": 10,
-                            "Target": 3,
-                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.3"
+                            "Target": 4,
+                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4"
                         },
                         "Which": "SceneToScene"
                     },
-                    "id": 2
+                    "Unique": true,
+                    "id": 3
+                },
+                {
+                    "Color": [
+                        0,
+                        0,
+                        0,
+                        255
+                    ],
+                    "Components": [
+                    ],
+                    "Fade": 0,
+                    "Metadata": {
+                        "Color": "Base1",
+                        "Comment": "",
+                        "Label": "",
+                        "ScriptingName": ""
+                    },
+                    "ObjectName": "Transition",
+                    "Sound": {
+                        "Path": "",
+                        "Range": 0,
+                        "Repeat": true,
+                        "Volume": 0.7
+                    },
+                    "Transition": {
+                        "ClickAreaToScene": {
+                            "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.4/ClickArea.1",
+                            "Source": 1,
+                            "Target": 7,
+                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5"
+                        },
+                        "Which": "ClickAreaToScene"
+                    },
+                    "Unique": false,
+                    "id": 4
+                },
+                {
+                    "Color": [
+                        0,
+                        0,
+                        0,
+                        255
+                    ],
+                    "Components": [
+                    ],
+                    "Fade": 1,
+                    "Metadata": {
+                        "Color": "Base1",
+                        "Comment": "",
+                        "Label": "",
+                        "ScriptingName": ""
+                    },
+                    "ObjectName": "Transition",
+                    "Sound": {
+                        "Path": "Sounds/GoodAnswer.mp3",
+                        "Range": 0,
+                        "Repeat": false,
+                        "Volume": 0.7
+                    },
+                    "Transition": {
+                        "SceneToScene": {
+                            "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5",
+                            "Riddle": {
+                                "MaxTime": "none",
+                                "Text": {
+                                    "Expected": "DELAI",
+                                    "FuzzyMatches": [
+                                        "DELIA",
+                                        "ELIDA",
+                                        "HELAI",
+                                        "IDEAL",
+                                        "LAIDE"
+                                    ],
+                                    "IfCorrect": "Félicitations !",
+                                    "IfWrong": "Rééssayez",
+                                    "Question": "Mot le plus long ? (5 lettres)",
+                                    "UseStars": false
+                                },
+                                "Which": "Text"
+                            },
+                            "Source": 1,
+                            "Target": 7,
+                            "To": "/SEGMentDocument.1/SEGMentProcess.0/Scene.6"
+                        },
+                        "Which": "SceneToScene"
+                    },
+                    "Unique": true,
+                    "id": 5
                 }
             ],
             "id": 0
