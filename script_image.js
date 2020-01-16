@@ -296,11 +296,34 @@ function getLastElem(lst){
 function verifyClick(event) { // NOTE : make separate functions for each case ?
   const X = event.clientX;
   const Y = event.clientY;
+  verifyClickZone(X,Y);
+  verifyBackZone(X,Y);
+  verifyDigicode(X,Y);
+  verifyObject(X,Y);
+  verifyGif(X,Y);
+}
+
+// -------------------------------------- verify[...] -------------------------------------
+
+/**
+ * Verifies if clicked on a ClickZone, and changes scene if so
+ * @param {coordinate} X
+ * @param {coordinate} Y
+ */
+function verifyClickZone(X,Y){
   const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if (resClickZone[0] >= 0) {
     playSoundClickZone(resClickZone[1]);
     changeScene(event, "ping.html", resClickZone[0], false);
   }
+}
+
+/**
+ * Verifies if clicked on a BackClickZone, and changes scene if so
+ * @param {coordinate} X
+ * @param {coordinate} Y
+ */
+function verifyBackZone(X,Y){
   const resBackZone = isOnBackZone(X, Y); // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
   if(resBackZone[0]){
     playSoundBackClickArea(resBackZone[1]);
@@ -308,6 +331,14 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
     let sId = 0;
     changeScene(event, "ping.html", sId, true);
   }
+}
+
+/**
+ * Verifies if clicked on a Digicode letter/validate, memorizes the letter or checks if the answer is correct
+ * @param {coordinate} X
+ * @param {coordinate} Y
+ */
+function verifyDigicode(X,Y){
   const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
   let bool = false;
   if(resDigi[0] != -1){
@@ -326,35 +357,48 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
           console.log(buffer);
       }
   }
-  const resGif = isOnGifZone(X,Y);
-  if(resGif!=-1){
-      let currentFrame = gifOnScene[resGif].get_current_frame();
-      let first = true;
-      while(first || gifClickZone[resGif].id[2][currentFrame] == 0){
-        let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
-        gifOnScene[resGif].move_to(newFrame);
-        currentFrame = gifOnScene[resGif].get_current_frame();
-        first = false;
-    }
-      if(areGifWellSet()){
-            //console.log(gifClickZone[resGif].id[3]);
-            changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false);
-      }
-  }
-  const resObject = isOnObjectZone(X, Y);
-  if(resObject[0] != -1){
-    console.log("resObject[0] : ", resObject[0]);
-    console.log("resObject[1] : ", resObject[1]);
-    playSoundObject(resObject[1]);
-    let sId = resObject[0];
-    changeScene(event, "ping.html", sId, false);
-  }
   if(bool){
     let sId = 0;
     sId = digicodeClickZone[digicodeClickZone.length-1]
     sId = sId[sId.length-1];
     changeScene(event, "ping.html", sId, false);
   }
+}
+
+/**
+ * Verifies if clicked on an object, and changes scene if so
+ * @param {coordinate} X
+ * @param {coordinate} Y
+ */
+function verifyObject(X,Y){
+  const resObject = isOnObjectZone(X, Y);
+  if(resObject[0] != -1){
+    playSoundObject(resObject[1]);
+    let sId = resObject[0];
+    changeScene(event, "ping.html", sId, false);
+  }
+}
+
+/**
+ * Verifies if clicked on a gif, if so, changes the image of the gif, and if the combination is correct, changes scene
+ * @param {coordinate} X
+ * @param {coordinate} Y
+ */
+function verifyGif(X,Y){
+    const resGif = isOnGifZone(X,Y);
+    if(resGif!=-1){
+        let currentFrame = gifOnScene[resGif].get_current_frame();
+        let first = true;
+        while(first || gifClickZone[resGif].id[2][currentFrame] == 0){
+          let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
+          gifOnScene[resGif].move_to(newFrame);
+          currentFrame = gifOnScene[resGif].get_current_frame();
+          first = false;
+        }
+        if(areGifWellSet()){
+              changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false);
+        }
+    }
 }
 
 // ------------------------------------- isOn[...]Zone ------------------------------------
