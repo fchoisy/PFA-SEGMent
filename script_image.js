@@ -168,7 +168,6 @@ function getCookieValue(cname) {
  */
 function resize(){
   setWindowsValues();
-  printOpeningText();
   resizeGif();
   loadObjects();
 }
@@ -693,6 +692,10 @@ function Puzzled(id){
       let puzzlePieces = getPuzzlepieces(id);
       let diffX;
       let diffY;
+      var tabPos = [];
+      var i;
+      var firstLoad = 0;
+      var ratio = window.devicePixelRatio;
       function displayPuzzleImage() {
       setWindowsValues();
       let puzzleImagesZone = document.getElementById("puzzleImages");
@@ -704,12 +707,23 @@ function Puzzled(id){
       puzzleImagesZone.innerHTML = "";
       puzzleImagesZone.width = windowsValues[0];
       puzzleImagesZone.height = windowsValues[1];
-      let i;
+      var top;
+      var left;
       for (i = 0; i < puzzlePieces.length; i++) {
-        var img = document.createElement("IMG");
+        var img;
+        img = document.createElement("IMG");
         img.id = "draggable" + i;
-        let top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
-        let left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+        img.classList.add("draggable");
+        if (firstLoad  != puzzlePieces.length-1) {
+          top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
+          left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+          firstLoad = i;
+          let posImg = [left/(windowsValues[2] * windowsValues[6]),top/(windowsValues[3] * windowsValues[6])];
+          tabPos.push(posImg);
+        }else{
+          top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
+          left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
+        }
         img.style.position = "absolute";
         img.style.top = top + "px";
         img.style.left = left + "px";
@@ -717,20 +731,14 @@ function Puzzled(id){
         img.height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
         img.src = "Game/" + puzzlePieces[i].Image;
         puzzleImagesZone.appendChild(img);
+        $(".draggable").draggable({containment: "parent"});
       }
-      var script = document.createElement("script");
-      var scriptCode = "$( function() {\n";
-      for (i = 0; i < puzzlePieces.length; i++) {
-        scriptCode += "$( \"#draggable" + i + "\" ).draggable({ revert: \"invalid\" });\n";
-      }
-      scriptCode += " } );";
-      script.innerHTML = scriptCode;
-      document.body.appendChild(script);
+
       diffX=[];
       diffY=[];
       var delta = 0.05;
-      let originX = windowsValues[4] + puzzlePieces[0].Pos[0] * windowsValues[2] * windowsValues[6];
-      let originY = windowsValues[5] + puzzlePieces[0].Pos[1] * windowsValues[3] * windowsValues[6];
+      let originX = puzzlePieces[0].Pos[0];
+      let originY = puzzlePieces[0].Pos[1];
       let imgX;
       let imgY;
       let minX;
@@ -738,33 +746,49 @@ function Puzzled(id){
       let minY;
       let maxY;
       for (i = 1; i < puzzlePieces.length; i++) {
-        imgX = windowsValues[4] + puzzlePieces[i].Pos[0] * windowsValues[2] * windowsValues[6];
-        imgY = windowsValues[5] + puzzlePieces[i].Pos[1] * windowsValues[3] * windowsValues[6];
-        minX = imgX - originX - delta * windowsValues[2] * windowsValues[6];
-        maxX = imgX - originX + delta * windowsValues[2] * windowsValues[6];
-        minY = imgY - originY - delta * windowsValues[3] * windowsValues[6];
-        maxY = imgY - originY + delta * windowsValues[3] * windowsValues[6];
+        imgX = puzzlePieces[i].Pos[0];
+        imgY = puzzlePieces[i].Pos[1];
+        minX = (imgX - originX - delta) * ratio;
+        maxX = (imgX - originX + delta) * ratio;
+        minY = (imgY - originY - delta) * ratio;
+        maxY = (imgY - originY + delta) * ratio;
         diffX.push([minX,maxX]);
         diffY.push([minY,maxY]);
       }
     }
     displayPuzzleImage();
     window.addEventListener("resize", displayPuzzleImage, false);
+    var currentOriginX;
+    var currentOriginY;
+    var currentX;
+    var currentY;
+    var pourcentX;
+    var pourcentY;
+    function storeImagePosition(){
+      for (i = 0; i < puzzlePieces.length; i++) {
+        let puzzleImagesZone = document.getElementById("puzzleImages");
+        currentX = parseInt(document.getElementById("draggable"+i).x)-windowsValues[4];
+        currentY = parseInt(document.getElementById("draggable"+i).y)-windowsValues[5];
+        pourcentX = currentX / (windowsValues[0]-2*windowsValues[4]);
+        pourcentY = currentY / (windowsValues[1]-2*windowsValues[5]);
+        tabPos[i][0]=pourcentX;
+        tabPos[i][1]=pourcentY;
+      }
+    }
+    window.addEventListener("touchend", storeImagePosition, false);
+    window.addEventListener("mouseup", storeImagePosition, false);
+
     const transition = getTransitionByID(getTransitions(),puzzle[1]);
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
     window.addEventListener("mouseup", verify, false);
     window.addEventListener("touchend", verify, false);
       function verify(){
-        let currentdiffX = [];
-        let currentdiffY = [];
-        let currentOriginX = parseInt(document.getElementById("draggable"+0).x) * windowsValues[6];
-        let currentOriginY = parseInt(document.getElementById("draggable"+0).y) * windowsValues[6];
+        currentOriginX = tabPos[0][0];
+        currentOriginY = tabPos[0][1];
         let result = true ;
-        let currentX;
-        let currentY;
         for (var i = 1; i < puzzlePieces.length; i++) {
-          currentX = parseInt(document.getElementById("draggable" + i).x) * windowsValues[6];
-          currentY = parseInt(document.getElementById("draggable" + i).y) * windowsValues[6];
+          currentX = tabPos[i][0];
+          currentY = tabPos[i][1];
           if (!((currentX - currentOriginX) >= diffX[i-1][0] && (currentX - currentOriginX) <= diffX[i-1][1])){
             result = false;
           }
