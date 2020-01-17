@@ -19,5 +19,6 @@ function startScene(event){
   event.preventDefault();
   document.cookie = "scene_number=" + getSceneId(getInitialScene()) + ";";
   document.cookie = "isback=" + false +";";
+  document.cookie = "skip=" + 0 + ";";
   document.location.href = 'ping.html';
 };

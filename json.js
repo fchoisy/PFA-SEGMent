@@ -10,19 +10,23 @@
 //                               ***Memos TODO (unused)***
 // ========================================================================================
 
-// --------------------------------------- Clément ----------------------------------------
+  // --------------------------------------- Clément ----------------------------------------
 
-// ---------------------------------------- Hind ------------------------------------------
+  // ---------------------------------------- Hind ------------------------------------------
 
-// --------------------------------------- Pierre -----------------------------------------
+  // --------------------------------------- Pierre -----------------------------------------
 
-// -------------------------------------- Eleonore ----------------------------------------
+  // -------------------------------------- Eleonore ----------------------------------------
 
-// --------------------------------------- Emeric -----------------------------------------
+  // --------------------------------------- Emeric -----------------------------------------
 
-// -------------------------------------- Corentin ----------------------------------------
+  // -------------------------------------- Corentin ----------------------------------------
 
-// ---------------------------------------- Jean ------------------------------------------
+    // getTransitionByID can be optimized (no need for transitions)
+
+    // Add commentaries for a lot of functions + return value
+
+  // ---------------------------------------- Jean ------------------------------------------
 
 // ========================================================================================
 //                              *** Global variables***
@@ -296,11 +300,11 @@ function getGifPointedScene(id){
     }
     return 2000000;
 }
+
 /**
  * Return the type of the puzzle present in the given scene
  * @param {Scene object} id
 */
-
 function whatPuzzleItIs(id){
     const scene = getSceneByID(id);
     //console.log(scene.Gifs);
@@ -335,6 +339,29 @@ function getLastNumberTransition(str){
           len--;
     }
     return parseInt(str.substring(len+1,str.length));
+}
+
+function getSceneIdFromPath(path){
+  let len = path.length;
+  let len2 = len;
+  let len3 = len;
+  while(len >= 0){
+    if(path[len] == "."){
+      len3 = len2;
+      len2 = len;
+      len--;
+    }
+    if(path[len] == "/"){
+      if(path.substring(len+1,len2) == "Scene"){
+        return path.substring(len2+1,len3);
+      }
+      len3 = len2;
+      len2 = len;
+      len--;
+    }
+    len--;
+  }
+  return -1;
 }
 
 // ------------------------------------ Get <...> By Id -------------------------------------
@@ -686,4 +713,18 @@ function playSoundTransition(transitionId){
   var transition = getTransitionByID(transitions, transitionId);
   var SoundPath = getSoundPath(transition);
   playSound(SoundPath);
+}
+
+// ========================================================================================
+//                                      ***Transitions***
+// ========================================================================================
+
+/**
+ * Returns true if the transition id is Unique
+ * @param {*} transitionId
+ *
+ * @returns true id the transition id is unique, false otherwise
+ */
+function isTransitionUnique(transition){
+  return transition.Unique;
 }

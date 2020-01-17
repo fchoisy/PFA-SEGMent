@@ -28,9 +28,12 @@
 
   // -------------------------------------- Corentin ----------------------------------------
 
-    // Séparer le code de verifyClick et Puzzled en plusieurs sous-fonctions
-
     // Pour les gifs IsOnZone, retourner un resTab[] pour pouvoir obtenir l'ID du gif et ainsi pouvoir jouer le son ?
+
+    // A chaque début de scène, checker si on peut passer directement à la scène suivante avec Unique
+
+    // Pour les transitions Uniques, si on a plusieurs puzzles dans une même scène qui mènent à des scènes différentes, avec une transition unique,
+    // que doit-on faire ? (faire test).
 
   // ---------------------------------------- Jean ------------------------------------------
 
@@ -51,7 +54,7 @@ let scene_number; // the number of the played scene
 let imgSize = []; // contains the size of the image in the background
 let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
-let windowsValues; //contains information of the size of the current window, image and bands on sides and top/bottom
+let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
 
 // ========================================================================================
 //                               ***Signals***
@@ -223,6 +226,13 @@ function changeCursor(event) {
  */
 function changeScene(event, html, id, back) {
   event.preventDefault();
+  let trueId = id;
+  if(isInSkip(id,back)){
+    console.log("Jean");
+    trueId = getNextSceneSkip(id,back);
+
+  }
+  console.log("Jean");
   $("#fade").fadeIn(FADE_IN_TIME, () => {
     let cook = document.cookie;
     let i = 0;
@@ -239,12 +249,17 @@ function changeScene(event, html, id, back) {
       if(back){
         let lst;
         if(getLastElem(lstSceneNumber)==scene_number){
-            lst = removeLastElem(lstSceneNumber);
-            document.cookie = "scene_number=" + lst + ";";
+          if(trueId==-1){
+            trueId = removeLastElem(lstSceneNumber);
+          }
+          if(getCookieValue("scene_number").length==1){
+            trueId = getCookieValue("scene_number");
+          }
+          document.cookie = "scene_number=" + trueId + ";";
         }
       }else{
         if(getLastElem(lstSceneNumber)==scene_number){
-            document.cookie = "scene_number=" + lstSceneNumber + "," + id + ";";
+            document.cookie = "scene_number=" + lstSceneNumber + "," + trueId + ";";
         }
       }
       document.location.href = html;
@@ -259,7 +274,7 @@ function changeScene(event, html, id, back) {
 */
 function removeLastElem(lst){
     let len = lst.length;
-    while(lst[len] !=","){
+    while(lst[len] !="," && len>=0){
         len = len - 1;
     }
     return lst.substring(0,len);
@@ -280,6 +295,70 @@ function getLastElem(lst){
       ret = ret+1;
   }
   return lst.substring(len,ret);
+}
+
+// ========================================================================================
+//                                     ***Transitions***
+// ========================================================================================
+
+// ------------------------------------- Skip to Scene -------------------------------------
+
+function addSkip(sceneId){
+  document.cookie = "skip=" + getCookieValue("skip") + "," + sceneId + ";";
+}
+
+function isInSkip(sceneId,back){
+  let skip = getCookieValue("skip");
+  skip = skip+",";
+  var IdStr;
+  var Id;
+  let sid=sceneId;
+  if(back && getCookieValue("scene_number").length>1){
+    sid = getLastElem(removeLastElem(getCookieValue("scene_number")));
+  }
+  for (var i = 0; i < skip.length; i++) {
+    if(skip[i] == ","){
+      Id = parseInt(IdStr);
+      IdStr = "";
+      if(Id == sid){
+        return true;
+      }
+    }
+    else{
+      IdStr += skip[i];
+    }
+  }
+  return false;
+}
+
+function getNextSceneSkip(sceneId,back){
+  if(!back){
+    const transition = findTransitionBySceneId(sceneId);
+    const transitionType = transition.Transition.Which;
+    const transitionData = transition.Transition[transitionType];
+    return getLastNumberTransition(transitionData.To);
+  }
+  let lst = removeLastElem(getCookieValue("scene_number"));
+  while(isInSkip(getLastElem(lst))){
+      lst = removeLastElem(lst);
+  }
+  return lst;
+}
+
+function findTransitionBySceneId(sceneId){
+  let transitions = getTransitions();
+  var transitionType;
+  var transition;
+  var transitionData;
+  for (var i = 0; i < transitions.length; i++) {
+    transition = transitions[i];
+    transitionType = transition.Transition.Which;
+    transitionData = transition.Transition[transitionType];
+    console.log(getSceneIdFromPath(transitionData.From));
+    if(getSceneIdFromPath(transitionData.From) == sceneId){
+      return transition;
+    }
+  }
 }
 
 // ========================================================================================
@@ -314,6 +393,9 @@ function verifyClickZone(X,Y){
   const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if (resClickZone[0] >= 0) {
     playSoundClickZone(resClickZone[1]);
+    if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+      addSkip(scene_number);
+    }
     changeScene(event, "ping.html", resClickZone[0], false);
   }
 }
@@ -328,7 +410,7 @@ function verifyBackZone(X,Y){
   if(resBackZone[0]){
     playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
-    let sId = 0;
+    let sId = -1;
     changeScene(event, "ping.html", sId, true);
   }
 }
@@ -361,6 +443,9 @@ function verifyDigicode(X,Y){
     let sId = 0;
     sId = digicodeClickZone[digicodeClickZone.length-1]
     sId = sId[sId.length-1];
+    if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+      addSkip(scene_number);
+    }
     changeScene(event, "ping.html", sId, false);
   }
 }
@@ -375,6 +460,9 @@ function verifyObject(X,Y){
   if(resObject[0] != -1){
     playSoundObject(resObject[1]);
     let sId = resObject[0];
+    if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+      addSkip(scene_number);
+    }
     changeScene(event, "ping.html", sId, false);
   }
 }
@@ -396,6 +484,9 @@ function verifyGif(X,Y){
           first = false;
         }
         if(areGifWellSet()){
+              if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+                addSkip(scene_number);
+              }
               changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false);
         }
     }
@@ -773,6 +864,9 @@ function Puzzled(id){
           }
         }
       if (result) {
+        if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+          addSkip(scene_number);
+        }
         changeScene(event, "ping.html", idTransition, false);
       }
     }
