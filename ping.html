@@ -82,17 +82,18 @@
   <div id="gifImages">
   <!-- Gif images -->
   </div>
+  
   <script>
     $( function() {
-      $( "#puzzleImages" ).droppable();
+      $( ".draggable" ).draggable({containment: "parent"});
     });
   </script>
 
-  <script type="text/javascript" src="json.js"></script>
-  <script type="text/javascript" src="script_image.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="jquery.ui.touch-punch.min.js"></script>
+  <script type="text/javascript" src="json.js"></script>
+  <script type="text/javascript" src="script_image.js"></script>
 
 </body>
 
