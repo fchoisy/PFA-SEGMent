@@ -1,10 +1,28 @@
 /**
  * json.js
  *
- * Methods for interpreting the 'segment.game' JSON file
+ * Functions for interpreting the 'segment.game' JSON file
  */
 
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
+
+// ========================================================================================
+//                               ***Memos TODO (unused)***
+// ========================================================================================
+
+// --------------------------------------- Clément ----------------------------------------
+
+// ---------------------------------------- Hind ------------------------------------------
+
+// --------------------------------------- Pierre -----------------------------------------
+
+// -------------------------------------- Eleonore ----------------------------------------
+
+// --------------------------------------- Emeric -----------------------------------------
+
+// -------------------------------------- Corentin ----------------------------------------
+
+// ---------------------------------------- Jean ------------------------------------------
 
 // ========================================================================================
 //                              *** Global variables***
@@ -244,30 +262,12 @@ function getPointedScene(clickAreaPath) {
         while (elem.ClickAreaToScene.To[len]!=".") {
           len--;
         }
-        //console.log(elem.ClickAreaToScene.To.substring(len+1, elem.ClickAreaToScene.To.length));
         return parseInt(elem.ClickAreaToScene.To.substring(len+1, elem.ClickAreaToScene.To.length));
       }
     }
   }
   return -1
 }
-
-
-// function getBackClickAreaImagePath(scene){
-//   let objects = getObjects(scene);
-//   let len = objects.length;
-//   let path = "";
-//   let i = 0;
-//   while (i < len && path == "") {
-//     if(objects[i].PuzzlePiece==false){
-//       path=objects[i].Image;
-//     }
-//     i++;
-//   }
-//   return path;
-// }
-
-
 
 function getPuzzlepieces(id){
   const scene = getSceneByID(id);
@@ -280,6 +280,22 @@ function getPuzzlepieces(id){
   return tab;
 }
 
+function getGifPointedScene(id){
+    const scene = getSceneByID(id);
+    let transitions = getTransitions();
+    const len = transitions.length;
+    for(let i =0 ; i<len; i++){
+        let sceneto = transitions[i].Transition.SceneToScene;
+        if(!(sceneto === undefined)){
+            if(!(sceneto.Riddle === undefined)){
+                if(sceneto.Riddle.Which=="Gif" && getLastNumberTransition(sceneto.From) == id){
+                    return getLastNumberTransition(sceneto.To);
+                }
+            }
+        }
+    }
+    return 2000000;
+}
 /**
  * Return the type of the puzzle present in the given scene
  * @param {Scene object} id
