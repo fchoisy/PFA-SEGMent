@@ -578,7 +578,7 @@ function printOpeningText(){
   var i=0;
   var t;
   function reset() {
-    i = 0;
+    setWindowsValues();
     clearTimeout(t);
     text = getSceneTextBySceneId(scene_number);
     textBox = document.getElementById("textbox");
@@ -595,12 +595,13 @@ function printOpeningText(){
     textBox.addEventListener("click", instantPrinting);
   }
   reset();
+  window.addEventListener("resize", function () {
+    reset();
+    textBox.innerHTML = text.substring(0,i);
+    charByChar();
+  });
   function charByChar() {
       if (i < text.length) {
-        window.addEventListener("resize", function () {
-          reset();
-          textBox.innerHTML = text.substring(0,i+1);
-        });
         textBox.innerHTML += text[i];
         i++;
         t=setTimeout(charByChar, 100);
