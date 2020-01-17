@@ -18,6 +18,7 @@ window.onload = loadJson();
 function startScene(event){
   event.preventDefault();
   document.cookie = "scene_number=" + getSceneId(getInitialScene()) + ";";
+  document.cookie = "visited_scenes=" + 0 + ";";
   document.cookie = "isback=" + false +";";
   document.cookie = "skip=" + 0 + ";";
   document.location.href = 'ping.html';
