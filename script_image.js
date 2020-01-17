@@ -341,6 +341,7 @@ function verifyDigicode(X,Y){
   const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
   let bool = false;
   if(resDigi[0] != -1){
+      var digiBox = document.getElementById("digiBox");
       playSoundText(resDigi[1]);
       if(resDigi[0][0] =="Validate"){
           bool = validatingBuffer();
@@ -355,6 +356,7 @@ function verifyDigicode(X,Y){
           addingBuffer(resDigi[0][1]);
           console.log(buffer);
       }
+      digiBox.innerHTML=buffer;
   }
   if(bool){
     let sId = 0;
@@ -662,6 +664,34 @@ function displayObject(object,transitions,scene){
 function Puzzled(id){
     const puzzle = whatPuzzleItIs(id);
     if(puzzle[0] == "Text"){
+        var digiBox = document.createElement("div");
+        digiBox.id="digiBox";
+        setWindowsValues();
+        digiBox.style.position = "absolute";
+        digiBox.style.left = (1.1 * windowsValues[4]) + "px";
+        digiBox.style.right = (1.1 * windowsValues[4]) + "px";
+        digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.margin = "auto";
+        digiBox.style.width = "50%";
+        digiBox.style.textAlign = "center";
+        digiBox.style.borderStyle= "double";
+        digiBox.style.borderColor= "DarkBlue";
+        digiBox.style.zIndex= 10;
+        digiBox.style.backgroundColor= "CornflowerBlue";
+        digiBox.style.fontSizeAdjust= "50px";
+        digiBox.style.fontVariant= "smallCaps";
+        digiBox.style.alignContent= "center";
+
+        function deplaceDigiBox(){
+          setWindowsValues();
+          digiBox.style.left = (1.1 * windowsValues[4]) + "px";
+          digiBox.style.right = (1.1 * windowsValues[4]) + "px";
+          digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+          digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        }
+        window.addEventListener("resize", deplaceDigiBox, false);
+        document.body.appendChild(digiBox);
         const scene = getSceneByID(id);
         const sceneTextArea = scene.TextAreas;
         const len = sceneTextArea.length;
