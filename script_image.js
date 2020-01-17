@@ -34,6 +34,8 @@
 
   // ---------------------------------------- Jean ------------------------------------------
 
+    //Mettre les bonnes phrases en cas d'erreur sur le digicode
+
 // ========================================================================================
 //                               ***Global variables***
 // ========================================================================================
@@ -671,6 +673,7 @@ function Puzzled(id){
         digiBox.style.left = (1.1 * windowsValues[4]) + "px";
         digiBox.style.right = (1.1 * windowsValues[4]) + "px";
         digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
         digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
         digiBox.style.margin = "auto";
         digiBox.style.width = "50%";
@@ -688,6 +691,7 @@ function Puzzled(id){
           digiBox.style.left = (1.1 * windowsValues[4]) + "px";
           digiBox.style.right = (1.1 * windowsValues[4]) + "px";
           digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+          digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
           digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
         }
         window.addEventListener("resize", deplaceDigiBox, false);
