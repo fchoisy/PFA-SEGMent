@@ -82,7 +82,10 @@ function initialisation() {
     playSoundScene();
     imgsize();
     setWindowsValues();
-    printOpeningText();
+    if(sceneVisited(scene_number)==false){
+      printOpeningText();
+      addCurrentSceneToVisited(scene_number);
+    }
     clickzone();
     Puzzled(scene_number);
     loadObjects();
@@ -164,6 +167,42 @@ function getCookieValue(cname) {
   }
   j = i
   return cook.substring(ind + 1, j);
+}
+
+// -------------------------------- Visited Scenes ------------------------------
+
+/**
+ * Return true if the 'scene_number' has been visited and false if not
+ * Use the cookie visited_scenes
+ * @param {number} sceneId
+ */
+function sceneVisited(sceneId){
+  let visited = getCookieValue("visited_scenes");
+  var Id;
+  for (var i = 0; i < visited.length; i++) {
+    if(visited[i]==","){
+      if(Id==sceneId){
+        return true;
+      }else{
+        Id="";
+      }
+    }else{
+      Id=Id+visited[i];
+    }
+  }
+  if(Id==sceneId){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+/**
+ * Add the 'sceneId' scene to the cookie 'visited_scenes'
+ * @param {number} sceneId
+ */
+function addCurrentSceneToVisited(sceneId){
+  document.cookie = "visited_scenes=" + getCookieValue("visited_scenes") + "," + sceneId + ";";
 }
 
 // ---------------------------------------- Resize ----------------------------------------
