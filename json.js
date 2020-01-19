@@ -568,6 +568,42 @@ function getSceneTextAreasBySceneId(sceneId) {
   return text_areas;
 }
 
+/**
+ * Returns Question, Success answer or Failure answer of a digicode
+ * in the scene whose id is 'sceneId'
+ *
+ * @param {number} sceneId
+ * @param {number} text
+ */
+function getDigicodeQSF(sceneId,text){
+  var transitions = getTransitions();
+  var sceneToScene;
+  var len = transitions.length;
+  var riddleText;
+  for (var i = 0; i < len; i++) {
+    if(transitions[i].Transition.Which == "SceneToScene"){
+      sceneToScene = transitions[i].Transition.SceneToScene;
+      var startSceneId = getLastNumberTransition(sceneToScene.From);
+      if (startSceneId == sceneId) {
+        riddleText = sceneToScene.Riddle.Text;
+      }
+    }
+  }
+  switch (text) {
+    case "QUESTION":
+      return riddleText.Question;
+      break;
+    case "SUCCESS":
+      return riddleText.IfCorrect;
+      break;
+    case "FAILURE":
+      return riddleText.IfWrong;
+      break;
+    default:
+      return"";
+  }
+}
+
 // ========================================================================================
 //                                      ***Texts***
 // ========================================================================================
@@ -589,8 +625,13 @@ function printOpeningText(){
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     function instantPrinting(){
       clearTimeout(t);
-      i = text.length;
-      textBox.innerHTML = text;
+      if(i == text.length){
+        textBox.innerHTML = "";
+      }
+      else {
+        i = text.length;
+        textBox.innerHTML = text;
+      }
     }
     textBox.addEventListener("click", instantPrinting);
   }

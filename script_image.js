@@ -465,8 +465,19 @@ function verifyDigicode(X,Y){
   let bool = false;
   if(resDigi[0] != -1){
       var digiBox = document.getElementById("digiBox");
+      var currentSceneId= getLastElem(getCookieValue("scene_number"));
+      var digiSuccess = getDigicodeQSF(currentSceneId,"SUCCESS");
+      if (digiSuccess==undefined) {
+        digiSuccess=="";
+      }
+      var digiFailure = getDigicodeQSF(currentSceneId,"FAILURE");
+      if (digiFailure==undefined) {
+        digiFailure=="";
+      }
+      var clickValidate = false;
       playSoundText(resDigi[1]);
       if(resDigi[0][0] =="Validate"){
+          clickValidate = true;
           bool = validatingBuffer();
       }
       else if(resDigi[0][0] == "Delete"){
@@ -477,9 +488,18 @@ function verifyDigicode(X,Y){
       }
       else{
           addingBuffer(resDigi[0][1]);
-          console.log(buffer);
+          //console.log(buffer);
       }
+      if(clickValidate){
+      clickValidate = false ;
+      if (bool) {
+        digiBox.innerHTML = digiSuccess;
+      }else {
+        digiBox.innerHTML = digiFailure;
+      }
+    }else {
       digiBox.innerHTML=buffer;
+    }
   }
   if(bool){
     let sId = 0;
@@ -815,7 +835,11 @@ function Puzzled(id){
         digiBox.style.fontSizeAdjust= "50px";
         digiBox.style.fontVariant= "smallCaps";
         digiBox.style.alignContent= "center";
-
+        var digiQuestion = getDigicodeQSF(id,"QUESTION");
+        if (digiQuestion==undefined) {
+          digiQuestion=="";
+        }
+        digiBox.innerHTML = digiQuestion;
         function deplaceDigiBox(){
           setWindowsValues();
           digiBox.style.left = (1.1 * windowsValues[4]) + "px";
@@ -931,8 +955,8 @@ function Puzzled(id){
     function storeImagePosition(){
       for (i = 0; i < puzzlePieces.length; i++) {
         let puzzleImagesZone = document.getElementById("puzzleImages");
-        currentX = parseInt(document.getElementById("draggable"+i).x)-windowsValues[4];
-        currentY = parseInt(document.getElementById("draggable"+i).y)-windowsValues[5];
+        currentX = parseInt(document.getElementById("draggable"+i).offsetLeft);
+        currentY = parseInt(document.getElementById("draggable"+i).offsetTop);
         pourcentX = currentX / (windowsValues[0]-2*windowsValues[4]);
         pourcentY = currentY / (windowsValues[1]-2*windowsValues[5]);
         tabPos[i][0]=pourcentX;
