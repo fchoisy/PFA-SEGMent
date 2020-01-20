@@ -883,7 +883,6 @@ function Puzzled(id){
       var tabPos = [];
       var i;
       var firstLoad = 0;
-      var ratio = window.devicePixelRatio;
       function displayPuzzleImage() {
       setWindowsValues();
       let puzzleImagesZone = document.getElementById("puzzleImages");
@@ -936,10 +935,10 @@ function Puzzled(id){
       for (i = 1; i < puzzlePieces.length; i++) {
         imgX = puzzlePieces[i].Pos[0];
         imgY = puzzlePieces[i].Pos[1];
-        minX = (imgX - originX - delta) * ratio;
-        maxX = (imgX - originX + delta) * ratio;
-        minY = (imgY - originY - delta) * ratio;
-        maxY = (imgY - originY + delta) * ratio;
+        minX = (imgX - originX - delta);
+        maxX = (imgX - originX + delta);
+        minY = (imgY - originY - delta);
+        maxY = (imgY - originY + delta);
         diffX.push([minX,maxX]);
         diffY.push([minY,maxY]);
       }
@@ -957,8 +956,8 @@ function Puzzled(id){
         let puzzleImagesZone = document.getElementById("puzzleImages");
         currentX = parseInt(document.getElementById("draggable"+i).offsetLeft);
         currentY = parseInt(document.getElementById("draggable"+i).offsetTop);
-        pourcentX = currentX / (windowsValues[0]-2*windowsValues[4]);
-        pourcentY = currentY / (windowsValues[1]-2*windowsValues[5]);
+        pourcentX = currentX / (windowsValues[0]-(2*windowsValues[4]));
+        pourcentY = currentY / (windowsValues[1]-(2*windowsValues[5]));
         tabPos[i][0]=pourcentX;
         tabPos[i][1]=pourcentY;
       }
