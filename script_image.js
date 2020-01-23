@@ -889,6 +889,9 @@ function Puzzled(id){
       let gif;
       const ctx = canvas.getContext("2d");
       for(let i=0;i<gifs.length;i++){
+          gifOnScene.push(0);
+      }
+      for(let i=0;i<gifs.length;i++){
           currentGif = gifs[i];
           let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
           clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames,getGifPointedScene(scene_number)], currentGif.id);
@@ -904,7 +907,7 @@ function Puzzled(id){
           document.getElementById("gifImages").appendChild(img);
           let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
           gifl.load(function(){
-              gifOnScene.push(gifl);
+              gifOnScene[i] = gifl;
           });
       }
    }
