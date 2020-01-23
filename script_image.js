@@ -37,6 +37,8 @@
 
   // ---------------------------------------- Jean ------------------------------------------
 
+    //Mettre les bonnes phrases en cas d'erreur sur le digicode
+
 // ========================================================================================
 //                               ***Global variables***
 // ========================================================================================
@@ -80,7 +82,10 @@ function initialisation() {
     playSoundScene();
     imgsize();
     setWindowsValues();
-    printOpeningText();
+    if(sceneVisited(scene_number)==false){
+      printOpeningText();
+      addCurrentSceneToVisited(scene_number);
+    }
     clickzone();
     Puzzled(scene_number);
     loadObjects();
@@ -122,7 +127,6 @@ function clickzone() {
  * Returns the index of cookie whose name is 'cname' in 'cook'
  * @param {*} cname
  * @param {*} cook
- * @returns : Beginning index of the cookie cname. -1 if not exist
  */
 function getIndexName(cname, cook) {
   var toSearch = cname + "=";
@@ -149,7 +153,6 @@ function getIndexName(cname, cook) {
 /**
  * Get the value of the cookie whose name is 'cname'
  * @param {string} cname
- * @returns : Value of cookie cname. "" if not exist.
  */
 function getCookieValue(cname) {
   const cook = document.cookie;
@@ -166,6 +169,42 @@ function getCookieValue(cname) {
   return cook.substring(ind + 1, j);
 }
 
+// -------------------------------- Visited Scenes ------------------------------
+
+/**
+ * Return true if the 'scene_number' has been visited and false if not
+ * Use the cookie visited_scenes
+ * @param {number} sceneId
+ */
+function sceneVisited(sceneId){
+  let visited = getCookieValue("visited_scenes");
+  var Id;
+  for (var i = 0; i < visited.length; i++) {
+    if(visited[i]==","){
+      if(Id==sceneId){
+        return true;
+      }else{
+        Id="";
+      }
+    }else{
+      Id=Id+visited[i];
+    }
+  }
+  if(Id==sceneId){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+/**
+ * Add the 'sceneId' scene to the cookie 'visited_scenes'
+ * @param {number} sceneId
+ */
+function addCurrentSceneToVisited(sceneId){
+  document.cookie = "visited_scenes=" + getCookieValue("visited_scenes") + "," + sceneId + ";";
+}
+
 // ---------------------------------------- Resize ----------------------------------------
 
 /**
@@ -173,7 +212,6 @@ function getCookieValue(cname) {
  */
 function resize(){
   setWindowsValues();
-  printOpeningText();
   resizeGif();
   loadObjects();
 }
@@ -207,7 +245,6 @@ function setWindowsValues(){
 /**
  * Changes the mouse pointer icon in reponse to an event
  * @param {MouseEvent} event
- * @returns : void
  */
 function changeCursor(event) {
   let X = event.clientX;
@@ -226,7 +263,6 @@ function changeCursor(event) {
  * @param {Event} event (ignored)
  * @param {string} html path of page to go to
  * @param {number} id id of scene to go to
- * @param {boolean} back if the changeScene load a backclickZone
  */
 function changeScene(event, html, id, back) {
   event.preventDefault();
@@ -275,7 +311,6 @@ function changeScene(event, html, id, back) {
 /**
  * Remove the last element from a string of this form "1,2,3,4"
  * @param {String} lst the string you want to remove the last element
- * @returns : list without the last element
 */
 function removeLastElem(lst){
     let len = lst.length;
@@ -288,7 +323,6 @@ function removeLastElem(lst){
 /**
  * Get the last element from a string of this form "1,2,3,4"
  * @param {String} lst the string you want to get the last element
- * @returns : Last element of the list
 */
 function getLastElem(lst){
   let len = lst.length;
@@ -430,8 +464,20 @@ function verifyDigicode(X,Y){
   const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
   let bool = false;
   if(resDigi[0] != -1){
+      var digiBox = document.getElementById("digiBox");
+      var currentSceneId= getLastElem(getCookieValue("scene_number"));
+      var digiSuccess = getDigicodeQSF(currentSceneId,"SUCCESS");
+      if (digiSuccess==undefined) {
+        digiSuccess=="";
+      }
+      var digiFailure = getDigicodeQSF(currentSceneId,"FAILURE");
+      if (digiFailure==undefined) {
+        digiFailure=="";
+      }
+      var clickValidate = false;
       playSoundText(resDigi[1]);
       if(resDigi[0][0] =="Validate"){
+          clickValidate = true;
           bool = validatingBuffer();
       }
       else if(resDigi[0][0] == "Delete"){
@@ -442,8 +488,18 @@ function verifyDigicode(X,Y){
       }
       else{
           addingBuffer(resDigi[0][1]);
-          console.log(buffer);
+          //console.log(buffer);
       }
+      if(clickValidate){
+      clickValidate = false ;
+      if (bool) {
+        digiBox.innerHTML = digiSuccess;
+      }else {
+        digiBox.innerHTML = digiFailure;
+      }
+    }else {
+      digiBox.innerHTML=buffer;
+    }
   }
   if(bool){
     let sId = 0;
@@ -620,11 +676,9 @@ function isOnObjectZone(X,Y){
 //                                    ***Digicode functions***
 // ========================================================================================
 
-/**
+/*
 * Implements the validation behavior of a digicode click zone
-* @returns : if the code is the right code
-**/
-
+*/
 function validatingBuffer(){
     const answer = digicodeClickZone[digicodeClickZone.length-1];
     const len = answer[1].length;
@@ -656,10 +710,9 @@ function addingBuffer(digi){
     buffer = buffer + digi;
 }
 
-/**
+/*
 * Implements the deleting behavior of a digicode click zone
-* @returns : void
-**/
+*/
 function deletingBuffer(){
     if(buffer.length == 0){
         return;
@@ -686,10 +739,9 @@ function resizeGif(){
     }
 }
 
-/**
+/*
 * Check if all the gifs are set to the right frame.
-* @returns : if the Gif code is the right code
-**/
+*/
 function areGifWellSet(){
     let bool = true;
     let i = 0 ;
@@ -723,7 +775,7 @@ function loadObjects(){
 }
 
 /**
-* Display the objects on the scene
+* Display the object on the scene
 * @param {object} object
 * @param {transistion[]} transitions
 * @param {Int} scene
@@ -764,6 +816,40 @@ function displayObject(object,transitions,scene){
 function Puzzled(id){
     const puzzle = whatPuzzleItIs(id);
     if(puzzle[0] == "Text"){
+        var digiBox = document.createElement("div");
+        digiBox.id="digiBox";
+        setWindowsValues();
+        digiBox.style.position = "absolute";
+        digiBox.style.left = (1.1 * windowsValues[4]) + "px";
+        digiBox.style.right = (1.1 * windowsValues[4]) + "px";
+        digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.margin = "auto";
+        digiBox.style.width = "50%";
+        digiBox.style.textAlign = "center";
+        digiBox.style.borderStyle= "double";
+        digiBox.style.borderColor= "DarkBlue";
+        digiBox.style.zIndex= 10;
+        digiBox.style.backgroundColor= "CornflowerBlue";
+        digiBox.style.fontSizeAdjust= "50px";
+        digiBox.style.fontVariant= "smallCaps";
+        digiBox.style.alignContent= "center";
+        var digiQuestion = getDigicodeQSF(id,"QUESTION");
+        if (digiQuestion==undefined) {
+          digiQuestion=="";
+        }
+        digiBox.innerHTML = digiQuestion;
+        function deplaceDigiBox(){
+          setWindowsValues();
+          digiBox.style.left = (1.1 * windowsValues[4]) + "px";
+          digiBox.style.right = (1.1 * windowsValues[4]) + "px";
+          digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+          digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+          digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        }
+        window.addEventListener("resize", deplaceDigiBox, false);
+        document.body.appendChild(digiBox);
         const scene = getSceneByID(id);
         const sceneTextArea = scene.TextAreas;
         const len = sceneTextArea.length;
@@ -794,6 +880,9 @@ function Puzzled(id){
       let puzzlePieces = getPuzzlepieces(id);
       let diffX;
       let diffY;
+      var tabPos = [];
+      var i;
+      var firstLoad = 0;
       function displayPuzzleImage() {
       setWindowsValues();
       let puzzleImagesZone = document.getElementById("puzzleImages");
@@ -805,12 +894,23 @@ function Puzzled(id){
       puzzleImagesZone.innerHTML = "";
       puzzleImagesZone.width = windowsValues[0];
       puzzleImagesZone.height = windowsValues[1];
-      let i;
+      var top;
+      var left;
       for (i = 0; i < puzzlePieces.length; i++) {
-        var img = document.createElement("IMG");
+        var img;
+        img = document.createElement("IMG");
         img.id = "draggable" + i;
-        let top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
-        let left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+        img.classList.add("draggable");
+        if (firstLoad  != puzzlePieces.length-1) {
+          top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
+          left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+          firstLoad = i;
+          let posImg = [left/(windowsValues[2] * windowsValues[6]),top/(windowsValues[3] * windowsValues[6])];
+          tabPos.push(posImg);
+        }else{
+          top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
+          left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
+        }
         img.style.position = "absolute";
         img.style.top = top + "px";
         img.style.left = left + "px";
@@ -818,20 +918,14 @@ function Puzzled(id){
         img.height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
         img.src = "Game/" + puzzlePieces[i].Image;
         puzzleImagesZone.appendChild(img);
+        $(".draggable").draggable({containment: "parent"});
       }
-      var script = document.createElement("script");
-      var scriptCode = "$( function() {\n";
-      for (i = 0; i < puzzlePieces.length; i++) {
-        scriptCode += "$( \"#draggable" + i + "\" ).draggable({ revert: \"invalid\" });\n";
-      }
-      scriptCode += " } );";
-      script.innerHTML = scriptCode;
-      document.body.appendChild(script);
+
       diffX=[];
       diffY=[];
       var delta = 0.05;
-      let originX = windowsValues[4] + puzzlePieces[0].Pos[0] * windowsValues[2] * windowsValues[6];
-      let originY = windowsValues[5] + puzzlePieces[0].Pos[1] * windowsValues[3] * windowsValues[6];
+      let originX = puzzlePieces[0].Pos[0];
+      let originY = puzzlePieces[0].Pos[1];
       let imgX;
       let imgY;
       let minX;
@@ -839,33 +933,49 @@ function Puzzled(id){
       let minY;
       let maxY;
       for (i = 1; i < puzzlePieces.length; i++) {
-        imgX = windowsValues[4] + puzzlePieces[i].Pos[0] * windowsValues[2] * windowsValues[6];
-        imgY = windowsValues[5] + puzzlePieces[i].Pos[1] * windowsValues[3] * windowsValues[6];
-        minX = imgX - originX - delta * windowsValues[2] * windowsValues[6];
-        maxX = imgX - originX + delta * windowsValues[2] * windowsValues[6];
-        minY = imgY - originY - delta * windowsValues[3] * windowsValues[6];
-        maxY = imgY - originY + delta * windowsValues[3] * windowsValues[6];
+        imgX = puzzlePieces[i].Pos[0];
+        imgY = puzzlePieces[i].Pos[1];
+        minX = (imgX - originX - delta);
+        maxX = (imgX - originX + delta);
+        minY = (imgY - originY - delta);
+        maxY = (imgY - originY + delta);
         diffX.push([minX,maxX]);
         diffY.push([minY,maxY]);
       }
     }
     displayPuzzleImage();
     window.addEventListener("resize", displayPuzzleImage, false);
+    var currentOriginX;
+    var currentOriginY;
+    var currentX;
+    var currentY;
+    var pourcentX;
+    var pourcentY;
+    function storeImagePosition(){
+      for (i = 0; i < puzzlePieces.length; i++) {
+        let puzzleImagesZone = document.getElementById("puzzleImages");
+        currentX = parseInt(document.getElementById("draggable"+i).offsetLeft);
+        currentY = parseInt(document.getElementById("draggable"+i).offsetTop);
+        pourcentX = currentX / (windowsValues[0]-(2*windowsValues[4]));
+        pourcentY = currentY / (windowsValues[1]-(2*windowsValues[5]));
+        tabPos[i][0]=pourcentX;
+        tabPos[i][1]=pourcentY;
+      }
+    }
+    window.addEventListener("touchend", storeImagePosition, false);
+    window.addEventListener("mouseup", storeImagePosition, false);
+
     const transition = getTransitionByID(getTransitions(),puzzle[1]);
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
     window.addEventListener("mouseup", verify, false);
     window.addEventListener("touchend", verify, false);
       function verify(){
-        let currentdiffX = [];
-        let currentdiffY = [];
-        let currentOriginX = parseInt(document.getElementById("draggable"+0).x) * windowsValues[6];
-        let currentOriginY = parseInt(document.getElementById("draggable"+0).y) * windowsValues[6];
+        currentOriginX = tabPos[0][0];
+        currentOriginY = tabPos[0][1];
         let result = true ;
-        let currentX;
-        let currentY;
         for (var i = 1; i < puzzlePieces.length; i++) {
-          currentX = parseInt(document.getElementById("draggable" + i).x) * windowsValues[6];
-          currentY = parseInt(document.getElementById("draggable" + i).y) * windowsValues[6];
+          currentX = tabPos[i][0];
+          currentY = tabPos[i][1];
           if (!((currentX - currentOriginX) >= diffX[i-1][0] && (currentX - currentOriginX) <= diffX[i-1][1])){
             result = false;
           }
