@@ -605,53 +605,6 @@ function getDigicodeQSF(sceneId,text){
 }
 
 // ========================================================================================
-//                                      ***Texts***
-// ========================================================================================
-
-function printOpeningText(){
-  var text;
-  var textBox;
-  var i=0;
-  var t;
-  function reset() {
-    setWindowsValues();
-    clearTimeout(t);
-    text = getSceneTextBySceneId(scene_number);
-    textBox = document.getElementById("textbox");
-    textBox.innerHTML="";
-    textBox.style.left = (1.1 * windowsValues[4]) + "px";
-    textBox.style.right = (1.1 * windowsValues[4]) + "px";
-    textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
-    textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
-    function instantPrinting(){
-      clearTimeout(t);
-      if(i == text.length){
-        textBox.innerHTML = "";
-      }
-      else {
-        i = text.length;
-        textBox.innerHTML = text;
-      }
-    }
-    textBox.addEventListener("click", instantPrinting);
-  }
-  reset();
-  window.addEventListener("resize", function () {
-    reset();
-    textBox.innerHTML = text.substring(0,i);
-    charByChar();
-  });
-  function charByChar() {
-      if (i < text.length) {
-        textBox.innerHTML += text[i];
-        i++;
-        t=setTimeout(charByChar, 100);
-    }
-  }
-  charByChar();
-}
-
-// ========================================================================================
 //                                      ***Sounds***
 // ========================================================================================
 
