@@ -755,10 +755,12 @@
             }());
 
             var resize = function(width, height, left, top){
+                ctx = canvas.getContext("2d");
                 canvas.style.left = left+"px";
                 canvas.style.top = top+"px";
                 canvas.width = width;
                 canvas.height = height;
+                ctx
             }
 
             var putFrame = function () {
@@ -774,10 +776,9 @@
                 }
 
                 offset = frameOffsets[i];
-
                 tmpCanvas.getContext("2d").putImageData(frames[i].data, offset.x, offset.y);
                 ctx.globalCompositeOperation = "copy";
-                ctx.drawImage(tmpCanvas, 0, 0);
+                ctx.drawImage(tmpCanvas, 0, 0,canvas.width,canvas.height);
             };
 
             var play = function () {

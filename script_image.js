@@ -268,11 +268,9 @@ function changeScene(event, html, id, back) {
   event.preventDefault();
   let trueId = id;
   if(isInSkip(id,back)){
-    console.log("Jean");
     trueId = getNextSceneSkip(id,back);
 
   }
-  console.log("Jean");
   $("#fade").fadeIn(FADE_IN_TIME, () => {
     let cook = document.cookie;
     let i = 0;
@@ -394,7 +392,6 @@ function findTransitionBySceneId(sceneId){
     transition = transitions[i];
     transitionType = transition.Transition.Which;
     transitionData = transition.Transition[transitionType];
-    console.log(getSceneIdFromPath(transitionData.From));
     if(getSceneIdFromPath(transitionData.From) == sceneId){
       return transition;
     }
@@ -488,7 +485,6 @@ function verifyDigicode(X,Y){
       }
       else{
           addingBuffer(resDigi[0][1]);
-          //console.log(buffer);
       }
       if(clickValidate){
       clickValidate = false ;
