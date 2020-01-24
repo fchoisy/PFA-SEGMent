@@ -87,6 +87,9 @@ function init_lock() {
       printOpeningText();
       addCurrentSceneToVisited(scene_number);
     }
+    else{
+      init_unlock();
+    }
 }
 
 function init_unlock(){
@@ -692,6 +695,9 @@ function printOpeningText(){
     textBox.style.right = (1.1 * windowsValues[4]) + "px";
     textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    if(text.length == 0){
+      init_unlock();
+    }
     function instantPrinting(){
       clearTimeout(t);
       if(i == text.length){
