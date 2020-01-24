@@ -873,6 +873,7 @@ function Puzzled(id){
         array.push(idTransition); // Attention cela doit toujours être en dernier
         digicodeClickZone.push(array);
     } else if (puzzle[0] == "Puzzle") {
+      devicePixelRatio = 1;
       let puzzlePieces = getPuzzlepieces(id);
       let diffX;
       let diffY;
