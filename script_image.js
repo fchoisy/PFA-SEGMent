@@ -28,11 +28,16 @@
 
   // -------------------------------------- Corentin ----------------------------------------
 
-    // Séparer le code de verifyClick et Puzzled en plusieurs sous-fonctions
-
     // Pour les gifs IsOnZone, retourner un resTab[] pour pouvoir obtenir l'ID du gif et ainsi pouvoir jouer le son ?
 
+    // A chaque début de scène, checker si on peut passer directement à la scène suivante avec Unique
+
+    // Pour les transitions Uniques, si on a plusieurs puzzles dans une même scène qui mènent à des scènes différentes, avec une transition unique,
+    // que doit-on faire ? (faire test).
+
   // ---------------------------------------- Jean ------------------------------------------
+
+    //Mettre les bonnes phrases en cas d'erreur sur le digicode
 
 // ========================================================================================
 //                               ***Global variables***
@@ -51,7 +56,7 @@ let scene_number; // the number of the played scene
 let imgSize = []; // contains the size of the image in the background
 let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
-let windowsValues; //contains information of the size of the current window, image and bands on sides and top/bottom
+let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
 
 // ========================================================================================
 //                               ***Signals***
@@ -77,7 +82,10 @@ function initialisation() {
     playSoundScene();
     imgsize();
     setWindowsValues();
-    printOpeningText();
+    if(sceneVisited(scene_number)==false){
+      printOpeningText();
+      addCurrentSceneToVisited(scene_number);
+    }
     clickzone();
     Puzzled(scene_number);
     loadObjects();
@@ -161,6 +169,42 @@ function getCookieValue(cname) {
   return cook.substring(ind + 1, j);
 }
 
+// -------------------------------- Visited Scenes ------------------------------
+
+/**
+ * Return true if the 'scene_number' has been visited and false if not
+ * Use the cookie visited_scenes
+ * @param {number} sceneId
+ */
+function sceneVisited(sceneId){
+  let visited = getCookieValue("visited_scenes");
+  var Id;
+  for (var i = 0; i < visited.length; i++) {
+    if(visited[i]==","){
+      if(Id==sceneId){
+        return true;
+      }else{
+        Id="";
+      }
+    }else{
+      Id=Id+visited[i];
+    }
+  }
+  if(Id==sceneId){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+/**
+ * Add the 'sceneId' scene to the cookie 'visited_scenes'
+ * @param {number} sceneId
+ */
+function addCurrentSceneToVisited(sceneId){
+  document.cookie = "visited_scenes=" + getCookieValue("visited_scenes") + "," + sceneId + ";";
+}
+
 // ---------------------------------------- Resize ----------------------------------------
 
 /**
@@ -168,7 +212,6 @@ function getCookieValue(cname) {
  */
 function resize(){
   setWindowsValues();
-  printOpeningText();
   resizeGif();
   loadObjects();
 }
@@ -223,6 +266,13 @@ function changeCursor(event) {
  */
 function changeScene(event, html, id, back) {
   event.preventDefault();
+  let trueId = id;
+  if(isInSkip(id,back)){
+    console.log("Jean");
+    trueId = getNextSceneSkip(id,back);
+
+  }
+  console.log("Jean");
   $("#fade").fadeIn(FADE_IN_TIME, () => {
     let cook = document.cookie;
     let i = 0;
@@ -239,12 +289,17 @@ function changeScene(event, html, id, back) {
       if(back){
         let lst;
         if(getLastElem(lstSceneNumber)==scene_number){
-            lst = removeLastElem(lstSceneNumber);
-            document.cookie = "scene_number=" + lst + ";";
+          if(trueId==-1){
+            trueId = removeLastElem(lstSceneNumber);
+          }
+          if(getCookieValue("scene_number").length==1){
+            trueId = getCookieValue("scene_number");
+          }
+          document.cookie = "scene_number=" + trueId + ";";
         }
       }else{
         if(getLastElem(lstSceneNumber)==scene_number){
-            document.cookie = "scene_number=" + lstSceneNumber + "," + id + ";";
+            document.cookie = "scene_number=" + lstSceneNumber + "," + trueId + ";";
         }
       }
       document.location.href = html;
@@ -259,7 +314,7 @@ function changeScene(event, html, id, back) {
 */
 function removeLastElem(lst){
     let len = lst.length;
-    while(lst[len] !=","){
+    while(lst[len] !="," && len>=0){
         len = len - 1;
     }
     return lst.substring(0,len);
@@ -280,6 +335,70 @@ function getLastElem(lst){
       ret = ret+1;
   }
   return lst.substring(len,ret);
+}
+
+// ========================================================================================
+//                                     ***Transitions***
+// ========================================================================================
+
+// ------------------------------------- Skip to Scene -------------------------------------
+
+function addSkip(sceneId){
+  document.cookie = "skip=" + getCookieValue("skip") + "," + sceneId + ";";
+}
+
+function isInSkip(sceneId,back){
+  let skip = getCookieValue("skip");
+  skip = skip+",";
+  var IdStr;
+  var Id;
+  let sid=sceneId;
+  if(back && getCookieValue("scene_number").length>1){
+    sid = getLastElem(removeLastElem(getCookieValue("scene_number")));
+  }
+  for (var i = 0; i < skip.length; i++) {
+    if(skip[i] == ","){
+      Id = parseInt(IdStr);
+      IdStr = "";
+      if(Id == sid){
+        return true;
+      }
+    }
+    else{
+      IdStr += skip[i];
+    }
+  }
+  return false;
+}
+
+function getNextSceneSkip(sceneId,back){
+  if(!back){
+    const transition = findTransitionBySceneId(sceneId);
+    const transitionType = transition.Transition.Which;
+    const transitionData = transition.Transition[transitionType];
+    return getLastNumberTransition(transitionData.To);
+  }
+  let lst = removeLastElem(getCookieValue("scene_number"));
+  while(isInSkip(getLastElem(lst))){
+      lst = removeLastElem(lst);
+  }
+  return lst;
+}
+
+function findTransitionBySceneId(sceneId){
+  let transitions = getTransitions();
+  var transitionType;
+  var transition;
+  var transitionData;
+  for (var i = 0; i < transitions.length; i++) {
+    transition = transitions[i];
+    transitionType = transition.Transition.Which;
+    transitionData = transition.Transition[transitionType];
+    console.log(getSceneIdFromPath(transitionData.From));
+    if(getSceneIdFromPath(transitionData.From) == sceneId){
+      return transition;
+    }
+  }
 }
 
 // ========================================================================================
@@ -314,6 +433,9 @@ function verifyClickZone(X,Y){
   const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if (resClickZone[0] >= 0) {
     playSoundClickZone(resClickZone[1]);
+    if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+      addSkip(scene_number);
+    }
     changeScene(event, "ping.html", resClickZone[0], false);
   }
 }
@@ -328,7 +450,7 @@ function verifyBackZone(X,Y){
   if(resBackZone[0]){
     playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
-    let sId = 0;
+    let sId = -1;
     changeScene(event, "ping.html", sId, true);
   }
 }
@@ -342,8 +464,20 @@ function verifyDigicode(X,Y){
   const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
   let bool = false;
   if(resDigi[0] != -1){
+      var digiBox = document.getElementById("digiBox");
+      var currentSceneId= getLastElem(getCookieValue("scene_number"));
+      var digiSuccess = getDigicodeQSF(currentSceneId,"SUCCESS");
+      if (digiSuccess==undefined) {
+        digiSuccess=="";
+      }
+      var digiFailure = getDigicodeQSF(currentSceneId,"FAILURE");
+      if (digiFailure==undefined) {
+        digiFailure=="";
+      }
+      var clickValidate = false;
       playSoundText(resDigi[1]);
       if(resDigi[0][0] =="Validate"){
+          clickValidate = true;
           bool = validatingBuffer();
       }
       else if(resDigi[0][0] == "Delete"){
@@ -354,13 +488,26 @@ function verifyDigicode(X,Y){
       }
       else{
           addingBuffer(resDigi[0][1]);
-          console.log(buffer);
+          //console.log(buffer);
       }
+      if(clickValidate){
+      clickValidate = false ;
+      if (bool) {
+        digiBox.innerHTML = digiSuccess;
+      }else {
+        digiBox.innerHTML = digiFailure;
+      }
+    }else {
+      digiBox.innerHTML=buffer;
+    }
   }
   if(bool){
     let sId = 0;
     sId = digicodeClickZone[digicodeClickZone.length-1]
     sId = sId[sId.length-1];
+    if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+      addSkip(scene_number);
+    }
     changeScene(event, "ping.html", sId, false);
   }
 }
@@ -375,6 +522,9 @@ function verifyObject(X,Y){
   if(resObject[0] != -1){
     playSoundObject(resObject[1]);
     let sId = resObject[0];
+    if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+      addSkip(scene_number);
+    }
     changeScene(event, "ping.html", sId, false);
   }
 }
@@ -396,6 +546,9 @@ function verifyGif(X,Y){
           first = false;
         }
         if(areGifWellSet()){
+              if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+                addSkip(scene_number);
+              }
               changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false);
         }
     }
@@ -663,6 +816,40 @@ function displayObject(object,transitions,scene){
 function Puzzled(id){
     const puzzle = whatPuzzleItIs(id);
     if(puzzle[0] == "Text"){
+        var digiBox = document.createElement("div");
+        digiBox.id="digiBox";
+        setWindowsValues();
+        digiBox.style.position = "absolute";
+        digiBox.style.left = (1.1 * windowsValues[4]) + "px";
+        digiBox.style.right = (1.1 * windowsValues[4]) + "px";
+        digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        digiBox.style.margin = "auto";
+        digiBox.style.width = "50%";
+        digiBox.style.textAlign = "center";
+        digiBox.style.borderStyle= "double";
+        digiBox.style.borderColor= "DarkBlue";
+        digiBox.style.zIndex= 10;
+        digiBox.style.backgroundColor= "CornflowerBlue";
+        digiBox.style.fontSizeAdjust= "50px";
+        digiBox.style.fontVariant= "smallCaps";
+        digiBox.style.alignContent= "center";
+        var digiQuestion = getDigicodeQSF(id,"QUESTION");
+        if (digiQuestion==undefined) {
+          digiQuestion=="";
+        }
+        digiBox.innerHTML = digiQuestion;
+        function deplaceDigiBox(){
+          setWindowsValues();
+          digiBox.style.left = (1.1 * windowsValues[4]) + "px";
+          digiBox.style.right = (1.1 * windowsValues[4]) + "px";
+          digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+          digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+          digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+        }
+        window.addEventListener("resize", deplaceDigiBox, false);
+        document.body.appendChild(digiBox);
         const scene = getSceneByID(id);
         const sceneTextArea = scene.TextAreas;
         const len = sceneTextArea.length;
@@ -693,6 +880,9 @@ function Puzzled(id){
       let puzzlePieces = getPuzzlepieces(id);
       let diffX;
       let diffY;
+      var tabPos = [];
+      var i;
+      var firstLoad = 0;
       function displayPuzzleImage() {
       setWindowsValues();
       let puzzleImagesZone = document.getElementById("puzzleImages");
@@ -704,12 +894,23 @@ function Puzzled(id){
       puzzleImagesZone.innerHTML = "";
       puzzleImagesZone.width = windowsValues[0];
       puzzleImagesZone.height = windowsValues[1];
-      let i;
+      var top;
+      var left;
       for (i = 0; i < puzzlePieces.length; i++) {
-        var img = document.createElement("IMG");
+        var img;
+        img = document.createElement("IMG");
         img.id = "draggable" + i;
-        let top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
-        let left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+        img.classList.add("draggable");
+        if (firstLoad  != puzzlePieces.length-1) {
+          top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
+          left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+          firstLoad = i;
+          let posImg = [left/(windowsValues[2] * windowsValues[6]),top/(windowsValues[3] * windowsValues[6])];
+          tabPos.push(posImg);
+        }else{
+          top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
+          left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
+        }
         img.style.position = "absolute";
         img.style.top = top + "px";
         img.style.left = left + "px";
@@ -717,20 +918,14 @@ function Puzzled(id){
         img.height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
         img.src = "Game/" + puzzlePieces[i].Image;
         puzzleImagesZone.appendChild(img);
+        $(".draggable").draggable({containment: "parent"});
       }
-      var script = document.createElement("script");
-      var scriptCode = "$( function() {\n";
-      for (i = 0; i < puzzlePieces.length; i++) {
-        scriptCode += "$( \"#draggable" + i + "\" ).draggable({ revert: \"invalid\" });\n";
-      }
-      scriptCode += " } );";
-      script.innerHTML = scriptCode;
-      document.body.appendChild(script);
+
       diffX=[];
       diffY=[];
       var delta = 0.05;
-      let originX = windowsValues[4] + puzzlePieces[0].Pos[0] * windowsValues[2] * windowsValues[6];
-      let originY = windowsValues[5] + puzzlePieces[0].Pos[1] * windowsValues[3] * windowsValues[6];
+      let originX = puzzlePieces[0].Pos[0];
+      let originY = puzzlePieces[0].Pos[1];
       let imgX;
       let imgY;
       let minX;
@@ -738,33 +933,49 @@ function Puzzled(id){
       let minY;
       let maxY;
       for (i = 1; i < puzzlePieces.length; i++) {
-        imgX = windowsValues[4] + puzzlePieces[i].Pos[0] * windowsValues[2] * windowsValues[6];
-        imgY = windowsValues[5] + puzzlePieces[i].Pos[1] * windowsValues[3] * windowsValues[6];
-        minX = imgX - originX - delta * windowsValues[2] * windowsValues[6];
-        maxX = imgX - originX + delta * windowsValues[2] * windowsValues[6];
-        minY = imgY - originY - delta * windowsValues[3] * windowsValues[6];
-        maxY = imgY - originY + delta * windowsValues[3] * windowsValues[6];
+        imgX = puzzlePieces[i].Pos[0];
+        imgY = puzzlePieces[i].Pos[1];
+        minX = (imgX - originX - delta);
+        maxX = (imgX - originX + delta);
+        minY = (imgY - originY - delta);
+        maxY = (imgY - originY + delta);
         diffX.push([minX,maxX]);
         diffY.push([minY,maxY]);
       }
     }
     displayPuzzleImage();
     window.addEventListener("resize", displayPuzzleImage, false);
+    var currentOriginX;
+    var currentOriginY;
+    var currentX;
+    var currentY;
+    var pourcentX;
+    var pourcentY;
+    function storeImagePosition(){
+      for (i = 0; i < puzzlePieces.length; i++) {
+        let puzzleImagesZone = document.getElementById("puzzleImages");
+        currentX = parseInt(document.getElementById("draggable"+i).offsetLeft);
+        currentY = parseInt(document.getElementById("draggable"+i).offsetTop);
+        pourcentX = currentX / (windowsValues[0]-(2*windowsValues[4]));
+        pourcentY = currentY / (windowsValues[1]-(2*windowsValues[5]));
+        tabPos[i][0]=pourcentX;
+        tabPos[i][1]=pourcentY;
+      }
+    }
+    window.addEventListener("touchend", storeImagePosition, false);
+    window.addEventListener("mouseup", storeImagePosition, false);
+
     const transition = getTransitionByID(getTransitions(),puzzle[1]);
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
     window.addEventListener("mouseup", verify, false);
     window.addEventListener("touchend", verify, false);
       function verify(){
-        let currentdiffX = [];
-        let currentdiffY = [];
-        let currentOriginX = parseInt(document.getElementById("draggable"+0).x) * windowsValues[6];
-        let currentOriginY = parseInt(document.getElementById("draggable"+0).y) * windowsValues[6];
+        currentOriginX = tabPos[0][0];
+        currentOriginY = tabPos[0][1];
         let result = true ;
-        let currentX;
-        let currentY;
         for (var i = 1; i < puzzlePieces.length; i++) {
-          currentX = parseInt(document.getElementById("draggable" + i).x) * windowsValues[6];
-          currentY = parseInt(document.getElementById("draggable" + i).y) * windowsValues[6];
+          currentX = tabPos[i][0];
+          currentY = tabPos[i][1];
           if (!((currentX - currentOriginX) >= diffX[i-1][0] && (currentX - currentOriginX) <= diffX[i-1][1])){
             result = false;
           }
@@ -773,6 +984,9 @@ function Puzzled(id){
           }
         }
       if (result) {
+        if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+          addSkip(scene_number);
+        }
         changeScene(event, "ping.html", idTransition, false);
       }
     }
@@ -784,6 +998,9 @@ function Puzzled(id){
       let img;
       let gif;
       const ctx = canvas.getContext("2d");
+      for(let i=0;i<gifs.length;i++){
+          gifOnScene.push(0);
+      }
       for(let i=0;i<gifs.length;i++){
           currentGif = gifs[i];
           let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
@@ -800,7 +1017,7 @@ function Puzzled(id){
           document.getElementById("gifImages").appendChild(img);
           let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
           gifl.load(function(){
-              gifOnScene.push(gifl);
+              gifOnScene[i] = gifl;
           });
       }
    }

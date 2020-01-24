@@ -10,19 +10,23 @@
 //                               ***Memos TODO (unused)***
 // ========================================================================================
 
-// --------------------------------------- Clément ----------------------------------------
+  // --------------------------------------- Clément ----------------------------------------
 
-// ---------------------------------------- Hind ------------------------------------------
+  // ---------------------------------------- Hind ------------------------------------------
 
-// --------------------------------------- Pierre -----------------------------------------
+  // --------------------------------------- Pierre -----------------------------------------
 
-// -------------------------------------- Eleonore ----------------------------------------
+  // -------------------------------------- Eleonore ----------------------------------------
 
-// --------------------------------------- Emeric -----------------------------------------
+  // --------------------------------------- Emeric -----------------------------------------
 
-// -------------------------------------- Corentin ----------------------------------------
+  // -------------------------------------- Corentin ----------------------------------------
 
-// ---------------------------------------- Jean ------------------------------------------
+    // getTransitionByID can be optimized (no need for transitions)
+
+    // Add commentaries for a lot of functions + return value
+
+  // ---------------------------------------- Jean ------------------------------------------
 
 // ========================================================================================
 //                              *** Global variables***
@@ -296,11 +300,11 @@ function getGifPointedScene(id){
     }
     return 2000000;
 }
+
 /**
  * Return the type of the puzzle present in the given scene
  * @param {Scene object} id
 */
-
 function whatPuzzleItIs(id){
     const scene = getSceneByID(id);
     //console.log(scene.Gifs);
@@ -335,6 +339,29 @@ function getLastNumberTransition(str){
           len--;
     }
     return parseInt(str.substring(len+1,str.length));
+}
+
+function getSceneIdFromPath(path){
+  let len = path.length;
+  let len2 = len;
+  let len3 = len;
+  while(len >= 0){
+    if(path[len] == "."){
+      len3 = len2;
+      len2 = len;
+      len--;
+    }
+    if(path[len] == "/"){
+      if(path.substring(len+1,len2) == "Scene"){
+        return path.substring(len2+1,len3);
+      }
+      len3 = len2;
+      len2 = len;
+      len--;
+    }
+    len--;
+  }
+  return -1;
 }
 
 // ------------------------------------ Get <...> By Id -------------------------------------
@@ -541,6 +568,42 @@ function getSceneTextAreasBySceneId(sceneId) {
   return text_areas;
 }
 
+/**
+ * Returns Question, Success answer or Failure answer of a digicode
+ * in the scene whose id is 'sceneId'
+ *
+ * @param {number} sceneId
+ * @param {number} text
+ */
+function getDigicodeQSF(sceneId,text){
+  var transitions = getTransitions();
+  var sceneToScene;
+  var len = transitions.length;
+  var riddleText;
+  for (var i = 0; i < len; i++) {
+    if(transitions[i].Transition.Which == "SceneToScene"){
+      sceneToScene = transitions[i].Transition.SceneToScene;
+      var startSceneId = getLastNumberTransition(sceneToScene.From);
+      if (startSceneId == sceneId) {
+        riddleText = sceneToScene.Riddle.Text;
+      }
+    }
+  }
+  switch (text) {
+    case "QUESTION":
+      return riddleText.Question;
+      break;
+    case "SUCCESS":
+      return riddleText.IfCorrect;
+      break;
+    case "FAILURE":
+      return riddleText.IfWrong;
+      break;
+    default:
+      return"";
+  }
+}
+
 // ========================================================================================
 //                                      ***Texts***
 // ========================================================================================
@@ -551,7 +614,7 @@ function printOpeningText(){
   var i=0;
   var t;
   function reset() {
-    i = 0;
+    setWindowsValues();
     clearTimeout(t);
     text = getSceneTextBySceneId(scene_number);
     textBox = document.getElementById("textbox");
@@ -562,18 +625,24 @@ function printOpeningText(){
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     function instantPrinting(){
       clearTimeout(t);
-      i = text.length;
-      textBox.innerHTML = text;
+      if(i == text.length){
+        textBox.innerHTML = "";
+      }
+      else {
+        i = text.length;
+        textBox.innerHTML = text;
+      }
     }
     textBox.addEventListener("click", instantPrinting);
   }
   reset();
+  window.addEventListener("resize", function () {
+    reset();
+    textBox.innerHTML = text.substring(0,i);
+    charByChar();
+  });
   function charByChar() {
       if (i < text.length) {
-        window.addEventListener("resize", function () {
-          reset();
-          textBox.innerHTML = text.substring(0,i+1);
-        });
         textBox.innerHTML += text[i];
         i++;
         t=setTimeout(charByChar, 100);
@@ -686,4 +755,18 @@ function playSoundTransition(transitionId){
   var transition = getTransitionByID(transitions, transitionId);
   var SoundPath = getSoundPath(transition);
   playSound(SoundPath);
+}
+
+// ========================================================================================
+//                                      ***Transitions***
+// ========================================================================================
+
+/**
+ * Returns true if the transition id is Unique
+ * @param {*} transitionId
+ *
+ * @returns true id the transition id is unique, false otherwise
+ */
+function isTransitionUnique(transition){
+  return transition.Unique;
 }
