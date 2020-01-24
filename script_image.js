@@ -62,7 +62,7 @@ let windowsValues; // contains information of the size of the current window, im
 //                               ***Signals***
 // ========================================================================================
 
-window.onload = initialisation();
+window.onload = init_lock();
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
 window.addEventListener("resize", resize);
@@ -76,9 +76,10 @@ window.addEventListener("resize", resize);
 /**
  * Function to be called when scene is opened
  */
-function initialisation() {
+function init_lock() {
     scene_number = getLastElem(getCookieValue("scene_number"));
     backgroundModifier();
+    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
     playSoundScene();
     imgsize();
     setWindowsValues();
@@ -86,10 +87,15 @@ function initialisation() {
       printOpeningText();
       addCurrentSceneToVisited(scene_number);
     }
-    clickzone();
-    Puzzled(scene_number);
-    loadObjects();
-    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+    else{
+      init_unlock();
+    }
+}
+
+function init_unlock(){
+  clickzone();
+  Puzzled(scene_number);
+  loadObjects();
 }
 
 /**
@@ -269,7 +275,6 @@ function changeScene(event, html, id, back) {
   let trueId = id;
   if(isInSkip(id,back)){
     trueId = getNextSceneSkip(id,back);
-
   }
   $("#fade").fadeIn(FADE_IN_TIME, () => {
     let cook = document.cookie;
@@ -666,6 +671,57 @@ function isOnObjectZone(X,Y){
   resTab[0] = -1;
   resTab[1] = -1;
   return resTab;
+}
+
+// ========================================================================================
+//                                      ***Texts***
+// ========================================================================================
+
+function printOpeningText(){
+  var text;
+  var textBox;
+  var i=0;
+  var t;
+  function reset() {
+    setWindowsValues();
+    clearTimeout(t);
+    text = getSceneTextBySceneId(scene_number);
+    textBox = document.getElementById("textbox");
+    textBox.innerHTML="";
+    textBox.style.left = (1.1 * windowsValues[4]) + "px";
+    textBox.style.right = (1.1 * windowsValues[4]) + "px";
+    textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
+    textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    if(text.length == 0){
+      init_unlock();
+    }
+    function instantPrinting(){
+      clearTimeout(t);
+      if(i == text.length){
+        textBox.innerHTML = "";
+        init_unlock();
+      }
+      else {
+        i = text.length;
+        textBox.innerHTML = text;
+      }
+    }
+    textBox.addEventListener("click", instantPrinting);
+  }
+  reset();
+  window.addEventListener("resize", function () {
+    reset();
+    textBox.innerHTML = text.substring(0,i);
+    charByChar();
+  });
+  function charByChar() {
+      if (i < text.length) {
+        textBox.innerHTML += text[i];
+        i++;
+        t=setTimeout(charByChar, 100);
+    }
+  }
+  charByChar();
 }
 
 // ========================================================================================
