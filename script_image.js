@@ -30,10 +30,11 @@
 
     // Pour les gifs IsOnZone, retourner un resTab[] pour pouvoir obtenir l'ID du gif et ainsi pouvoir jouer le son ?
 
-    // A chaque début de scène, checker si on peut passer directement à la scène suivante avec Unique
-
     // Pour les transitions Uniques, si on a plusieurs puzzles dans une même scène qui mènent à des scènes différentes, avec une transition unique,
     // que doit-on faire ? (faire test).
+
+    // Pas utile de mettre un objet qui prend toute la page en z index grand car on check la position de la souris de toute façon.
+    // Seule façon de faire : check en variable globale
 
   // ---------------------------------------- Jean ------------------------------------------
 
@@ -57,6 +58,7 @@ let imgSize = []; // contains the size of the image in the background
 let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
+let canPlay = false;
 
 // ========================================================================================
 //                               ***Signals***
@@ -79,6 +81,7 @@ window.addEventListener("resize", resize);
 function initialisation() {
     scene_number = getLastElem(getCookieValue("scene_number"));
     backgroundModifier();
+    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
     playSoundScene();
     imgsize();
     setWindowsValues();
@@ -86,10 +89,12 @@ function initialisation() {
       printOpeningText();
       addCurrentSceneToVisited(scene_number);
     }
+    else{
+      canPlay = true;
+    }
     clickzone();
     Puzzled(scene_number);
     loadObjects();
-    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
 }
 
 /**
@@ -247,13 +252,15 @@ function setWindowsValues(){
  * @param {MouseEvent} event
  */
 function changeCursor(event) {
-  let X = event.clientX;
-  let Y = event.clientY;
-  if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1) {
-    document.body.style.cursor = 'pointer';
-    return;
+  if(canPlay){
+    let X = event.clientX;
+    let Y = event.clientY;
+    if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1) {
+      document.body.style.cursor = 'pointer';
+      return;
+    }
+    document.body.style.cursor = 'default';
   }
-  document.body.style.cursor = 'default';
 }
 
 // ------------------------------------- Change scene -------------------------------------
@@ -268,11 +275,8 @@ function changeScene(event, html, id, back) {
   event.preventDefault();
   let trueId = id;
   if(isInSkip(id,back)){
-    console.log("Jean");
     trueId = getNextSceneSkip(id,back);
-
   }
-  console.log("Jean");
   $("#fade").fadeIn(FADE_IN_TIME, () => {
     let cook = document.cookie;
     let i = 0;
@@ -394,7 +398,6 @@ function findTransitionBySceneId(sceneId){
     transition = transitions[i];
     transitionType = transition.Transition.Which;
     transitionData = transition.Transition[transitionType];
-    console.log(getSceneIdFromPath(transitionData.From));
     if(getSceneIdFromPath(transitionData.From) == sceneId){
       return transition;
     }
@@ -413,13 +416,15 @@ function findTransitionBySceneId(sceneId){
  * @param {MouseEvent} event
  */
 function verifyClick(event) { // NOTE : make separate functions for each case ?
-  const X = event.clientX;
-  const Y = event.clientY;
-  verifyClickZone(X,Y);
-  verifyBackZone(X,Y);
-  verifyDigicode(X,Y);
-  verifyObject(X,Y);
-  verifyGif(X,Y);
+  if(canPlay){
+    const X = event.clientX;
+    const Y = event.clientY;
+    verifyClickZone(X,Y);
+    verifyBackZone(X,Y);
+    verifyDigicode(X,Y);
+    verifyObject(X,Y);
+    verifyGif(X,Y);
+  }
 }
 
 // -------------------------------------- verify[...] -------------------------------------
@@ -488,7 +493,6 @@ function verifyDigicode(X,Y){
       }
       else{
           addingBuffer(resDigi[0][1]);
-          //console.log(buffer);
       }
       if(clickValidate){
       clickValidate = false ;
@@ -670,6 +674,59 @@ function isOnObjectZone(X,Y){
   resTab[0] = -1;
   resTab[1] = -1;
   return resTab;
+}
+
+// ========================================================================================
+//                                      ***Texts***
+// ========================================================================================
+
+function printOpeningText(){
+  var text;
+  var textBox;
+  var i=0;
+  var t;
+  function reset() {
+    setWindowsValues();
+    clearTimeout(t);
+    text = getSceneTextBySceneId(scene_number);
+
+    textBox = document.getElementById("textbox");
+    textBox.innerHTML="";
+    textBox.style.left = (1.1 * windowsValues[4]) + "px";
+    textBox.style.right = (1.1 * windowsValues[4]) + "px";
+    textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
+    textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    textBox.style.zIndex = 11;
+    if(text.length == 0){
+      canPlay = true;
+    }
+    function instantPrinting(){
+      clearTimeout(t);
+      if(i == text.length){
+        textBox.innerHTML = "";
+        canPlay = true;
+      }
+      else {
+        i = text.length;
+        textBox.innerHTML = text;
+      }
+    }
+    textBox.addEventListener("click", instantPrinting);
+  }
+  reset();
+  window.addEventListener("resize", function () {
+    reset();
+    textBox.innerHTML = text.substring(0,i);
+    charByChar();
+  });
+  function charByChar() {
+      if (i < text.length) {
+        textBox.innerHTML += text[i];
+        i++;
+        t=setTimeout(charByChar, 100);
+    }
+  }
+  charByChar();
 }
 
 // ========================================================================================
@@ -877,6 +934,7 @@ function Puzzled(id){
         array.push(idTransition); // Attention cela doit toujours être en dernier
         digicodeClickZone.push(array);
     } else if (puzzle[0] == "Puzzle") {
+      devicePixelRatio = 1;
       let puzzlePieces = getPuzzlepieces(id);
       let diffX;
       let diffY;
