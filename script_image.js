@@ -30,10 +30,11 @@
 
     // Pour les gifs IsOnZone, retourner un resTab[] pour pouvoir obtenir l'ID du gif et ainsi pouvoir jouer le son ?
 
-    // A chaque début de scène, checker si on peut passer directement à la scène suivante avec Unique
-
     // Pour les transitions Uniques, si on a plusieurs puzzles dans une même scène qui mènent à des scènes différentes, avec une transition unique,
     // que doit-on faire ? (faire test).
+
+    // Pas utile de mettre un objet qui prend toute la page en z index grand car on check la position de la souris de toute façon.
+    // Seule façon de faire : check en variable globale
 
   // ---------------------------------------- Jean ------------------------------------------
 
@@ -57,12 +58,13 @@ let imgSize = []; // contains the size of the image in the background
 let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
+let canPlay = false;
 
 // ========================================================================================
 //                               ***Signals***
 // ========================================================================================
 
-window.onload = init_lock();
+window.onload = initialisation();
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
 window.addEventListener("resize", resize);
@@ -76,7 +78,7 @@ window.addEventListener("resize", resize);
 /**
  * Function to be called when scene is opened
  */
-function init_lock() {
+function initialisation() {
     scene_number = getLastElem(getCookieValue("scene_number"));
     backgroundModifier();
     $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
@@ -88,14 +90,11 @@ function init_lock() {
       addCurrentSceneToVisited(scene_number);
     }
     else{
-      init_unlock();
+      canPlay = true;
     }
-}
-
-function init_unlock(){
-  clickzone();
-  Puzzled(scene_number);
-  loadObjects();
+    clickzone();
+    Puzzled(scene_number);
+    loadObjects();
 }
 
 /**
@@ -253,13 +252,15 @@ function setWindowsValues(){
  * @param {MouseEvent} event
  */
 function changeCursor(event) {
-  let X = event.clientX;
-  let Y = event.clientY;
-  if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1) {
-    document.body.style.cursor = 'pointer';
-    return;
+  if(canPlay){
+    let X = event.clientX;
+    let Y = event.clientY;
+    if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1) {
+      document.body.style.cursor = 'pointer';
+      return;
+    }
+    document.body.style.cursor = 'default';
   }
-  document.body.style.cursor = 'default';
 }
 
 // ------------------------------------- Change scene -------------------------------------
@@ -415,13 +416,15 @@ function findTransitionBySceneId(sceneId){
  * @param {MouseEvent} event
  */
 function verifyClick(event) { // NOTE : make separate functions for each case ?
-  const X = event.clientX;
-  const Y = event.clientY;
-  verifyClickZone(X,Y);
-  verifyBackZone(X,Y);
-  verifyDigicode(X,Y);
-  verifyObject(X,Y);
-  verifyGif(X,Y);
+  if(canPlay){
+    const X = event.clientX;
+    const Y = event.clientY;
+    verifyClickZone(X,Y);
+    verifyBackZone(X,Y);
+    verifyDigicode(X,Y);
+    verifyObject(X,Y);
+    verifyGif(X,Y);
+  }
 }
 
 // -------------------------------------- verify[...] -------------------------------------
@@ -686,20 +689,22 @@ function printOpeningText(){
     setWindowsValues();
     clearTimeout(t);
     text = getSceneTextBySceneId(scene_number);
+
     textBox = document.getElementById("textbox");
     textBox.innerHTML="";
     textBox.style.left = (1.1 * windowsValues[4]) + "px";
     textBox.style.right = (1.1 * windowsValues[4]) + "px";
     textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    textBox.style.zIndex = 11;
     if(text.length == 0){
-      init_unlock();
+      canPlay = true;
     }
     function instantPrinting(){
       clearTimeout(t);
       if(i == text.length){
         textBox.innerHTML = "";
-        init_unlock();
+        canPlay = true;
       }
       else {
         i = text.length;
