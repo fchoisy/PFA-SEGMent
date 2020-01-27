@@ -513,6 +513,17 @@ function getTransitionByID(transitions, id) {
   throw "Transition " + id + " not found";
 }
 
+function findTransition(transitions, source, destination) {
+  for (var i = 0; i < transitions.length; i++) {
+    if((getLastNumberTransition(transitions[i].Transition[transitions[i].Transition.Which].To) == destination) && (getLastNumberTransition(transitions[i].Transition[transitions[i].Transition.Which].From) == source)){
+      console.log("trouvé")
+      return transitions[i].Transition.Fade;
+    }
+  }
+  return false
+  throw "Transition from " + source + " to " + destination + " not found";
+// }
+
 /**
  * Returns the start text that has to be displayed at the
  * begining of the scene whose id is 'scene_id'
@@ -537,7 +548,6 @@ function getSceneTextAreasBySceneId(sceneId) {
   for (var i = 0; i < scene.TextAreas.length; i++) {
     text_areas[i] = scene.TextAreas[i].Text;
   }
-  console.log(text_areas);
   return text_areas;
 }
 

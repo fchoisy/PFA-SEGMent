@@ -12,6 +12,8 @@
 
   // --------------------------------------- Clément ----------------------------------------
 
+    // Toujours fondue pour les backClickZone
+
   // ---------------------------------------- Hind ------------------------------------------
 
   // --------------------------------------- Pierre -----------------------------------------
@@ -47,7 +49,7 @@ let backClickZones = []; // array containing backclickzone objects (definition o
 let objectClickZones = []; // array containing clickzone objects related to image elements on the scene (definition of class ClickZone in json.js)
 let digicodeClickZone = []; // array containing clickzone objects related to text zones for a digicode enigma (definition of class ClickZone in json.js)
 let gifClickZone = []; // array containing clickzone objects related to gif elements for a gif enigma (definition of class ClickZone in json.js)
-let scene_number; // the number of the played scene
+let scene_number = -1; // the number of the played scene
 let imgSize = []; // contains the size of the image in the background
 let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
@@ -72,6 +74,7 @@ window.addEventListener("resize", resize);
  * Function to be called when scene is opened
  */
 function initialisation() {
+    let isBack = getCookieValue("isback");
     scene_number = getLastElem(getCookieValue("scene_number"));
     backgroundModifier();
     playSoundScene();
@@ -81,7 +84,14 @@ function initialisation() {
     clickzone();
     Puzzled(scene_number);
     loadObjects();
-    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+    console.log("ICI")
+    if(isBack || (findTransition(getLastElem(removeLastElem(getCookieValue("scene_number")))), scene_number)){
+      console.log("isBack: ", isBack)
+      $("#fade").fadeOut(FADE_OUT_TIME);
+    } else {
+      console.log(FADE_OUT_TIME)
+      $("#fade").fadeOut(0); // jQuery method
+  }
 }
 
 /**
@@ -221,9 +231,15 @@ function changeCursor(event) {
  * @param {string} html path of page to go to
  * @param {number} id id of scene to go to
  */
-function changeScene(event, html, id, back) {
+function changeScene(event, html, id, back, fade) {
   event.preventDefault();
-  $("#fade").fadeIn(FADE_IN_TIME, () => {
+  let fade_in;
+  if(fade) {
+    fade_in = 0;
+  } else {
+    fade_in = FADE_IN_TIME;
+  }
+  $("#fade").fadeIn(fade_in, () => {
     let cook = document.cookie;
     let i = 0;
     while (cook[i] != ";" && i < cook.length) {
@@ -314,8 +330,10 @@ function verifyClickZone(X,Y){
   const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if (resClickZone[0] >= 0) {
     playSoundClickZone(resClickZone[1]);
-    changeScene(event, "ping.html", resClickZone[0], false);
+    document.cookie = "isback=" + false +";";
+    changeScene(event, "ping.html", resClickZone[0], false, findTransition(getTransitions(), scene_number, resClickZone[0]));
   }
+
 }
 
 /**
@@ -329,7 +347,8 @@ function verifyBackZone(X,Y){
     playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = 0;
-    changeScene(event, "ping.html", sId, true);
+    document.cookie = "isback=" + true +";";
+    changeScene(event, "ping.html", sId, true, true);
   }
 }
 
@@ -354,14 +373,14 @@ function verifyDigicode(X,Y){
       }
       else{
           addingBuffer(resDigi[0][1]);
-          console.log(buffer);
       }
   }
   if(bool){
     let sId = 0;
     sId = digicodeClickZone[digicodeClickZone.length-1]
     sId = sId[sId.length-1];
-    changeScene(event, "ping.html", sId, false);
+        document.cookie = "isback=" + false +";";
+    changeScene(event, "ping.html", sId, false, findTransition(getTransitions(), scene_number, sId));
   }
 }
 
@@ -375,7 +394,8 @@ function verifyObject(X,Y){
   if(resObject[0] != -1){
     playSoundObject(resObject[1]);
     let sId = resObject[0];
-    changeScene(event, "ping.html", sId, false);
+        document.cookie = "isback=" + false +";";
+    changeScene(event, "ping.html", sId, false, findTransition(getTransitions(), scene_number, sId));
   }
 }
 
@@ -396,7 +416,8 @@ function verifyGif(X,Y){
           first = false;
         }
         if(areGifWellSet()){
-              changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false);
+              document.cookie = "isback=" + false +";";
+              changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false, findTransition(getTransitions(), scene_number, gifClickZone[resGif].id[3]));
         }
     }
 }
@@ -773,7 +794,8 @@ function Puzzled(id){
           }
         }
       if (result) {
-        changeScene(event, "ping.html", idTransition, false);
+            document.cookie = "isback=" + false +";";
+        changeScene(event, "ping.html", idTransition, false, findTransition(getTransitions(), scene_number, idTransition));
       }
     }
   }else if(puzzle[0] == "Gif"){
