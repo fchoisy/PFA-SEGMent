@@ -20,7 +20,6 @@
 
   // --------------------------------------- Emeric -----------------------------------------
 
-    // Penser à remplir gifOnScene
 
     // Verifier pour le changement de scene que tous les gifs sont sur la bonne frame
 
@@ -697,6 +696,7 @@ function printOpeningText(){
     textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
     textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     textBox.style.zIndex = 11;
+    textBox.style.color = "#ffffff";
     if(text.length == 0){
       canPlay = true;
     }
@@ -711,7 +711,7 @@ function printOpeningText(){
         textBox.innerHTML = text;
       }
     }
-    textBox.addEventListener("click", instantPrinting);
+    document.addEventListener("click", instantPrinting);
   }
   reset();
   window.addEventListener("resize", function () {
