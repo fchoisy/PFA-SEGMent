@@ -548,11 +548,8 @@ function getTransitionByID(transitions, id) {
 }
 //
 function findTransition(transitions, source, destination) {
-  console.log(source, destination)
   for (var i = 0; i < transitions.length; i++) {
-    console.log(getTransitionId(transitions[i].Transition[transitions[i].Transition.Which].To), getTransitionId(transitions[i].Transition[transitions[i].Transition.Which].From))
     if((getTransitionId(transitions[i].Transition[transitions[i].Transition.Which].To) == destination) && (getTransitionId(transitions[i].Transition[transitions[i].Transition.Which].From) == source)){
-      console.log(source, destination, transitions[i].Fade == 1)
       return transitions[i].Fade == 1;
     }
   }

@@ -83,7 +83,17 @@ function initialisation() {
   let isBack = getCookieValue("isback");
   scene_number = getLastElem(getCookieValue("scene_number"));
   backgroundModifier();
-  $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+  //let fade = (findTransition(getLastElem(removeLastElem(getCookieValue("scene_number")))), scene_number)
+  let fade = true
+  console.log(getLastElem(getCookieValue("scene_number")), scene_number)
+  console.log(fade)
+  if(isBack || fade){
+    console.log("isBack: ", isBack)
+    $("#fade").fadeOut(FADE_OUT_TIME);
+  } else {
+    console.log(FADE_OUT_TIME)
+    $("#fade").fadeOut(0); // jQuery method
+  }
   playSoundScene();
   imgsize();
   setWindowsValues();
@@ -97,14 +107,6 @@ function initialisation() {
   clickzone();
   Puzzled(scene_number);
   loadObjects();
-  console.log("ICI")
-  if(isBack || (findTransition(getLastElem(removeLastElem(getCookieValue("scene_number")))), scene_number)){
-    console.log("isBack: ", isBack)
-    $("#fade").fadeOut(FADE_OUT_TIME);
-  } else {
-    console.log(FADE_OUT_TIME)
-    $("#fade").fadeOut(0); // jQuery method
-  }
 }
 
 /**
@@ -459,7 +461,6 @@ function verifyClickZone(X,Y){
     }
     document.cookie = "isback=" + false +";";
     let fade = findTransition(getTransitions(), scene_number, resClickZone[0])
-    console.log(fade)
     changeScene(event, "ping.html", resClickZone[0], false, fade);
   }
 
@@ -477,7 +478,6 @@ function verifyBackZone(X,Y){
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = -1;
     document.cookie = "isback=" + true +";";
-    console.log("aled")
     changeScene(event, "ping.html", sId, true, true);
   }
 }
@@ -536,7 +536,7 @@ function verifyDigicode(X,Y){
     }
     document.cookie = "isback=" + false +";";
     let fade  = findTransition(getTransitions(), scene_number, sId)
-    console.log(fade)
+
     changeScene(event, "ping.html", sId, false, fade);
   }
 }
@@ -556,7 +556,7 @@ function verifyObject(X,Y){
     }
     document.cookie = "isback=" + false +";";
     let fade = findTransition(getTransitions(), scene_number, sId)
-    console.log(fade)
+
     changeScene(event, "ping.html", sId, false, fade);
   }
 }
@@ -583,7 +583,7 @@ function verifyGif(X,Y){
       }
       document.cookie = "isback=" + false +";";
       let fade = findTransition(getTransitions(), scene_number, gifClickZone[resGif].id[3])
-      console.log(fade)
+
       changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false, fade);
     }
   }
@@ -1079,7 +1079,7 @@ function Puzzled(id){
         }
         document.cookie = "isback=" + false +";";
         let fade = findTransition(getTransitions(), scene_number, idTransition)
-        console.log(fade)
+
         changeScene(event, "ping.html", idTransition, false, fade);
               }
     }
