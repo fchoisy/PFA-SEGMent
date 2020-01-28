@@ -533,7 +533,15 @@ function getTransitionByID(transitions, id) {
   }
   throw "Transition " + id + " not found";
 }
-//
+
+/**
+* Find if we have a fade transition for the transition between source and
+* destination
+*
+* @param {object} transitions
+* @param {number} source
+* @param {number} destination
+*/
 function findTransition(transitions, source, destination) {
   for (var i = 0; i < transitions.length; i++) {
     if((getSceneIdFromPath(transitions[i].Transition[transitions[i].Transition.Which].To) == destination) && (getSceneIdFromPath(transitions[i].Transition[transitions[i].Transition.Which].From) == source)){

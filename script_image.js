@@ -80,14 +80,10 @@ window.addEventListener("resize", resize);
 * Function to be called when scene is opened
 */
 function initialisation() {
-  let isBack = getCookieValue("isback") == "true";
+  let isBack = JSON.parse(getCookieValue("isback"));
   scene_number = getLastElem(getCookieValue("scene_number"));
   backgroundModifier();
-  let fade = true
-  if(!isBack){
-    fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number) == 1
-  }
-  if(isBack || fade){
+  if(isBack || (findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number) == 1)){
     $("#fade").fadeOut(FADE_OUT_TIME);
   } else {
     $("#fade").fadeOut(0);
@@ -140,7 +136,7 @@ function clickzone() {
 
 /**
 * Returns the index of cookie whose name is 'cname' in 'cook'
-* @param {*} cname
+* @param {string} cname
 * @param {*} cook
 */
 function getIndexName(cname, cook) {
@@ -280,6 +276,8 @@ function changeCursor(event) {
 * @param {Event} event (ignored)
 * @param {string} html path of page to go to
 * @param {number} id id of scene to go to
+* @param {boolean} back is a back transition
+* @param {boolean} fade need a fade transition ?
 */
 function changeScene(event, html, id, back, fade) {
   event.preventDefault();
@@ -287,11 +285,9 @@ function changeScene(event, html, id, back, fade) {
   if(isInSkip(id,back)){
     trueId = getNextSceneSkip(id,back);
   }
-  let fade_in;
+  let fade_in = FADE_IN_TIME;
   if(!fade) {
     fade_in = 0;
-  } else {
-    fade_in = FADE_IN_TIME;
   }
   $("#fade").fadeIn(fade_in, () => {
     let cook = document.cookie;
@@ -309,7 +305,7 @@ function changeScene(event, html, id, back, fade) {
     if(back){
       let lst;
       if(getLastElem(lstSceneNumber)==scene_number){
-        if(trueId==-1){
+      if(trueId==-1){
           trueId = removeLastElem(lstSceneNumber);
         }
         if(getCookieValue("scene_number").length==1){
@@ -363,10 +359,19 @@ function getLastElem(lst){
 
 // ------------------------------------- Skip to Scene -------------------------------------
 
+/** TODO
+*
+* @param {} sceneId
+*/
 function addSkip(sceneId){
   document.cookie = "skip=" + getCookieValue("skip") + "," + sceneId + ";";
 }
 
+/** TODO
+*
+* @param {} sceneId
+* @param {} back
+*/
 function isInSkip(sceneId,back){
   let skip = getCookieValue("skip");
   skip = skip+",";
@@ -391,6 +396,11 @@ function isInSkip(sceneId,back){
   return false;
 }
 
+/** TODO
+*
+* @param {} sceneId
+* @param {} back
+*/
 function getNextSceneSkip(sceneId,back){
   if(!back){
     const transition = findTransitionBySceneId(sceneId);
@@ -405,6 +415,10 @@ function getNextSceneSkip(sceneId,back){
   return lst;
 }
 
+/** TODO
+*
+* @param {} sceneId
+*/
 function findTransitionBySceneId(sceneId){
   let transitions = getTransitions();
   var transitionType;
@@ -709,11 +723,19 @@ function isOnObjectZone(X,Y){
 //                                      ***Texts***
 // ========================================================================================
 
+/** TODO
+*
+*/
 function printOpeningText(){
   var text;
   var textBox;
   var i=0;
   var t;
+  /** TODO
+  *
+  * @param {} sceneId
+  * @param {} back
+  */
   function reset() {
     setWindowsValues();
     clearTimeout(t);
@@ -730,6 +752,11 @@ function printOpeningText(){
     if(text.length == 0){
       canPlay = true;
     }
+    /** TODO
+    *
+    * @param {} sceneId
+    * @param {} back
+    */
     function instantPrinting(){
       clearTimeout(t);
       if(i == text.length){
@@ -749,6 +776,11 @@ function printOpeningText(){
     textBox.innerHTML = text.substring(0,i);
     charByChar();
   });
+  /** TODO
+  *
+  * @param {} sceneId
+  * @param {} back
+  */
   function charByChar() {
     if (i < text.length) {
       textBox.innerHTML += text[i];
