@@ -80,19 +80,17 @@ window.addEventListener("resize", resize);
 * Function to be called when scene is opened
 */
 function initialisation() {
-  let isBack = getCookieValue("isback");
+  let isBack = getCookieValue("isback") == "true";
   scene_number = getLastElem(getCookieValue("scene_number"));
   backgroundModifier();
-  //let fade = (findTransition(getLastElem(removeLastElem(getCookieValue("scene_number")))), scene_number)
   let fade = true
-  console.log(getLastElem(getCookieValue("scene_number")), scene_number)
-  console.log(fade)
+  if(!isBack){
+    fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number) == 1
+  }
   if(isBack || fade){
-    console.log("isBack: ", isBack)
     $("#fade").fadeOut(FADE_OUT_TIME);
   } else {
-    console.log(FADE_OUT_TIME)
-    $("#fade").fadeOut(0); // jQuery method
+    $("#fade").fadeOut(0);
   }
   playSoundScene();
   imgsize();
@@ -1074,14 +1072,14 @@ function Puzzled(id){
         }
       }
       if (result) {
-                if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+        if(isTransitionUnique(findTransitionBySceneId(scene_number))){
           addSkip(scene_number);
         }
         document.cookie = "isback=" + false +";";
         let fade = findTransition(getTransitions(), scene_number, idTransition)
 
         changeScene(event, "ping.html", idTransition, false, fade);
-              }
+      }
     }
   }else if(puzzle[0] == "Gif"){
     const scene = getSceneByID(id);
