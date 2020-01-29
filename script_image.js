@@ -273,6 +273,18 @@ function changeCursor(event) {
 function changeScene(event, html, id, back) {
   event.preventDefault();
   let trueId = id;
+  // Save the position of the gifs
+  if(gifOnScene.length > 0){
+      let state = getCookieValue("gif_state");
+      let toAdd = "";
+      toAdd = toAdd + scene_number + ":";
+      for(let i=0;i<gifOnScene.length-1;i++){
+            toAdd += gifOnScene[i].get_current_frame() +",";
+      }
+      toAdd += gifOnScene[gifOnScene.length-1].get_current_frame() + "/";
+      console.log(state);
+      addGifStateCookie(state,scene_number,toAdd);
+  }
   if(isInSkip(id,back)){
     trueId = getNextSceneSkip(id,back);
   }
@@ -340,6 +352,59 @@ function getLastElem(lst){
   return lst.substring(len,ret);
 }
 
+function getGifStateBySceneId(scene_number,cook){
+    let len = cook.length-1;
+    let len2 = cook.length-1;
+    let len3 = cook.length-1;
+    while(len>=0){
+        if(cook[len] ==":"){
+            len2=len;
+        }
+        if(cook[len] == "/"){
+            console.log(cook.substring(len,len2));
+            if(cook.substring(len+1,len2)==scene_number){
+                return(cook.substring(len2+1,len3+1));
+            }
+            len3 = len;
+        }
+        len = len - 1;
+    }
+    if(cook.substring(len,len2)==scene_number){
+        return(cook.substring(len2+1,len3+1));
+    }
+    return "";
+}
+
+function getIndexGifStateBySceneId(scene_number,cook){
+    let len = cook.length-1;
+    let len2 = cook.length-1;
+    let len3 = cook.length-1;
+    while(len>=0){
+        if(cook[len] ==":"){
+            len2=len;
+        }
+        if(cook[len] == "/"){
+            if(cook.substring(len+1,len2)==scene_number){
+                return[len+1,len3+1];
+            }
+            len3 = len;
+        }
+        len = len - 1;
+    }
+    if(cook.substring(len,len2)==scene_number){
+        return[len+1,len3+1];
+    }
+    return [cook.length,cook.length];
+}
+
+function addGifStateCookie(state,sceneNumber,toAdd){
+    const indexes = getIndexGifStateBySceneId(sceneNumber,state);
+    console.log()
+    document.cookie = "gif_state=" + state.substring(0,indexes[0]) + toAdd + state.substring(indexes[1]);
+    console.log(state.substring(0,indexes[0]));
+    console.log(state.substring(indexes[1]));
+
+}
 // ========================================================================================
 //                                     ***Transitions***
 // ========================================================================================
@@ -540,6 +605,7 @@ function verifyObject(X,Y){
 function verifyGif(X,Y){
     const resGif = isOnGifZone(X,Y);
     if(resGif!=-1){
+        console.log(gifOnScene);
         let currentFrame = gifOnScene[resGif].get_current_frame();
         let first = true;
         while(first || gifClickZone[resGif].id[2][currentFrame] == 0){
@@ -1055,9 +1121,27 @@ function Puzzled(id){
       let currentGif = [];
       let img;
       let gif;
+      let alreadyVisited = false;
+      let stateArray = []
+      let len =0;
       const ctx = canvas.getContext("2d");
       for(let i=0;i<gifs.length;i++){
           gifOnScene.push(0);
+      }
+      let state = getGifStateBySceneId(scene_number,getCookieValue("gif_state"));
+      if(state !=""){
+          alreadyVisited = true;
+          let buffer = "";
+          while(len<state.length){
+              if(state[len] == "," || state[len] =="/"){
+                  stateArray.push(parseInt(buffer));
+                  buffer = "";
+              }
+              else{
+                  buffer += state[len];
+              }
+              len++;
+          }
       }
       for(let i=0;i<gifs.length;i++){
           currentGif = gifs[i];
@@ -1074,7 +1158,12 @@ function Puzzled(id){
           let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
           document.getElementById("gifImages").appendChild(img);
           let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
-          gifl.load(function(){
+          var fram =0;
+          if(alreadyVisited){
+              fram = stateArray[i];
+              console.log(stateArray);
+          }
+          gifl.load(fram,function(){
               gifOnScene[i] = gifl;
           });
       }
