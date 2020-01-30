@@ -60,6 +60,7 @@ let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
 let canPlay = false;
+let canPlayGif = true;
 
 // ========================================================================================
 //                               ***Signals***
@@ -266,7 +267,7 @@ function changeCursor(event) {
       return;
     }
     document.body.style.cursor = 'default';
-  }
+}
 }
 
 // ------------------------------------- Change scene -------------------------------------
@@ -643,13 +644,20 @@ function verifyGif(X,Y){
   if(resGif!=-1){
     let currentFrame = gifOnScene[resGif].get_current_frame();
     let first = true;
-    while(first || gifClickZone[resGif].id[2][currentFrame] == 0){
+    console.log(canPlayGif)
+    while((first || gifClickZone[resGif].id[2][currentFrame] == 0) && canPlayGif){
       let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
-      gifOnScene[resGif].move_to(newFrame);
+      if(gifClickZone[resGif].id[2][currentFrame] == 0){
+          gifOnScene[resGif].play();
+      }else{
+          gifOnScene[resGif].pause();
+          gifOnScene[resGif].move_to(newFrame);
+      }
       currentFrame = gifOnScene[resGif].get_current_frame();
       first = false;
     }
     if(areGifWellSet()){
+      canPlayGif = false;
       if(isTransitionUnique(findTransitionBySceneId(scene_number))){
         addSkip(scene_number);
       }
@@ -1001,7 +1009,7 @@ function Puzzled(id){
     digiBox.style.position = "absolute";
     digiBox.style.left = (1.1 * windowsValues[4]) + "px";
     digiBox.style.right = (1.1 * windowsValues[4]) + "px";
-    digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+    digiBox.style.top = (windowsValues[5] + 0.90 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.margin = "auto";
@@ -1023,7 +1031,7 @@ function Puzzled(id){
       setWindowsValues();
       digiBox.style.left = (1.1 * windowsValues[4]) + "px";
       digiBox.style.right = (1.1 * windowsValues[4]) + "px";
-      digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+      digiBox.style.top = (windowsValues[5] + 0.9 * windowsValues[3] * windowsValues[6]) + "px";
       digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
       digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     }
