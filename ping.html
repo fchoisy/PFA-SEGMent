@@ -59,6 +59,54 @@
       background-color: rgba(0, 0, 0, 0.7);
     }
 
+    .defileDigicode{
+      margin: auto;
+      /*width: 20%;*/
+      z-index: 10;
+      border: 5px double DarkBlue;
+      text-align: center;
+      background-color: CornflowerBlue;
+      overflow: hidden;
+      align-content: center;
+      box-shadow: 0 0 .5em #CCC,inset 0 0 1em .25em #CCC;
+    }
+
+    .defileDigicode > :first-child  {
+      display: inline-block;                /* modèle de boîte en ligne */
+      padding-right: 2em;                   /* un peu d'espace pour la transition */
+      padding-left: 100%;                   /* placement à droite du conteneur */
+      white-space: nowrap;                  /* pas de passage à la ligne */
+      animation: defilement-digicode 15s infinite linear;
+    	-webkit-animation:defilement-digicode 15s infinite linear;
+    	-moz-animation:defilement-digicode 15s infinite linear;
+    	-o-animation:defilement-digicode 15s infinite linear;
+    	-ms-animation:defilement-digicode 15s infinite linear;
+    }
+
+    @keyframes defilement-digicode {
+      0% {transform: translate3d(0,0,0);}
+      100% {transform: translate3d(-100%,0,0);}
+    }
+
+    @-webkit-keyframes defilement-digicode {
+      0% {transform: translate3d(0,0,0);}
+      100% {transform: translate3d(-100%,0,0);}
+    }
+
+    @-moz-keyframes defilement-digicode {
+      0% {transform: translate3d(0,0,0);}
+      100% {transform: translate3d(-100%,0,0);}
+    }
+
+    @-o-keyframes defilement-digicode {
+      0% {transform: translate3d(0,0,0);}
+      100% {transform: translate3d(-100%,0,0);}
+    }
+
+    @-ms-keyframes defilement-digicode {
+      0% {transform: translate3d(0,0,0);}
+      100% {transform: translate3d(-100%,0,0);}
+    }
   </style>
 </head>
 

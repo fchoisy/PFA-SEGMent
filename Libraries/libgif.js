@@ -199,7 +199,7 @@
 
 
     // The actual parsing; returns an object with properties.
-    var parseGIF = function (st, handler) {
+    var parseGIF = function (st,frame, handler) {
         handler || (handler = {});
 
         // LZW (GIF-specific)
@@ -402,7 +402,7 @@
                     break;
                 case ';':
                     block.type = 'eof';
-                    handler.eof && handler.eof(block);
+                    handler.eof && handler.eof(block,frame);
                     break;
                 default:
                     throw new Error('Unknown block: 0x' + block.sentinel.toString(16)); // TODO: Pad this with a 0.
@@ -482,9 +482,9 @@
 
         // XXX: There's probably a better way to handle catching exceptions when
         // callbacks are involved.
-        var doParse = function () {
+        var doParse = function (fram) {
             try {
-                parseGIF(stream, handler);
+                parseGIF(stream,fram, handler);
             }
             catch (err) {
                 doLoadError('parse');
@@ -766,7 +766,6 @@
             var putFrame = function () {
                 var offset;
                 i = parseInt(i, 10);
-
                 if (i > frames.length - 1){
                     i = 0;
                 }
@@ -792,7 +791,7 @@
 
 
             return {
-                init: function () {
+                init: function (fram) {
                     if (loadError) return;
 
                     if ( ! (options.c_w && options.c_h) ) {
@@ -803,7 +802,7 @@
                         step();
                     }
                     else {
-                        i = 0;
+                        i = fram;
                         putFrame();
                     }
                 },
@@ -853,7 +852,7 @@
                 NETSCAPE: withProgress(doNothing)
             },
             img: withProgress(doImg, true),
-            eof: function (block) {
+            eof: function (block,fram) {
                 //toolbar.style.display = '';
                 pushFrame();
                 doDecodeProgress(false);
@@ -861,7 +860,7 @@
                     //canvas.width = hdr.width * get_canvas_scale();
                     //canvas.height = hdr.height * get_canvas_scale();
                 }
-                player.init();
+                player.init(fram);
                 loading = false;
                 if (load_callback) {
                     load_callback(gif);
@@ -870,7 +869,7 @@
             }
         };
 
-        var init = function () {
+        var init = function (i) {
             var parent = gif.parentNode;
 
             var div = document.createElement('div');
@@ -952,7 +951,7 @@
             get_auto_play    : function() { return options.auto_play },
             get_length       : function() { return player.length() },
             get_current_frame: function() { return player.current_frame() },
-            load_url: function(src,callback){
+            load_url: function(src,fram,callback){
                 if (!load_setup(callback)) return;
 
                 var h = new XMLHttpRequest();
@@ -975,7 +974,7 @@
 
                 h.onloadstart = function() {
                     // Wait until connection is opened to replace the gif element with a canvas to avoid a blank img
-                    if (!initialized) init();
+                    if (!initialized) init(fram);
                 };
                 h.onload = function(e) {
                     if (this.status != 200) {
@@ -991,7 +990,7 @@
                     }
 
                     stream = new Stream(data);
-                    setTimeout(doParse, 0);
+                    setTimeout(doParse(fram), 0);
                 };
                 h.onprogress = function (e) {
                     if (e.lengthComputable) doShowProgress(e.loaded, e.total, true);
@@ -999,14 +998,14 @@
                 h.onerror = function() { doLoadError('xhr'); };
                 h.send();
             },
-            load: function (callback) {
-                this.load_url(gif.getAttribute('rel:animated_src') || gif.src,callback);
+            load: function (fram,callback) {
+                this.load_url(gif.getAttribute('rel:animated_src') || gif.src,fram,callback);
             },
             load_raw: function(arr, callback) {
                 if (!load_setup(callback)) return;
-                if (!initialized) init();
+                if (!initialized) init(fram);
                 stream = new Stream(arr);
-                setTimeout(doParse, 0);
+                setTimeout(doParse(fram), 0);
             },
             set_frame_offset: setFrameOffset
         };

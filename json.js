@@ -338,19 +338,6 @@ function getLastNumberTransition(str){
   return parseInt(str.substring(len+1,str.length));
 }
 
-/**
-* Given a path (ex : "Game/Scene.14") return the last number (in the example 14)
-*
-* @param {String} str
-*/
-function getTransitionId(str){
-  let len = str.length;
-  while(str[len] !="." || str.substring(len-5,len) != "Scene"){
-    len--;
-  }
-  return parseInt(str.substring(len+1,len+2));
-}
-
 function getSceneIdFromPath(path){
   let len = path.length;
   let len2 = len;
@@ -548,10 +535,18 @@ function getTransitionByID(transitions, id) {
   }
   throw "Transition " + id + " not found";
 }
-//
+
+/**
+* Find if we have a fade transition for the transition between source and
+* destination
+*
+* @param {object} transitions
+* @param {number} source
+* @param {number} destination
+*/
 function findTransition(transitions, source, destination) {
   for (var i = 0; i < transitions.length; i++) {
-    if((getTransitionId(transitions[i].Transition[transitions[i].Transition.Which].To) == destination) && (getTransitionId(transitions[i].Transition[transitions[i].Transition.Which].From) == source)){
+    if((getSceneIdFromPath(transitions[i].Transition[transitions[i].Transition.Which].To) == destination) && (getSceneIdFromPath(transitions[i].Transition[transitions[i].Transition.Which].From) == source)){
       return transitions[i].Fade == 1;
     }
   }

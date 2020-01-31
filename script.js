@@ -17,9 +17,14 @@ window.onload = loadJson();
  */
 function startScene(event){
   event.preventDefault();
+  //stack of the visited scene
   document.cookie = "scene_number=" + getSceneId(getInitialScene()) + ";";
+  // Was a backclick zone activated
   document.cookie = "isback=" + false +";";
+  // List of unic transition scenes
   document.cookie = "skip=" + 0 + ";";
+  // List of already visited scene
   document.cookie = "visited_scenes=" + 0 + ";";
+  document.cookie = "gif_state=0/;";
   document.location.href = 'intro.html';
 };

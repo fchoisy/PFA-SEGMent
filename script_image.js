@@ -60,6 +60,7 @@ let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
 let canPlay = false;
+let canPlayGif = true;
 
 // ========================================================================================
 //                               ***Signals***
@@ -80,15 +81,13 @@ window.addEventListener("resize", resize);
 * Function to be called when scene is opened
 */
 function initialisation() {
-  let isBack = getCookieValue("isback");
+  let isBack = JSON.parse(getCookieValue("isback"));
   scene_number = getLastElem(getCookieValue("scene_number"));
   backgroundModifier();
-  //let fade = (findTransition(getLastElem(removeLastElem(getCookieValue("scene_number")))), scene_number)
-  let fade = true
-  if(isBack || fade){
+  if(isBack || (findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number) == 1)){
     $("#fade").fadeOut(FADE_OUT_TIME);
   } else {
-    $("#fade").fadeOut(0); // jQuery method
+    $("#fade").fadeOut(0);
   }
   playSoundScene();
   imgsize();
@@ -138,7 +137,7 @@ function clickzone() {
 
 /**
 * Returns the index of cookie whose name is 'cname' in 'cook'
-* @param {*} cname
+* @param {string} cname
 * @param {*} cook
 */
 function getIndexName(cname, cook) {
@@ -268,7 +267,7 @@ function changeCursor(event) {
       return;
     }
     document.body.style.cursor = 'default';
-  }
+}
 }
 
 // ------------------------------------- Change scene -------------------------------------
@@ -278,18 +277,29 @@ function changeCursor(event) {
 * @param {Event} event (ignored)
 * @param {string} html path of page to go to
 * @param {number} id id of scene to go to
+* @param {boolean} back is a back transition
+* @param {boolean} fade need a fade transition ?
 */
 function changeScene(event, html, id, back, fade) {
   event.preventDefault();
   let trueId = id;
+  // Save the position of the gifs
+  if(gifOnScene.length > 0){
+      let state = getCookieValue("gif_state");
+      let toAdd = "";
+      toAdd = toAdd + scene_number + ":";
+      for(let i=0;i<gifOnScene.length-1;i++){
+            toAdd += gifOnScene[i].get_current_frame() +",";
+      }
+      toAdd += gifOnScene[gifOnScene.length-1].get_current_frame() + "/";
+      addGifStateCookie(state,scene_number,toAdd);
+  }
   if(isInSkip(id,back)){
     trueId = getNextSceneSkip(id,back);
   }
-  let fade_in;
+  let fade_in = FADE_IN_TIME;
   if(!fade) {
     fade_in = 0;
-  } else {
-    fade_in = FADE_IN_TIME;
   }
   $("#fade").fadeIn(fade_in, () => {
     let cook = document.cookie;
@@ -307,7 +317,7 @@ function changeScene(event, html, id, back, fade) {
     if(back){
       let lst;
       if(getLastElem(lstSceneNumber)==scene_number){
-        if(trueId==-1){
+      if(trueId==-1){
           trueId = removeLastElem(lstSceneNumber);
         }
         if(getCookieValue("scene_number").length==1){
@@ -355,16 +365,74 @@ function getLastElem(lst){
   return lst.substring(len,ret);
 }
 
+function getGifStateBySceneId(scene_number,cook){
+    let len = cook.length-1;
+    let len2 = cook.length-1;
+    let len3 = cook.length-1;
+    while(len>=0){
+        if(cook[len] ==":"){
+            len2=len;
+        }
+        if(cook[len] == "/"){
+            if(cook.substring(len+1,len2)==scene_number){
+                return(cook.substring(len2+1,len3+1));
+            }
+            len3 = len;
+        }
+        len = len - 1;
+    }
+    if(cook.substring(len,len2)==scene_number){
+        return(cook.substring(len2+1,len3+1));
+    }
+    return "";
+}
+
+function getIndexGifStateBySceneId(scene_number,cook){
+    let len = cook.length-1;
+    let len2 = cook.length-1;
+    let len3 = cook.length-1;
+    while(len>=0){
+        if(cook[len] ==":"){
+            len2=len;
+        }
+        if(cook[len] == "/"){
+            if(cook.substring(len+1,len2)==scene_number){
+                return[len+1,len3+1];
+            }
+            len3 = len;
+        }
+        len = len - 1;
+    }
+    if(cook.substring(len,len2)==scene_number){
+        return[len+1,len3+1];
+    }
+    return [cook.length,cook.length];
+}
+
+function addGifStateCookie(state,sceneNumber,toAdd){
+    const indexes = getIndexGifStateBySceneId(sceneNumber,state);
+    document.cookie = "gif_state=" + state.substring(0,indexes[0]) + toAdd + state.substring(indexes[1]);
+
+}
 // ========================================================================================
 //                                     ***Transitions***
 // ========================================================================================
 
 // ------------------------------------- Skip to Scene -------------------------------------
 
+/** TODO
+*
+* @param {} sceneId
+*/
 function addSkip(sceneId){
   document.cookie = "skip=" + getCookieValue("skip") + "," + sceneId + ";";
 }
 
+/** TODO
+*
+* @param {} sceneId
+* @param {} back
+*/
 function isInSkip(sceneId,back){
   let skip = getCookieValue("skip");
   skip = skip+",";
@@ -389,6 +457,11 @@ function isInSkip(sceneId,back){
   return false;
 }
 
+/** TODO
+*
+* @param {} sceneId
+* @param {} back
+*/
 function getNextSceneSkip(sceneId,back){
   if(!back){
     const transition = findTransitionBySceneId(sceneId);
@@ -403,6 +476,10 @@ function getNextSceneSkip(sceneId,back){
   return lst;
 }
 
+/** TODO
+*
+* @param {} sceneId
+*/
 function findTransitionBySceneId(sceneId){
   let transitions = getTransitions();
   var transitionType;
@@ -567,13 +644,20 @@ function verifyGif(X,Y){
   if(resGif!=-1){
     let currentFrame = gifOnScene[resGif].get_current_frame();
     let first = true;
-    while(first || gifClickZone[resGif].id[2][currentFrame] == 0){
+    console.log(canPlayGif)
+    while((first || gifClickZone[resGif].id[2][currentFrame] == 0) && canPlayGif){
       let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
-      gifOnScene[resGif].move_to(newFrame);
+      if(gifClickZone[resGif].id[2][currentFrame] == 0){
+          gifOnScene[resGif].play();
+      }else{
+          gifOnScene[resGif].pause();
+          gifOnScene[resGif].move_to(newFrame);
+      }
       currentFrame = gifOnScene[resGif].get_current_frame();
       first = false;
     }
     if(areGifWellSet()){
+      canPlayGif = false;
       if(isTransitionUnique(findTransitionBySceneId(scene_number))){
         addSkip(scene_number);
       }
@@ -707,11 +791,19 @@ function isOnObjectZone(X,Y){
 //                                      ***Texts***
 // ========================================================================================
 
+/** TODO
+*
+*/
 function printOpeningText(){
   var text;
   var textBox;
   var i=0;
   var t;
+  /** TODO
+  *
+  * @param {} sceneId
+  * @param {} back
+  */
   function reset() {
     setWindowsValues();
     clearTimeout(t);
@@ -728,6 +820,11 @@ function printOpeningText(){
     if(text.length == 0){
       canPlay = true;
     }
+    /** TODO
+    *
+    * @param {} sceneId
+    * @param {} back
+    */
     function instantPrinting(){
       clearTimeout(t);
       if(i == text.length){
@@ -747,6 +844,11 @@ function printOpeningText(){
     textBox.innerHTML = text.substring(0,i);
     charByChar();
   });
+  /** TODO
+  *
+  * @param {} sceneId
+  * @param {} back
+  */
   function charByChar() {
     if (i < text.length) {
       textBox.innerHTML += text[i];
@@ -905,31 +1007,25 @@ function Puzzled(id){
     digiBox.id="digiBox";
     setWindowsValues();
     digiBox.style.position = "absolute";
-    digiBox.style.left = (1.1 * windowsValues[4]) + "px";
-    digiBox.style.right = (1.1 * windowsValues[4]) + "px";
-    digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+    digiBox.style.left = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
+    digiBox.style.right = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
+    digiBox.style.top = (windowsValues[5] + 0.9 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
-    digiBox.style.margin = "auto";
-    digiBox.style.width = "50%";
-    digiBox.style.textAlign = "center";
-    digiBox.style.borderStyle= "double";
-    digiBox.style.borderColor= "DarkBlue";
-    digiBox.style.zIndex= 10;
-    digiBox.style.backgroundColor= "CornflowerBlue";
-    digiBox.style.fontSizeAdjust= "50px";
-    digiBox.style.fontVariant= "smallCaps";
-    digiBox.style.alignContent= "center";
     var digiQuestion = getDigicodeQSF(id,"QUESTION");
     if (digiQuestion==undefined) {
       digiQuestion=="";
+    }else {
+      digiBox.classList.add("defileDigicode");
+      var digiSpan = document.createElement("div");
+      digiSpan.innerHTML = digiQuestion;
+      digiBox.appendChild(digiSpan);
     }
-    digiBox.innerHTML = digiQuestion;
     function deplaceDigiBox(){
       setWindowsValues();
-      digiBox.style.left = (1.1 * windowsValues[4]) + "px";
-      digiBox.style.right = (1.1 * windowsValues[4]) + "px";
-      digiBox.style.top = (windowsValues[5] + 0.8 * windowsValues[3] * windowsValues[6]) + "px";
+      digiBox.style.left = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
+      digiBox.style.right = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
+      digiBox.style.top = (windowsValues[5] + 0.9 * windowsValues[3] * windowsValues[6]) + "px";
       digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
       digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     }
@@ -1070,44 +1166,66 @@ function Puzzled(id){
         }
       }
       if (result) {
-                if(isTransitionUnique(findTransitionBySceneId(scene_number))){
+        if(isTransitionUnique(findTransitionBySceneId(scene_number))){
           addSkip(scene_number);
         }
         document.cookie = "isback=" + false +";";
         let fade = findTransition(getTransitions(), scene_number, idTransition)
 
         changeScene(event, "ping.html", idTransition, false, fade);
-              }
+      }
     }
   }else if(puzzle[0] == "Gif"){
-    const scene = getSceneByID(id);
-    let gifs = scene.Gifs;
-    let clickz=[];
-    let currentGif = [];
-    let img;
-    let gif;
-    const ctx = canvas.getContext("2d");
-    for(let i=0;i<gifs.length;i++){
-      gifOnScene.push(0);
-    }
-    for(let i=0;i<gifs.length;i++){
-      currentGif = gifs[i];
-      let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
-      clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames,getGifPointedScene(scene_number)], currentGif.id);
-      gifClickZone.push(clickz);
-      img = document.createElement("img");
-      img.setAttribute("id","gif"+i);
-      img.setAttribute("rel:auto_play","-1");
-      img.setAttribute("src","Game/"+currentGif.Image);
-      let top = windowsValues[5] + clickz.y1 * windowsValues[3] * windowsValues[6];
-      let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
-      let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);
-      let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
-      document.getElementById("gifImages").appendChild(img);
-      let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
-      gifl.load(function(){
-        gifOnScene[i] = gifl;
-      });
-    }
-  }
+      const scene = getSceneByID(id);
+      let gifs = scene.Gifs;
+      let clickz=[];
+      let currentGif = [];
+      let img;
+      let gif;
+      let alreadyVisited = false;
+      let stateArray = []
+      let len =0;
+      const ctx = canvas.getContext("2d");
+      for(let i=0;i<gifs.length;i++){
+          gifOnScene.push(0);
+      }
+      let state = getGifStateBySceneId(scene_number,getCookieValue("gif_state"));
+      if(state !=""){
+          alreadyVisited = true;
+          let buffer = "";
+          while(len<state.length){
+              if(state[len] == "," || state[len] =="/"){
+                  stateArray.push(parseInt(buffer));
+                  buffer = "";
+              }
+              else{
+                  buffer += state[len];
+              }
+              len++;
+          }
+      }
+      for(let i=0;i<gifs.length;i++){
+          currentGif = gifs[i];
+          let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
+          clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames,getGifPointedScene(scene_number)], currentGif.id);
+          gifClickZone.push(clickz);
+          img = document.createElement("img");
+          img.setAttribute("id","gif"+i);
+          img.setAttribute("rel:auto_play","-1");
+          img.setAttribute("src","Game/"+currentGif.Image);
+          let top = windowsValues[5] + clickz.y1 * windowsValues[3] * windowsValues[6];
+          let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
+          let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);
+          let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
+          document.getElementById("gifImages").appendChild(img);
+          let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
+          var fram =0;
+          if(alreadyVisited){
+              fram = stateArray[i];
+          }
+          gifl.load(fram,function(){
+              gifOnScene[i] = gifl;
+          });
+      }
+   }
 }
