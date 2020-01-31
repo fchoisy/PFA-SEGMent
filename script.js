@@ -21,5 +21,5 @@ function startScene(event){
   document.cookie = "isback=" + false +";";
   document.cookie = "skip=" + 0 + ";";
   document.cookie = "visited_scenes=" + 0 + ";";
-  document.location.href = 'ping.html';
+  document.location.href = 'intro.html';
 };

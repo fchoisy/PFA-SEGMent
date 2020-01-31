@@ -85,13 +85,9 @@ function initialisation() {
   backgroundModifier();
   //let fade = (findTransition(getLastElem(removeLastElem(getCookieValue("scene_number")))), scene_number)
   let fade = true
-  console.log(getLastElem(getCookieValue("scene_number")), scene_number)
-  console.log(fade)
   if(isBack || fade){
-    console.log("isBack: ", isBack)
     $("#fade").fadeOut(FADE_OUT_TIME);
   } else {
-    console.log(FADE_OUT_TIME)
     $("#fade").fadeOut(0); // jQuery method
   }
   playSoundScene();
