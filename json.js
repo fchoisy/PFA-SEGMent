@@ -22,9 +22,11 @@
 
 // -------------------------------------- Corentin ----------------------------------------
 
-// getTransitionByID can be optimized (no need for transitions)
+  // getTransitionByID can be optimized (no need for transitions)
 
-// Add commentaries for a lot of functions + return value
+  // Add commentaries for a lot of functions + return value
+
+  // Video json ? Que intro ? Intro.mp4 ? Vidéo scène finale ?
 
 // ---------------------------------------- Jean ------------------------------------------
 
@@ -733,4 +735,54 @@ function playSoundTransition(transitionId){
 */
 function isTransitionUnique(transition){
   return transition.Unique;
+}
+
+// ========================================================================================
+//                                      ***Video***
+// ========================================================================================
+/**
+* plays the video vidName with type "type" (video/mp4, video/ogg, etc.)
+* @param {vidName} path of the video (ex. "Intro.mp4")
+* @param {type} type of the video (ex. "video/mp4")
+*
+* @returns false if the video does not exist. Nothing otherwise
+*/
+function playVideo(vidName, type)
+{
+  if(fileExists(vidName)){
+    var video = document.getElementById("video");
+    video.innerHTML = "";
+    video.width = parseInt(window.innerWidth);
+    video.height = parseInt(window.innerHeight);
+    video.zIndex = 30;
+    var source = document.createElement("source");
+    source.src = vidName;
+    source.type = type;
+    video.appendChild(source);
+    video.play();
+  }
+  else{
+    throw "fileError";
+  }
+}
+
+// ========================================================================================
+//                                      ***Other***
+// ========================================================================================
+/**
+* Checks if a file exists
+* @param {url} url where the file should be
+*
+* @returns true if the file exists, false otherwise
+*/
+function fileExists(url)
+{
+  var http = new XMLHttpRequest();
+  http.open('HEAD', url, false);
+  http.send();
+  return http.status!=404;
+}
+
+function isSceneFinal(scene){
+  return scene.SceneType == 2;
 }

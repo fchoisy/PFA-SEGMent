@@ -526,6 +526,10 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
     verifyDigicode(X,Y);
     verifyObject(X,Y);
     verifyGif(X,Y);
+    console.log(getSceneByID(scene_number).SceneType);
+    if(isSceneFinal(getSceneByID(scene_number))){
+      document.location.href = 'outro.html';
+    }
   }
 }
 
@@ -1018,30 +1022,24 @@ function Puzzled(id){
     digiBox.id="digiBox";
     setWindowsValues();
     digiBox.style.position = "absolute";
-    digiBox.style.left = (1.1 * windowsValues[4]) + "px";
-    digiBox.style.right = (1.1 * windowsValues[4]) + "px";
-    digiBox.style.top = (windowsValues[5] + 0.90 * windowsValues[3] * windowsValues[6]) + "px";
+    digiBox.style.left = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
+    digiBox.style.right = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
+    digiBox.style.top = (windowsValues[5] + 0.9 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
-    digiBox.style.margin = "auto";
-    digiBox.style.width = "50%";
-    digiBox.style.textAlign = "center";
-    digiBox.style.borderStyle= "double";
-    digiBox.style.borderColor= "DarkBlue";
-    digiBox.style.zIndex= 10;
-    digiBox.style.backgroundColor= "CornflowerBlue";
-    digiBox.style.fontSizeAdjust= "50px";
-    digiBox.style.fontVariant= "smallCaps";
-    digiBox.style.alignContent= "center";
     var digiQuestion = getDigicodeQSF(id,"QUESTION");
     if (digiQuestion==undefined) {
       digiQuestion=="";
+    }else {
+      digiBox.classList.add("defileDigicode");
+      var digiSpan = document.createElement("div");
+      digiSpan.innerHTML = digiQuestion;
+      digiBox.appendChild(digiSpan);
     }
-    digiBox.innerHTML = digiQuestion;
     function deplaceDigiBox(){
       setWindowsValues();
-      digiBox.style.left = (1.1 * windowsValues[4]) + "px";
-      digiBox.style.right = (1.1 * windowsValues[4]) + "px";
+      digiBox.style.left = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
+      digiBox.style.right = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
       digiBox.style.top = (windowsValues[5] + 0.9 * windowsValues[3] * windowsValues[6]) + "px";
       digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
       digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
