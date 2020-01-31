@@ -27,5 +27,7 @@ function startScene(event){
   document.cookie = "visited_scenes=" + 0 + ";";
   // Different state of the gif given a scene
   document.cookie = "gif_state=0/;";
+  // Different position of the puzzle given a scene
+  document.cookie = "puzzle_pos=0/;";
   document.location.href = 'ping.html';
 };

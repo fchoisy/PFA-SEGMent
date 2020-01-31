@@ -61,6 +61,8 @@ let buffer = ""; // String to memorize the answer of the user for a digicode eni
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
 let canPlay = false;
 let canPlayGif = true;
+let isPuzzleScene = false;
+let tabPos = [];
 
 // ========================================================================================
 //                               ***Signals***
@@ -280,7 +282,7 @@ function changeCursor(event) {
 * @param {boolean} back is a back transition
 * @param {boolean} fade need a fade transition ?
 */
-function changeScene(event, html, id, back, fade) {
+function changeScene(event, html, id, back, fade,) {
   event.preventDefault();
   let trueId = id;
   // Save the position of the gifs
@@ -293,6 +295,9 @@ function changeScene(event, html, id, back, fade) {
       }
       toAdd += gifOnScene[gifOnScene.length-1].get_current_frame() + "/";
       addGifStateCookie(state,scene_number,toAdd);
+  }
+  if(isPuzzleScene){
+      storePuzzleInCookie(getCookieValue("puzzle_pos"),tabPos,scene_number);
   }
   if(isInSkip(id,back)){
     trueId = getNextSceneSkip(id,back);
@@ -365,7 +370,7 @@ function getLastElem(lst){
   return lst.substring(len,ret);
 }
 
-function getGifStateBySceneId(scene_number,cook){
+function getStateBySceneId(scene_number,cook){
     let len = cook.length-1;
     let len2 = cook.length-1;
     let len3 = cook.length-1;
@@ -375,19 +380,19 @@ function getGifStateBySceneId(scene_number,cook){
         }
         if(cook[len] == "/"){
             if(cook.substring(len+1,len2)==scene_number){
-                return(cook.substring(len2+1,len3+1));
+                return(cook.substring(len2+1,len3));
             }
             len3 = len;
         }
         len = len - 1;
     }
     if(cook.substring(len,len2)==scene_number){
-        return(cook.substring(len2+1,len3+1));
+        return(cook.substring(len2+1,len3));
     }
     return "";
 }
 
-function getIndexGifStateBySceneId(scene_number,cook){
+function getIndexStateBySceneId(scene_number,cook){
     let len = cook.length-1;
     let len2 = cook.length-1;
     let len3 = cook.length-1;
@@ -410,9 +415,15 @@ function getIndexGifStateBySceneId(scene_number,cook){
 }
 
 function addGifStateCookie(state,sceneNumber,toAdd){
-    const indexes = getIndexGifStateBySceneId(sceneNumber,state);
+    const indexes = getIndexStateBySceneId(sceneNumber,state);
     document.cookie = "gif_state=" + state.substring(0,indexes[0]) + toAdd + state.substring(indexes[1]);
 
+}
+
+function storePuzzleInCookie(cook,topPos,sceneNb){
+    console.log(topPos);
+    let indexes =  getIndexStateBySceneId(sceneNb,cook);
+    document.cookie = "puzzle_pos="+cook.substring(0,indexes[0])+sceneNb +":"+topPos+cook.substring(indexes[1])+"/";
 }
 // ========================================================================================
 //                                     ***Transitions***
@@ -829,7 +840,7 @@ function printOpeningText(){
       clearTimeout(t);
       if(i == text.length){
         textBox.innerHTML = "";
-        canPlay = true;
+        setTimeout(function(){ canPlay=true; }, 100);
       }
       else {
         i = text.length;
@@ -1064,11 +1075,29 @@ function Puzzled(id){
     array.push(idTransition); // Attention cela doit toujours être en dernier
     digicodeClickZone.push(array);
   } else if (puzzle[0] == "Puzzle") {
+    isPuzzleScene = true;
     devicePixelRatio = 1;
     let puzzlePieces = getPuzzlepieces(id);
     let diffX;
     let diffY;
-    var tabPos = [];
+    tabPos = [];
+    let alreadyVisited =false;
+    let statePuzzle = getStateBySceneId(scene_number,getCookieValue("puzzle_pos"));
+    if(statePuzzle != ""){
+        alreadyVisited = true;
+    }
+    if(alreadyVisited){
+        let tmpTab = statePuzzle.split(",");
+        console.log(tmpTab.length);
+        for(let i=0;i<tmpTab.length/2; i++){
+            let tempo = [0,0];
+            tempo[0] = parseFloat(tmpTab[2*i]);
+            tempo[1] = parseFloat(tmpTab[2*i+1]);
+            tabPos.push(tempo);
+        }
+        console.log(tabPos);
+        console.log(tmpTab);
+    }
     var i;
     var firstLoad = 0;
     function displayPuzzleImage() {
@@ -1089,7 +1118,7 @@ function Puzzled(id){
         img = document.createElement("IMG");
         img.id = "draggable" + i;
         img.classList.add("draggable");
-        if (firstLoad  != puzzlePieces.length-1) {
+        if (firstLoad  != puzzlePieces.length-1 && !alreadyVisited) {
           top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
           left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
           firstLoad = i;
@@ -1099,6 +1128,7 @@ function Puzzled(id){
           top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
           left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
         }
+        // C'est ici puzzle
         img.style.position = "absolute";
         img.style.top = top + "px";
         img.style.left = left + "px";
@@ -1176,8 +1206,7 @@ function Puzzled(id){
           addSkip(scene_number);
         }
         document.cookie = "isback=" + false +";";
-        let fade = findTransition(getTransitions(), scene_number, idTransition)
-
+        let fade = findTransition(getTransitions(), scene_number, idTransition);
         changeScene(event, "ping.html", idTransition, false, fade);
       }
     }
@@ -1195,8 +1224,10 @@ function Puzzled(id){
       for(let i=0;i<gifs.length;i++){
           gifOnScene.push(0);
       }
-      let state = getGifStateBySceneId(scene_number,getCookieValue("gif_state"));
+      let state = getStateBySceneId(scene_number,getCookieValue("gif_state"));
       if(state !=""){
+          console.log(state);
+          state += "/";
           alreadyVisited = true;
           let buffer = "";
           while(len<state.length){
