@@ -515,6 +515,10 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
     verifyDigicode(X,Y);
     verifyObject(X,Y);
     verifyGif(X,Y);
+    console.log(getSceneByID(scene_number).SceneType);
+    if(isSceneFinal(getSceneByID(scene_number))){
+      document.location.href = 'outro.html';
+    }
   }
 }
 

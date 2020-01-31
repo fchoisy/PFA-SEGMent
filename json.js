@@ -26,7 +26,7 @@
 
   // Add commentaries for a lot of functions + return value
 
-  // Video json ?
+  // Video json ? Que intro ? Intro.mp4 ? Vidéo scène finale ?
 
 // ---------------------------------------- Jean ------------------------------------------
 
@@ -781,4 +781,8 @@ function fileExists(url)
   http.open('HEAD', url, false);
   http.send();
   return http.status!=404;
+}
+
+function isSceneFinal(scene){
+  return scene.SceneType == 2;
 }
