@@ -86,12 +86,9 @@ function initialisation() {
   let isBack = JSON.parse(getCookieValue("isback"));
   scene_number = getLastElem(getCookieValue("scene_number"));
   let fade_global=getCookieValue("fade_global") == "true";
-  console.log("fade_global="+fade_global,"isBack="+isBack);
-  if(fade_global||isBack){
-    console.log("fadeout");
-    document.body.classList.add("fadeout");
-  }else {
-    console.log("fadein");
+  let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
+  console.log("fade ", fade)
+  if(fade||isBack){
     document.body.classList.add("fadein");
   }
   backgroundModifier();
@@ -273,7 +270,7 @@ function changeCursor(event) {
       return;
     }
     document.body.style.cursor = 'default';
-}
+  }
 }
 
 // ------------------------------------- Change scene -------------------------------------
@@ -291,28 +288,24 @@ function changeScene(event, html, id, back, fade,) {
   let trueId = id;
   // Save the position of the gifs
   if(gifOnScene.length > 0){
-      let state = getCookieValue("gif_state");
-      let toAdd = "";
-      toAdd = toAdd + scene_number + ":";
-      for(let i=0;i<gifOnScene.length-1;i++){
-            toAdd += gifOnScene[i].get_current_frame() +",";
-      }
-      toAdd += gifOnScene[gifOnScene.length-1].get_current_frame() + "/";
-      addGifStateCookie(state,scene_number,toAdd);
+    let state = getCookieValue("gif_state");
+    let toAdd = "";
+    toAdd = toAdd + scene_number + ":";
+    for(let i=0;i<gifOnScene.length-1;i++){
+      toAdd += gifOnScene[i].get_current_frame() +",";
+    }
+    toAdd += gifOnScene[gifOnScene.length-1].get_current_frame() + "/";
+    addGifStateCookie(state,scene_number,toAdd);
   }
   if(isPuzzleScene){
-      storePuzzleInCookie(getCookieValue("puzzle_pos"),tabPos,scene_number);
+    storePuzzleInCookie(getCookieValue("puzzle_pos"),tabPos,scene_number);
   }
   if(isInSkip(id,back)){
     trueId = getNextSceneSkip(id,back);
   }
-  /*let fade_in = FADE_IN_TIME;
-  if(!fade) {
-    fade_in = 0;
+  if(fade){
+    document.body.classList.add("fadeout");
   }
-  $("#fade").fadeIn(fade_in, () => {*/
-  document.cookie = "fade_global=" + fade + ";";
-  console.log(fade)
   let cook = document.cookie;
   let i = 0;
   while (cook[i] != ";" && i < cook.length) {
@@ -341,7 +334,11 @@ function changeScene(event, html, id, back, fade,) {
       document.cookie = "scene_number=" + lstSceneNumber + "," + trueId + ";";
     }
   }
-  document.location.href = html;
+  if(fade){
+    document.body.addEventListener("animationend", function(){document.location.href = html;})
+  } else {
+    document.location.href = html;
+  }
 };
 
 // -------------------------------- Get/Remove last element -------------------------------
@@ -376,59 +373,59 @@ function getLastElem(lst){
 }
 
 function getStateBySceneId(scene_number,cook){
-    let len = cook.length-1;
-    let len2 = cook.length-1;
-    let len3 = cook.length-1;
-    while(len>=0){
-        if(cook[len] ==":"){
-            len2=len;
-        }
-        if(cook[len] == "/"){
-            if(cook.substring(len+1,len2)==scene_number){
-                return(cook.substring(len2+1,len3));
-            }
-            len3 = len;
-        }
-        len = len - 1;
+  let len = cook.length-1;
+  let len2 = cook.length-1;
+  let len3 = cook.length-1;
+  while(len>=0){
+    if(cook[len] ==":"){
+      len2=len;
     }
-    if(cook.substring(len,len2)==scene_number){
+    if(cook[len] == "/"){
+      if(cook.substring(len+1,len2)==scene_number){
         return(cook.substring(len2+1,len3));
+      }
+      len3 = len;
     }
-    return "";
+    len = len - 1;
+  }
+  if(cook.substring(len,len2)==scene_number){
+    return(cook.substring(len2+1,len3));
+  }
+  return "";
 }
 
 function getIndexStateBySceneId(scene_number,cook){
-    let len = cook.length-1;
-    let len2 = cook.length-1;
-    let len3 = cook.length-1;
-    while(len>=0){
-        if(cook[len] ==":"){
-            len2=len;
-        }
-        if(cook[len] == "/"){
-            if(cook.substring(len+1,len2)==scene_number){
-                return[len+1,len3+1];
-            }
-            len3 = len;
-        }
-        len = len - 1;
+  let len = cook.length-1;
+  let len2 = cook.length-1;
+  let len3 = cook.length-1;
+  while(len>=0){
+    if(cook[len] ==":"){
+      len2=len;
     }
-    if(cook.substring(len,len2)==scene_number){
+    if(cook[len] == "/"){
+      if(cook.substring(len+1,len2)==scene_number){
         return[len+1,len3+1];
+      }
+      len3 = len;
     }
-    return [cook.length,cook.length];
+    len = len - 1;
+  }
+  if(cook.substring(len,len2)==scene_number){
+    return[len+1,len3+1];
+  }
+  return [cook.length,cook.length];
 }
 
 function addGifStateCookie(state,sceneNumber,toAdd){
-    const indexes = getIndexStateBySceneId(sceneNumber,state);
-    document.cookie = "gif_state=" + state.substring(0,indexes[0]) + toAdd + state.substring(indexes[1]);
+  const indexes = getIndexStateBySceneId(sceneNumber,state);
+  document.cookie = "gif_state=" + state.substring(0,indexes[0]) + toAdd + state.substring(indexes[1]);
 
 }
 
 function storePuzzleInCookie(cook,topPos,sceneNb){
-    console.log(topPos);
-    let indexes =  getIndexStateBySceneId(sceneNb,cook);
-    document.cookie = "puzzle_pos="+cook.substring(0,indexes[0])+sceneNb +":"+topPos+cook.substring(indexes[1])+"/";
+  console.log(topPos);
+  let indexes =  getIndexStateBySceneId(sceneNb,cook);
+  document.cookie = "puzzle_pos="+cook.substring(0,indexes[0])+sceneNb +":"+topPos+cook.substring(indexes[1])+"/";
 }
 // ========================================================================================
 //                                     ***Transitions***
@@ -668,10 +665,10 @@ function verifyGif(X,Y){
     while((first || gifClickZone[resGif].id[2][currentFrame] == 0) && canPlayGif){
       let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
       if(gifClickZone[resGif].id[2][currentFrame] == 0){
-          gifOnScene[resGif].play();
+        gifOnScene[resGif].play();
       }else{
-          gifOnScene[resGif].pause();
-          gifOnScene[resGif].move_to(newFrame);
+        gifOnScene[resGif].pause();
+        gifOnScene[resGif].move_to(newFrame);
       }
       currentFrame = gifOnScene[resGif].get_current_frame();
       first = false;
@@ -812,28 +809,28 @@ function isOnObjectZone(X,Y){
 // ========================================================================================
 
 function findKeyframesRule(rule,nav="") {
-    // Gather all stylesheets into an array
-    var ss = document.styleSheets;
-    var startText="@"+nav;
-    // Storing all the rules that match the nav
-    var tabRules=[];
-    // Loop through the stylesheets
-    for (var i = 0; i < ss.length; ++i) {
-        // Loop through all the rules
-        for (var j = 0; j < ss[i].cssRules.length; ++j) {
-            // Find the rule whose name matches our passed over parameter starting with nav and adding that rule to the tab
-            if ((ss[i].cssRules[j].type == window.CSSRule.KEYFRAMES_RULE) && ss[i].cssRules[j].name == rule && ss[i].cssRules[j].cssText.startsWith(startText))
-             tabRules.push([ss[i], ss[i].cssRules[j]]);
-        }
+  // Gather all stylesheets into an array
+  var ss = document.styleSheets;
+  var startText="@"+nav;
+  // Storing all the rules that match the nav
+  var tabRules=[];
+  // Loop through the stylesheets
+  for (var i = 0; i < ss.length; ++i) {
+    // Loop through all the rules
+    for (var j = 0; j < ss[i].cssRules.length; ++j) {
+      // Find the rule whose name matches our passed over parameter starting with nav and adding that rule to the tab
+      if ((ss[i].cssRules[j].type == window.CSSRule.KEYFRAMES_RULE) && ss[i].cssRules[j].name == rule && ss[i].cssRules[j].cssText.startsWith(startText))
+      tabRules.push([ss[i], ss[i].cssRules[j]]);
     }
-    // Rule(s) found
-    if (tabRules.length!=0) {
-      //console.log(ss);
-      //console.log(tabRules);
-      return tabRules;
-    }
-    // Rule not found
-    return null;
+  }
+  // Rule(s) found
+  if (tabRules.length!=0) {
+    //console.log(ss);
+    //console.log(tabRules);
+    return tabRules;
+  }
+  // Rule not found
+  return null;
 }
 
 
@@ -1150,19 +1147,19 @@ function Puzzled(id){
     let alreadyVisited =false;
     let statePuzzle = getStateBySceneId(scene_number,getCookieValue("puzzle_pos"));
     if(statePuzzle != ""){
-        alreadyVisited = true;
+      alreadyVisited = true;
     }
     if(alreadyVisited){
-        let tmpTab = statePuzzle.split(",");
-        console.log(tmpTab.length);
-        for(let i=0;i<tmpTab.length/2; i++){
-            let tempo = [0,0];
-            tempo[0] = parseFloat(tmpTab[2*i]);
-            tempo[1] = parseFloat(tmpTab[2*i+1]);
-            tabPos.push(tempo);
-        }
-        console.log(tabPos);
-        console.log(tmpTab);
+      let tmpTab = statePuzzle.split(",");
+      console.log(tmpTab.length);
+      for(let i=0;i<tmpTab.length/2; i++){
+        let tempo = [0,0];
+        tempo[0] = parseFloat(tmpTab[2*i]);
+        tempo[1] = parseFloat(tmpTab[2*i+1]);
+        tabPos.push(tempo);
+      }
+      console.log(tabPos);
+      console.log(tmpTab);
     }
     var i;
     var firstLoad = 0;
@@ -1277,58 +1274,58 @@ function Puzzled(id){
       }
     }
   }else if(puzzle[0] == "Gif"){
-      const scene = getSceneByID(id);
-      let gifs = scene.Gifs;
-      let clickz=[];
-      let currentGif = [];
-      let img;
-      let gif;
-      let alreadyVisited = false;
-      let stateArray = []
-      let len =0;
-      const ctx = canvas.getContext("2d");
-      for(let i=0;i<gifs.length;i++){
-          gifOnScene.push(0);
+    const scene = getSceneByID(id);
+    let gifs = scene.Gifs;
+    let clickz=[];
+    let currentGif = [];
+    let img;
+    let gif;
+    let alreadyVisited = false;
+    let stateArray = []
+    let len =0;
+    const ctx = canvas.getContext("2d");
+    for(let i=0;i<gifs.length;i++){
+      gifOnScene.push(0);
+    }
+    let state = getStateBySceneId(scene_number,getCookieValue("gif_state"));
+    if(state !=""){
+      console.log(state);
+      state += "/";
+      alreadyVisited = true;
+      let buffer = "";
+      while(len<state.length){
+        if(state[len] == "," || state[len] =="/"){
+          stateArray.push(parseInt(buffer));
+          buffer = "";
+        }
+        else{
+          buffer += state[len];
+        }
+        len++;
       }
-      let state = getStateBySceneId(scene_number,getCookieValue("gif_state"));
-      if(state !=""){
-          console.log(state);
-          state += "/";
-          alreadyVisited = true;
-          let buffer = "";
-          while(len<state.length){
-              if(state[len] == "," || state[len] =="/"){
-                  stateArray.push(parseInt(buffer));
-                  buffer = "";
-              }
-              else{
-                  buffer += state[len];
-              }
-              len++;
-          }
+    }
+    for(let i=0;i<gifs.length;i++){
+      currentGif = gifs[i];
+      let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
+      clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames,getGifPointedScene(scene_number)], currentGif.id);
+      gifClickZone.push(clickz);
+      img = document.createElement("img");
+      img.setAttribute("id","gif"+i);
+      img.setAttribute("rel:auto_play","-1");
+      img.setAttribute("src","Game/"+currentGif.Image);
+      let top = windowsValues[5] + clickz.y1 * windowsValues[3] * windowsValues[6];
+      let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
+      let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);
+      let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
+      document.getElementById("gifImages").appendChild(img);
+      let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
+      var fram =0;
+      if(alreadyVisited){
+        fram = stateArray[i];
       }
-      for(let i=0;i<gifs.length;i++){
-          currentGif = gifs[i];
-          let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
-          clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames,getGifPointedScene(scene_number)], currentGif.id);
-          gifClickZone.push(clickz);
-          img = document.createElement("img");
-          img.setAttribute("id","gif"+i);
-          img.setAttribute("rel:auto_play","-1");
-          img.setAttribute("src","Game/"+currentGif.Image);
-          let top = windowsValues[5] + clickz.y1 * windowsValues[3] * windowsValues[6];
-          let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
-          let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);
-          let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
-          document.getElementById("gifImages").appendChild(img);
-          let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height} );
-          var fram =0;
-          if(alreadyVisited){
-              fram = stateArray[i];
-          }
-          gifl.load(fram,function(){
-              gifOnScene[i] = gifl;
-          });
-      }
-   }
+      gifl.load(fram,function(){
+        gifOnScene[i] = gifl;
+      });
+    }
+  }
 }
