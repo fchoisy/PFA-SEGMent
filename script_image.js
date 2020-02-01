@@ -85,12 +85,16 @@ window.addEventListener("resize", resize);
 function initialisation() {
   let isBack = JSON.parse(getCookieValue("isback"));
   scene_number = getLastElem(getCookieValue("scene_number"));
-  backgroundModifier();
-  if(isBack || (findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number) == 1)){
-    $("#fade").fadeOut(FADE_OUT_TIME);
-  } else {
-    $("#fade").fadeOut(0);
+  let fade_global=getCookieValue("fade_global") == "true";
+  console.log("fade_global="+fade_global,"isBack="+isBack);
+  if(fade_global||isBack){
+    console.log("fadeout");
+    document.body.classList.add("fadeout");
+  }else {
+    console.log("fadein");
+    document.body.classList.add("fadein");
   }
+  backgroundModifier();
   playSoundScene();
   imgsize();
   setWindowsValues();
@@ -114,7 +118,7 @@ function backgroundModifier() {
   scene_number = getLastElem(getCookieValue("scene_number"));
   img_path = getSceneBackgroundById(parseInt(scene_number));
   document.body.style.cursor = "default";
-  let elem = document.getElementById('html');
+  let elem = document.body;
   elem.style.backgroundImage = "url(" + img_path + ")";
 };
 
@@ -302,41 +306,42 @@ function changeScene(event, html, id, back, fade,) {
   if(isInSkip(id,back)){
     trueId = getNextSceneSkip(id,back);
   }
-  let fade_in = FADE_IN_TIME;
+  /*let fade_in = FADE_IN_TIME;
   if(!fade) {
     fade_in = 0;
   }
-  $("#fade").fadeIn(fade_in, () => {
-    let cook = document.cookie;
-    let i = 0;
-    while (cook[i] != ";" && i < cook.length) {
-      i = i + 1;
-    }
-    let lstSceneNumber = getCookieValue("scene_number")
-    if(lstSceneNumber.length > 0 ){
-      lstSceneNumber = lstSceneNumber.substring(0,lstSceneNumber.length);
-    }
-    else{
-      lstSceneNumber = "";
-    }
-    if(back){
-      let lst;
-      if(getLastElem(lstSceneNumber)==scene_number){
+  $("#fade").fadeIn(fade_in, () => {*/
+  document.cookie = "fade_global=" + fade + ";";
+  console.log(fade)
+  let cook = document.cookie;
+  let i = 0;
+  while (cook[i] != ";" && i < cook.length) {
+    i = i + 1;
+  }
+  let lstSceneNumber = getCookieValue("scene_number")
+  if(lstSceneNumber.length > 0 ){
+    lstSceneNumber = lstSceneNumber.substring(0,lstSceneNumber.length);
+  }
+  else{
+    lstSceneNumber = "";
+  }
+  if(back){
+    let lst;
+    if(getLastElem(lstSceneNumber)==scene_number){
       if(trueId==-1){
-          trueId = removeLastElem(lstSceneNumber);
-        }
-        if(getCookieValue("scene_number").length==1){
-          trueId = getCookieValue("scene_number");
-        }
-        document.cookie = "scene_number=" + trueId + ";";
+        trueId = removeLastElem(lstSceneNumber);
       }
-    }else{
-      if(getLastElem(lstSceneNumber)==scene_number){
-        document.cookie = "scene_number=" + lstSceneNumber + "," + trueId + ";";
+      if(getCookieValue("scene_number").length==1){
+        trueId = getCookieValue("scene_number");
       }
+      document.cookie = "scene_number=" + trueId + ";";
     }
-    document.location.href = html;
-  })
+  }else{
+    if(getLastElem(lstSceneNumber)==scene_number){
+      document.cookie = "scene_number=" + lstSceneNumber + "," + trueId + ";";
+    }
+  }
+  document.location.href = html;
 };
 
 // -------------------------------- Get/Remove last element -------------------------------
@@ -872,7 +877,6 @@ function printOpeningText(){
   textDiv.style.position="relative";
   textDiv.style.boxSizing="border-box";
   textDiv.innerHTML=text;
-  textBox.appendChild(textDiv);
 
   //Changing the rules of the scrolling
   function setTextKeyframes(){
@@ -888,13 +892,16 @@ function printOpeningText(){
           var rule = results[i][1];
           rule.deleteRule("0%");
           rule.deleteRule("100%");
-          rule.appendRule("0% { transform: translateY(" + (textBox.clientHeight+ 0.01 * windowsValues[3] * windowsValues[6])  +"px); }")
-          rule.appendRule("100% { transform: translateY(-" + (textDiv.clientHeight-textBox.clientHeight) + "px); }")      }
+          rule.appendRule("0% { transform: translate3d(0px," + (textBox.clientHeight+ 0.01 * windowsValues[3] * windowsValues[6])  +"px,0px); }")
+          rule.appendRule("100% { transform: translate3d(0px,-" + (textDiv.clientHeight-textBox.clientHeight) + "px,0px); }")
         }
       }
+      //console.log(rule);
     }
+  }
+  setTextKeyframes();
 
-    setTextKeyframes();
+  textBox.appendChild(textDiv);
 
   //Changing the font size automatically
   window.addEventListener("resize", function () {
@@ -914,14 +921,14 @@ function printOpeningText(){
     } else {
       textDiv = document.getElementById("textDiv");
       textDiv.style.animationName = 'none';
-      textDiv.style.webkitAnimationName = 'none';
+      textDiv.style.WebkitAnimationName = 'none';
       textDiv.style.animation = "defilement-texte 1ms 1 normal linear forwards";
-      textDiv.style.webkitAnimationName = "defilement-texte";
-      textDiv.style.webkitAnimationDuration = "1ms";
-      textDiv.style.webkitAnimationIterationCount = "1";
-      textDiv.style.webkitAnimationDirection = "normal";
-      textDiv.style.webkitAnimationTimingFunction = "linear";
-      textDiv.style.webkitAnimationFillMode = "forwards";
+      textDiv.style.WebkitAnimationName = "defilement-texte";
+      textDiv.style.WebkitAnimationDuration = "1ms";
+      textDiv.style.WebkitAnimationIterationCount = "1";
+      textDiv.style.WebkitAnimationDirection = "normal";
+      textDiv.style.WebkitAnimationTimingFunction = "linear";
+      textDiv.style.WebkitAnimationFillMode = "forwards";
       alreadyClicked=true;
     }
   }
@@ -930,7 +937,7 @@ function printOpeningText(){
 
   textDiv.addEventListener("animationend",function() {
     alreadyClicked=true;
-    //console.log("end");
+    console.log("end");
   });
 
 }

@@ -34,19 +34,10 @@
       margin:0;
       padding:0;
       height: 100%;
-    }
-
-    #fade {
-      /* To be above all other elements */
-      z-index: 100;
-      position:fixed;
-      padding:0;
-      margin:0;
-      top:0;
-      left:0;
-      width: 100%;
-      height: 100%;
-      background-color:rgba(255,255,255);
+      background: url("") no-repeat center fixed;
+      background-color: black;
+      background-size: contain;
+      -webkit-background-size: contain;
     }
 
     #textbox {
@@ -119,11 +110,36 @@
     .defileTexte > :first-child  {
       display: inline-block;                /* modèle de boîte en ligne */
       white-space: normal;                  /* pas de passage à la ligne */
-      animation: defilement-texte 5s 1 normal linear forwards;
-    	-webkit-animation:defilement-texte 5s 1 normal linear forwards;
-    	-moz-animation:defilement-texte 5s 1 normal linear forwards;
-    	-o-animation:defilement-texte 5s 1 normal linear forwards;
-    	-ms-animation:defilement-texte 5s 1 normal linear forwards;
+      animation-name: defilement-texte;
+      animation-duration: 5s;
+      animation-iteration-count: 1;
+      animation-timing-function: linear;
+      animation-fill-mode: forwards;
+      animation-direction: normal;
+      -moz-animation-name: defilement-texte;
+      -moz-animation-duration: 5s;
+      -moz-animation-iteration-count: 1;
+      -moz-animation-timing-function: linear;
+      -moz-animation-fill-mode: forwards;
+      -moz-animation-direction: normal;
+      -webkit-animation-name: defilement-texte;
+      -webkit-animation-duration: 5s;
+      -webkit-animation-iteration-count: 1;
+      -webkit-animation-timing-function: linear;
+      -webkit-animation-fill-mode: forwards;
+      -webkit-animation-direction: normal;
+      -o-animation-name: defilement-texte;
+      -o-animation-duration: 5s;
+      -o-animation-iteration-count: 1;
+      -o-animation-timing-function: linear;
+      -o-animation-fill-mode: forwards;
+      -o-animation-direction: normal;
+      -ms-animation-name: defilement-texte;
+      -ms-animation-duration: 5s;
+      -ms-animation-iteration-count: 1;
+      -ms-animation-timing-function: linear;
+      -ms-animation-fill-mode: forwards;
+      -ms-animation-direction: normal;
     }
 
     /*The next keyframes will be overwritted by the code JS*/
@@ -151,6 +167,76 @@
       0% {transform: translateY(0)}
       100% {transform: translateY(5px)}
     }
+
+    .fade, .fadein, .fadeout{
+    animation-name: fadein;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    -moz-animation-name: fadein;
+    -moz-animation-duration: 5s;
+    -moz-animation-iteration-count: 1;
+    -moz-animation-timing-function: linear;
+    -moz-animation-fill-mode: forwards;
+    -webkit-animation-name: fadein;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-fill-mode: forwards;
+    -o-animation-name: fadein;
+    -o-animation-duration: 5s;
+    -o-animation-iteration-count: 1;
+    -o-animation-timing-function: linear;
+    -o-animation-fill-mode: forwards;
+    -ms-animation-name: fadein;
+    -ms-animation-duration: 5s;
+    -ms-animation-iteration-count: 1;
+    -ms-animation-timing-function: linear;
+    -ms-animation-fill-mode: forwards;
+  }
+
+  .fadein{
+    animation-direction: normal;
+    -moz-animation-direction: normal;
+    -webkit-animation-direction: normal;
+    -o-animation-direction: normal;
+    -ms-animation-direction: normal;
+  }
+
+  .fadeout{
+    animation-direction: reverse;
+    -moz-animation-direction: reverse;
+    -webkit-animation-direction: reverse;
+    -o-animation-direction: reverse;
+    -ms-animation-direction: reverse;
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
   </style>
 </head>
 
