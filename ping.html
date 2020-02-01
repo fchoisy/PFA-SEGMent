@@ -59,9 +59,9 @@
       background-color: rgba(0, 0, 0, 0.7);
     }
 
+    /* digiBox */
     .defileDigicode{
       margin: auto;
-      /*width: 20%;*/
       z-index: 10;
       border: 5px double DarkBlue;
       text-align: center;
@@ -107,6 +107,50 @@
       0% {transform: translate3d(0,0,0);}
       100% {transform: translate3d(-100%,0,0);}
     }
+
+    /* textBox*/
+    .defileTexte{
+      margin: auto;
+      z-index: 11;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .defileTexte > :first-child  {
+      display: inline-block;                /* modèle de boîte en ligne */
+      white-space: normal;                  /* pas de passage à la ligne */
+      animation: defilement-texte 5s 1 normal linear forwards;
+    	-webkit-animation:defilement-texte 5s 1 normal linear forwards;
+    	-moz-animation:defilement-texte 5s 1 normal linear forwards;
+    	-o-animation:defilement-texte 5s 1 normal linear forwards;
+    	-ms-animation:defilement-texte 5s 1 normal linear forwards;
+    }
+
+    /*The next keyframes will be overwritted by the code JS*/
+    @keyframes defilement-texte {
+      0% {transform: translateY(0)}
+      100% {transform: translateY(1px)}
+    }
+
+    @-webkit-keyframes defilement-texte {
+      0% {transform: translateY(0)}
+      100% {transform: translateY(2px)}
+    }
+
+    @-moz-keyframes defilement-texte {
+      0% {transform: translateY(0)}
+      100% {transform: translateY(3px)}
+    }
+
+    @-o-keyframes defilement-texte {
+      0% {transform: translateY(0)}
+      100% {transform: translateY(4px)}
+    }
+
+    @-ms-keyframes defilement-texte {
+      0% {transform: translateY(0)}
+      100% {transform: translateY(5px)}
+    }
   </style>
 </head>
 
@@ -117,7 +161,7 @@
   <div id="fade"></div>
 
   <div id="textbox">
-  <!-- Text displayed when scene is open -->
+  <!-- Div containing the text displayed when scene is open -->
   </div>
 
 

@@ -806,6 +806,32 @@ function isOnObjectZone(X,Y){
 //                                      ***Texts***
 // ========================================================================================
 
+function findKeyframesRule(rule,nav="") {
+    // Gather all stylesheets into an array
+    var ss = document.styleSheets;
+    var startText="@"+nav;
+    // Storing all the rules that match the nav
+    var tabRules=[];
+    // Loop through the stylesheets
+    for (var i = 0; i < ss.length; ++i) {
+        // Loop through all the rules
+        for (var j = 0; j < ss[i].cssRules.length; ++j) {
+            // Find the rule whose name matches our passed over parameter starting with nav and adding that rule to the tab
+            if ((ss[i].cssRules[j].type == window.CSSRule.KEYFRAMES_RULE) && ss[i].cssRules[j].name == rule && ss[i].cssRules[j].cssText.startsWith(startText))
+             tabRules.push([ss[i], ss[i].cssRules[j]]);
+        }
+    }
+    // Rule(s) found
+    if (tabRules.length!=0) {
+      //console.log(ss);
+      //console.log(tabRules);
+      return tabRules;
+    }
+    // Rule not found
+    return null;
+}
+
+
 /** TODO
 *
 */
@@ -814,64 +840,99 @@ function printOpeningText(){
   var textBox;
   var i=0;
   var t;
-  /** TODO
-  *
-  * @param {} sceneId
-  * @param {} back
-  */
+  //Creating the textBox
   function reset() {
     setWindowsValues();
     clearTimeout(t);
     text = getSceneTextBySceneId(scene_number);
-
     textBox = document.getElementById("textbox");
-    textBox.innerHTML="";
-    textBox.style.left = (1.1 * windowsValues[4]) + "px";
-    textBox.style.right = (1.1 * windowsValues[4]) + "px";
+    textBox.style.position="absolute";
+    textBox.style.left = (windowsValues[4] + 0.15 * windowsValues[2] * windowsValues[6]) + "px";
+    textBox.style.right = (windowsValues[4] + 0.15  * windowsValues[2] * windowsValues[6]) + "px";
     textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
-    textBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
-    textBox.style.zIndex = 11;
+    textBox.style.height = (0.16 * windowsValues[3] * windowsValues[6]) + "px";
     textBox.style.color = "#ffffff";
+    textBox.style.boxSizing="border-box";
+    if (text!="") {
+      textBox.classList.add("defileTexte");
+    } else {
+      textBox.classList.remove("defileTexte");
+      textBox.style.display = "none";
+    }
     if(text.length == 0){
       canPlay = true;
     }
-    /** TODO
-    *
-    * @param {} sceneId
-    * @param {} back
-    */
-    function instantPrinting(){
-      clearTimeout(t);
-      if(i == text.length){
-        textBox.innerHTML = "";
-        setTimeout(function(){ canPlay=true; }, 100);
-      }
-      else {
-        i = text.length;
-        textBox.innerHTML = text;
-      }
-    }
-    document.addEventListener("click", instantPrinting);
   }
   reset();
+
+  //Creating the div that will scroll in the textBox
+  let textDiv = document.createElement("div");
+  textDiv.id="textDiv";
+  textDiv.style.fontSize = (0.07 * windowsValues[3] * windowsValues[6]) + "px";
+  textDiv.style.position="relative";
+  textDiv.style.boxSizing="border-box";
+  textDiv.innerHTML=text;
+  textBox.appendChild(textDiv);
+
+  //Changing the rules of the scrolling
+  function setTextKeyframes(){
+    //Set the keyframes rules with dynamic values
+    const arrayNav=["","-webkit-","-o-","-moz-","-ms-"];
+    //const arrayNav=["","-webkit-"];
+    for (const nav of arrayNav) {
+      var results = findKeyframesRule("defilement-texte",nav);
+      //console.log(results,nav);
+      if (results!=null) {
+        for (let i = 0; i < results.length; i++) {
+          var style_sheet = results[i][0];
+          var rule = results[i][1];
+          rule.deleteRule("0%");
+          rule.deleteRule("100%");
+          rule.appendRule("0% { transform: translateY(" + (textBox.clientHeight+ 0.01 * windowsValues[3] * windowsValues[6])  +"px); }")
+          rule.appendRule("100% { transform: translateY(-" + (textDiv.clientHeight-textBox.clientHeight) + "px); }")      }
+        }
+      }
+    }
+
+    setTextKeyframes();
+
+  //Changing the font size automatically
   window.addEventListener("resize", function () {
     reset();
-    textBox.innerHTML = text.substring(0,i);
-    charByChar();
+    setTextKeyframes();
+    textDiv.style.fontSize = (0.07 * windowsValues[3] * windowsValues[6]) + "px";
   });
-  /** TODO
-  *
-  * @param {} sceneId
-  * @param {} back
-  */
-  function charByChar() {
-    if (i < text.length) {
-      textBox.innerHTML += text[i];
-      i++;
-      t=setTimeout(charByChar, 100);
+
+  //Changing the comportment on click
+  let alreadyClicked=false;
+  function instantPrinting(){
+    if (alreadyClicked) {
+      setTimeout(function(){
+        textBox.style.display="none";
+      }, 100);
+      setTimeout(function(){ canPlay=true; }, 100);
+    } else {
+      textDiv = document.getElementById("textDiv");
+      textDiv.style.animationName = 'none';
+      textDiv.style.webkitAnimationName = 'none';
+      textDiv.style.animation = "defilement-texte 1ms 1 normal linear forwards";
+      textDiv.style.webkitAnimationName = "defilement-texte";
+      textDiv.style.webkitAnimationDuration = "1ms";
+      textDiv.style.webkitAnimationIterationCount = "1";
+      textDiv.style.webkitAnimationDirection = "normal";
+      textDiv.style.webkitAnimationTimingFunction = "linear";
+      textDiv.style.webkitAnimationFillMode = "forwards";
+      alreadyClicked=true;
     }
   }
-  charByChar();
+
+  document.addEventListener("click", instantPrinting);
+
+  textDiv.addEventListener("animationend",function() {
+    alreadyClicked=true;
+    //console.log("end");
+  });
+
 }
 
 // ========================================================================================
