@@ -86,11 +86,10 @@ function initialisation() {
   let isBack = JSON.parse(getCookieValue("isback"));
   scene_number = getLastElem(getCookieValue("scene_number"));
   let fade_global=getCookieValue("fade_global") == "true";
-  let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
-  console.log("fade ", fade)
-  if(fade||isBack){
+  if(isBack || findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)){
     document.body.classList.add("fadein");
   }
+  setTimeout(function(){document.body.classList.remove("fadein")}, 1500)
   backgroundModifier();
   playSoundScene();
   imgsize();
@@ -334,11 +333,12 @@ function changeScene(event, html, id, back, fade,) {
       document.cookie = "scene_number=" + lstSceneNumber + "," + trueId + ";";
     }
   }
-  if(fade){
-    document.body.addEventListener("animationend", function(){document.location.href = html;})
-  } else {
-    document.location.href = html;
-  }
+  setTimeout(function(){document.location.href = html}, 1500)
+  // if(fade){
+  //   document.body.addEventListener("animationend", function(){document.location.href = html;})
+  // } else {
+  //   document.location.href = html;
+  // }
 };
 
 // -------------------------------- Get/Remove last element -------------------------------
@@ -528,7 +528,6 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
     verifyDigicode(X,Y);
     verifyObject(X,Y);
     verifyGif(X,Y);
-    console.log(getSceneByID(scene_number).SceneType);
     if(isSceneFinal(getSceneByID(scene_number))){
       document.location.href = 'outro.html';
     }
@@ -874,6 +873,8 @@ function printOpeningText(){
   textDiv.style.position="relative";
   textDiv.style.boxSizing="border-box";
   textDiv.innerHTML=text;
+  textBox.appendChild(textDiv);
+
 
   //Changing the rules of the scrolling
   function setTextKeyframes(){
@@ -897,8 +898,6 @@ function printOpeningText(){
     }
   }
   setTextKeyframes();
-
-  textBox.appendChild(textDiv);
 
   //Changing the font size automatically
   window.addEventListener("resize", function () {
