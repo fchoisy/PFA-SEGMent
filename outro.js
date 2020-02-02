@@ -6,6 +6,7 @@
 */
 
 window.onload = playOutro();
+window.addEventListener("resize", resizeVideo);
 
 /**
 * Plays the intro video, or skip it if it does not exist

@@ -766,6 +766,15 @@ function playVideo(vidName, type)
   }
 }
 
+/**
+* resizes the video to the size of the window
+*/
+function resizeVideo(){
+  var video = document.getElementById("video");
+  video.width = parseInt(window.innerWidth);
+  video.height = parseInt(window.innerHeight);
+}
+
 // ========================================================================================
 //                                      ***Other***
 // ========================================================================================
