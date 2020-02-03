@@ -427,6 +427,21 @@ function storePuzzleInCookie(cook,topPos,sceneNb){
   let indexes =  getIndexStateBySceneId(sceneNb,cook);
   document.cookie = "puzzle_pos="+cook.substring(0,indexes[0])+sceneNb +":"+topPos+cook.substring(indexes[1])+"/";
 }
+
+function findNextUnskippedFrame(resGif,currentFrame){
+    let i = currentFrame + 1;
+    const len = gifClickZone[resGif].id[0]
+    while(i != currentFrame){
+            if(i >=len){
+                i = 0;
+            }
+            if(gifClickZone[resGif].id[2][i]!=0){
+                return i
+            }
+            i++;
+    }
+    return -1;
+}
 // ========================================================================================
 //                                     ***Transitions***
 // ========================================================================================
@@ -660,12 +675,16 @@ function verifyGif(X,Y){
   if(resGif!=-1){
     let currentFrame = gifOnScene[resGif].get_current_frame();
     let first = true;
-    console.log(canPlayGif)
-    while((first || gifClickZone[resGif].id[2][currentFrame] == 0) && canPlayGif){
+    while(first && canPlayGif){
       let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
-      if(gifClickZone[resGif].id[2][currentFrame] == 0){
-        gifOnScene[resGif].play();
-      }else{
+      if(gifClickZone[resGif].id[2][newFrame] == 0){
+        let nextScene = findNextUnskippedFrame(resGif,currentFrame);
+        if(currentFrame == nextScene){
+            gifOnScene[resGif].move_to(newFrame);
+        }
+        gifOnScene[resGif].play_until(nextScene);
+      }
+      else{
         gifOnScene[resGif].pause();
         gifOnScene[resGif].move_to(newFrame);
       }

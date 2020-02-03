@@ -695,6 +695,7 @@
         };
 
         var player = (function () {
+            var until = -1;
             var i = -1;
             var iterationCount = 0;
 
@@ -718,13 +719,12 @@
 
             var step = (function () {
                 var stepping = false;
-
                 var completeLoop = function () {
                     if (onEndListener !== null)
                         onEndListener(gif);
                     iterationCount++;
 
-                    if (overrideLoopMode !== false || iterationCount < 0) {
+                    if (overrideLoopMode !== false || iterationCount < 0 ) {
                         doStep();
                     } else {
                         stepping = false;
@@ -733,6 +733,9 @@
                 };
 
                 var doStep = function () {
+                    if(until == i){
+                        playing = false;
+                    }
                     stepping = playing;
                     if (!stepping) return;
 
@@ -750,7 +753,7 @@
                 };
 
                 return function () {
-                    if (!stepping) setTimeout(doStep, 0);
+                    if (!stepping) setTimeout(doStep(), 0);
                 };
             }());
 
@@ -808,6 +811,8 @@
                 },
                 step: step,
                 play: play,
+                play_until: function(fram=-1) { until = fram;
+                    play(); },
                 pause: pause,
                 playing: playing,
                 move_relative: stepFrame,
@@ -938,6 +943,7 @@
         return {
             // play controls
             play: player.play,
+            play_until: player.play_until,
             pause: player.pause,
             move_relative: player.move_relative,
             move_to: player.move_to,
