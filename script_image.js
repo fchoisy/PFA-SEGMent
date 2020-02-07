@@ -72,6 +72,11 @@ window.onload = initialisation();
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
 window.addEventListener("resize", resize);
+$(window).on('load', handler);
+
+function handler(){
+  console.log("All images loaded");
+}
 
 // ========================================================================================
 //                          ***functions unrelated to any enigma***
@@ -93,6 +98,8 @@ function initialisation() {
   backgroundModifier();
   playSoundScene();
   imgsize();
+  Puzzled(scene_number);
+  loadObjects();
   setWindowsValues();
   if(sceneVisited(scene_number)==false){
     printOpeningText();
@@ -102,8 +109,6 @@ function initialisation() {
     canPlay = true;
   }
   clickzone();
-  Puzzled(scene_number);
-  loadObjects();
 }
 
 /**
