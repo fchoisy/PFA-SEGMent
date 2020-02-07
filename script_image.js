@@ -846,133 +846,150 @@ function isOnObjectZone(X,Y){
 //                                      ***Texts***
 // ========================================================================================
 
-function findKeyframesRule(rule,nav="") {
-  // Gather all stylesheets into an array
-  var ss = document.styleSheets;
-  var startText="@"+nav;
-  // Storing all the rules that match the nav
-  var tabRules=[];
-  // Loop through the stylesheets
-  for (var i = 0; i < ss.length; ++i) {
-    // Loop through all the rules
-    for (var j = 0; j < ss[i].cssRules.length; ++j) {
-      // Find the rule whose name matches our passed over parameter starting with nav and adding that rule to the tab
-      if ((ss[i].cssRules[j].type == window.CSSRule.KEYFRAMES_RULE) && ss[i].cssRules[j].name == rule && ss[i].cssRules[j].cssText.startsWith(startText))
-      tabRules.push([ss[i], ss[i].cssRules[j]]);
+function splitThroughPixel(string, px, fontsize=null) {
+  let words = string.split(' ');
+  let split = [];
+
+  let div = document.createElement('div');
+  div.style.cssText = 'white-space:nowrap; display:inline;';
+
+  if (fontsize!=null) {
+    div.style.fontSize=fontsize;
+  }
+  document.body.appendChild(div);
+
+  for (let i = 0; i < words.length; i++) {
+    div.innerText = (div.innerText + ' ' + words[i]).trim();
+    let width = Math.ceil(div.getBoundingClientRect().width);
+    if (width > px && div.innerText.split(' ').length > 1) {
+      let currentWords = div.innerText.split(' ');
+      let lastWord = currentWords.pop();
+      split.push(currentWords.join(' '));
+      div.innerText = lastWord;
     }
   }
-  // Rule(s) found
-  if (tabRules.length!=0) {
-    //console.log(ss);
-    //console.log(tabRules);
-    return tabRules;
+  if (div.innerText !== '') {
+    split.push(div.innerText);
   }
-  // Rule not found
-  return null;
+  document.body.removeChild(div);
+  return split;
 }
 
-
-/** TODO
-*
-*/
 function printOpeningText(){
   var text;
   var textBox;
-  var i=0;
-  var t;
-  //Creating the textBox
-  function reset() {
-    setWindowsValues();
-    clearTimeout(t);
-    text = getSceneTextBySceneId(scene_number);
+  var i=0; var j=0;
+  var timer;
+  var split_text;
+  var count;
+  var textBoxTop;
+  var textBoxBottom;
+  var printSpeed = 60;
+
+  function initTextBox() {
     textBox = document.getElementById("textbox");
-    textBox.style.position="absolute";
-    textBox.style.left = (windowsValues[4] + 0.15 * windowsValues[2] * windowsValues[6]) + "px";
-    textBox.style.right = (windowsValues[4] + 0.15  * windowsValues[2] * windowsValues[6]) + "px";
-    textBox.style.top = (windowsValues[5] + 0.75 * windowsValues[3] * windowsValues[6]) + "px";
-    textBox.style.height = (0.16 * windowsValues[3] * windowsValues[6]) + "px";
-    textBox.style.color = "#ffffff";
-    textBox.style.boxSizing="border-box";
-    if (text!="") {
-      textBox.classList.add("defileTexte");
-    } else {
-      textBox.classList.remove("defileTexte");
-      textBox.style.display = "none";
-    }
+    textBox.innerHTML="";
+    textBox.style.zIndex = 11;
+    textBox.style.borderStyle= "solid";
+    textBox.style.borderColor = "black";
+    textBox.style.color = "white";
+    textBox.style.boxSizing = "border-box";
+
+    textBoxTop = document.createElement("div");
+    textBoxTop.id="texttop";
+    textBoxTop.style.height="50%";
+    textBoxTop.style.width="100%";
+
+    textBoxBottom = document.createElement("div");
+    textBoxBottom.id="textbottom";
+    textBoxBottom.style.height="50%";
+    textBoxBottom.style.width="100%";
+
+    resizeTextBox();
+    textBox.appendChild(textBoxTop);
+    textbox.appendChild(textBoxBottom);
+  }
+
+  function reset() {
+    clearTimeout(timer);
+    textBox = document.getElementById("textbox");
+    text = getSceneTextBySceneId(scene_number);
+    split_text=splitThroughPixel(text,textBox.clientWidth,"60px");
+    count = split_text.length;
     if(text.length == 0){
       canPlay = true;
     }
   }
-  reset();
 
-  //Creating the div that will scroll in the textBox
-  let textDiv = document.createElement("div");
-  textDiv.id="textDiv";
-  textDiv.style.fontSize = (0.07 * windowsValues[3] * windowsValues[6]) + "px";
-  textDiv.style.position="relative";
-  textDiv.style.boxSizing="border-box";
-  textDiv.innerHTML=text;
-  textBox.appendChild(textDiv);
-
-
-  //Changing the rules of the scrolling
-  function setTextKeyframes(){
-    //Set the keyframes rules with dynamic values
-    const arrayNav=["","-webkit-","-o-","-moz-","-ms-"];
-    //const arrayNav=["","-webkit-"];
-    for (const nav of arrayNav) {
-      var results = findKeyframesRule("defilement-texte",nav);
-      //console.log(results,nav);
-      if (results!=null) {
-        for (let i = 0; i < results.length; i++) {
-          var style_sheet = results[i][0];
-          var rule = results[i][1];
-          rule.deleteRule("0%");
-          rule.deleteRule("100%");
-          rule.appendRule("0% { transform: translate3d(0px," + (textBox.clientHeight+ 0.01 * windowsValues[3] * windowsValues[6])  +"px,0px); }")
-          rule.appendRule("100% { transform: translate3d(0px,-" + (textDiv.clientHeight-textBox.clientHeight) + "px,0px); }")
+  function charByChar() {
+    if (j<count) {
+      if (j==0) {
+        if (i < split_text[j].length) {
+          textBoxTop.innerHTML += split_text[j][i];
+          i++;
+          timer=setTimeout(charByChar, printSpeed);
+        }
+        if (i == split_text[j].length){
+          clearTimeout(timer);
+          j+=1;
+          i=0;
+          timer=setTimeout(charByChar, printSpeed);
+        }
+      } else {
+        if (i < split_text[j].length) {
+          textBoxBottom.innerHTML += split_text[j][i];
+          i++;
+          timer=setTimeout(charByChar, printSpeed);
+        }
+        if (i == split_text[j].length){
+          clearTimeout(timer);
+          j+=1;
+          i=0;
+          if(j<count){
+            textBoxTop.innerHTML=textBoxBottom.innerHTML;
+            textBoxBottom.innerHTML="";
+            timer=setTimeout(charByChar, printSpeed);
+          }
         }
       }
-      //console.log(rule);
     }
   }
-  setTextKeyframes();
 
-  //Changing the font size automatically
-  window.addEventListener("resize", function () {
-    reset();
-    setTextKeyframes();
-    textDiv.style.fontSize = (0.07 * windowsValues[3] * windowsValues[6]) + "px";
-  });
-
-  //Changing the comportment on click
-  let alreadyClicked=false;
   function instantPrinting(){
-    if (alreadyClicked) {
-      setTimeout(function(){
-        textBox.style.display="none";
-      }, 100);
-      setTimeout(function(){ canPlay=true; }, 100);
-    } else {
-      textDiv = document.getElementById("textDiv");
-      textDiv.style.animationName = 'none';
-      textDiv.style.WebkitAnimationName = 'none';
-      textDiv.style.animation = "defilement-texte 1ms 1 normal linear forwards";
-      textDiv.style.WebkitAnimationName = "defilement-texte";
-      textDiv.style.WebkitAnimationDuration = "1ms";
-      textDiv.style.WebkitAnimationIterationCount = "1";
-      textDiv.style.WebkitAnimationDirection = "normal";
-      textDiv.style.WebkitAnimationTimingFunction = "linear";
-      textDiv.style.WebkitAnimationFillMode = "forwards";
-      alreadyClicked=true;
+    clearTimeout(timer);
+    if(i==-1){
+      textBox.innerHTML = "";
+      setTimeout(function(){ canPlay=true; }, printSpeed);
+      textBox.style.height = 0;
+      textBox.style.top = 0;
+    }
+    else {
+      textBoxTop.innerHTML=split_text[count-2];
+      textBoxBottom.innerHTML=split_text[count-1];
+      i=-1;
     }
   }
 
+  function resizeTextBox(){
+    setWindowsValues();
+    textBox.style.top = (windowsValues[5] + 0.841 * windowsValues[3] * windowsValues[6]) + "px";
+    textBox.style.height = (0.16 * windowsValues[3] * windowsValues[6]) + "px";
+    textBoxTop.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    textBoxBottom.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+  }
+  initTextBox();
+  reset();
+  charByChar();
   document.addEventListener("click", instantPrinting);
 
-  textDiv.addEventListener("animationend",function() {
-    alreadyClicked=true;
-    console.log("end");
+  var resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(timer);
+    clearTimeout(resizeTimer);
+    resizeTextBox();
+      resizeTimer = setTimeout(function() {
+        setTimeout(charByChar, printSpeed);
+      }, 250);
   });
 
 }
