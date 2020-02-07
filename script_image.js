@@ -60,10 +60,12 @@ let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
 let canPlay = false;
+let canPlayFade = false;
 let canPlayGif = true;
 let isPuzzleScene = false;
 let tabPos = [];
-
+let fade = false;
+let gifOK = 0;
 // ========================================================================================
 //                               ***Signals***
 // ========================================================================================
@@ -75,7 +77,17 @@ window.addEventListener("resize", resize);
 $(window).on('load', handler);
 
 function handler(){
-  console.log("All images loaded");
+    if(fade && gifOK == 0){
+      document.body.classList.add("fadein");
+      setTimeout(function(){document.body.classList.remove("fadein");
+        document.body.style.opacity = 1;
+        canPlayFade = true;}, 1500)
+    }
+    else if(gifOK == 0){
+        document.body.style.opacity = 1;
+        canPlayFade = true;
+    }
+
 }
 
 // ========================================================================================
@@ -88,22 +100,17 @@ function handler(){
 * Function to be called when scene is opened
 */
 function initialisation() {
+  document.body.style.opacity = 0;
   let isBack = getCookieValue("isback");
   scene_number = getLastElem(getCookieValue("scene_number"));
   let fade_global=getCookieValue("fade_global") == "true";
-  let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
+  fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
   if(isBack.substring(0, 4) == "true"){
     fade = findTransition(getTransitions(), scene_number, isBack.substring(4,5))
   }
-  if(fade){
-    document.body.classList.add("fadein");
-  }
-  setTimeout(function(){document.body.classList.remove("fadein")}, 1500)
   backgroundModifier();
   playSoundScene();
   imgsize();
-  Puzzled(scene_number);
-  loadObjects();
   setWindowsValues();
   if(sceneVisited(scene_number)==false){
     printOpeningText();
@@ -113,6 +120,8 @@ function initialisation() {
     canPlay = true;
   }
   clickzone();
+  Puzzled(scene_number);
+  loadObjects();
 }
 
 /**
@@ -270,7 +279,7 @@ function setWindowsValues(){
 * @param {MouseEvent} event
 */
 function changeCursor(event) {
-  if(canPlay){
+  if(canPlay && canPlayFade){
     let X = event.clientX;
     let Y = event.clientY;
     if (isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1 || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1) {
@@ -546,7 +555,7 @@ function findTransitionBySceneId(sceneId){
 * @param {MouseEvent} event
 */
 function verifyClick(event) { // NOTE : make separate functions for each case ?
-  if(canPlay){
+  if(canPlay && canPlayFade){
     const X = event.clientX;
     const Y = event.clientY;
     verifyClickZone(X,Y);
@@ -1211,8 +1220,8 @@ function Puzzled(id){
         img.id = "draggable" + i;
         img.classList.add("draggable");
         if (firstLoad  != puzzlePieces.length-1 && !alreadyVisited) {
-          top = Math.floor(Math.random() * 65) / 100 * windowsValues[3] * windowsValues[6];
-          left = Math.floor(Math.random() * 65) / 100 * windowsValues[2] * windowsValues[6];
+          top = Math.floor(Math.random() * (101-puzzlePieces[i].Size[1]*windowsValues[2]/windowsValues[3]*100)) / 100 * windowsValues[3] * windowsValues[6];
+          left = Math.floor(Math.random() * (101-puzzlePieces[i].Size[0]*100)) / 100 * windowsValues[2] * windowsValues[6];
           firstLoad = i;
           let posImg = [left/(windowsValues[2] * windowsValues[6]),top/(windowsValues[3] * windowsValues[6])];
           tabPos.push(posImg);
@@ -1333,6 +1342,7 @@ function Puzzled(id){
         len++;
       }
     }
+    gifOK = gifs.length;
     for(let i=0;i<gifs.length;i++){
       currentGif = gifs[i];
       let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
@@ -1354,6 +1364,10 @@ function Puzzled(id){
       }
       gifl.load(fram,function(){
         gifOnScene[i] = gifl;
+        gifOK --;
+        if(gifOK == 0){
+            handler();
+        }
       });
     }
   }
