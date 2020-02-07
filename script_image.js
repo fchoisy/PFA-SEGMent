@@ -88,10 +88,14 @@ function handler(){
 * Function to be called when scene is opened
 */
 function initialisation() {
-  let isBack = JSON.parse(getCookieValue("isback"));
+  let isBack = getCookieValue("isback");
   scene_number = getLastElem(getCookieValue("scene_number"));
   let fade_global=getCookieValue("fade_global") == "true";
-  if(isBack || findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)){
+  let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
+  if(isBack.substring(0, 4) == "true"){
+    fade = findTransition(getTransitions(), scene_number, isBack.substring(4,5))
+  }
+  if(fade){
     document.body.classList.add("fadein");
   }
   setTimeout(function(){document.body.classList.remove("fadein")}, 1500)
@@ -326,7 +330,9 @@ function changeScene(event, html, id, back, fade,) {
     let lst;
     if(getLastElem(lstSceneNumber)==scene_number){
       if(trueId==-1){
+        id = getLastElem(lstSceneNumber)
         trueId = removeLastElem(lstSceneNumber);
+        document.cookie = "isback=" + true + id + ";";
       }
       if(getCookieValue("scene_number").length==1){
         trueId = getCookieValue("scene_number");
@@ -586,8 +592,8 @@ function verifyBackZone(X,Y){
     playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = -1;
-    document.cookie = "isback=" + true +";";
-    changeScene(event, "ping.html", sId, true, true);
+    fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
+    changeScene(event, "ping.html", sId, true, fade);
   }
 }
 
