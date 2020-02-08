@@ -643,8 +643,18 @@ function verifyDigicode(X,Y){
     if(clickValidate){
       clickValidate = false ;
       if (bool) {
-        digiBox.innerHTML = digiSuccess;
-      }else {
+          const split_texting = splitThroughPixel(digiSuccess,digiBox.clientWidth,digiBox.clientHeight+"px")
+          if(split_texting.length > 1){
+              digiBox.innerHTML = '';
+              digiBox.classList.add("defileDigicode");
+              var digiSpan = document.createElement("div");
+              digiSpan.innerHTML = digiSuccess;
+              digiBox.appendChild(digiSpan);
+          }
+          else{
+              digiBox.innerHTML = digiSuccess;
+          }
+	  }else {
           //Faut changer ça
           console.log(digiFailure);
           const split_texting = splitThroughPixel(digiFailure,digiBox.clientWidth,digiBox.clientHeight+"px")
@@ -866,10 +876,10 @@ function splitThroughPixel(string, px, fontsize=null) {
   let split = [];
 
   let div = document.createElement('div');
-  div.style.cssText = 'white-space:nowrap; display:inline;';
+  div.style.cssText = "white-space:nowrap; display:inline;";
 
   if (fontsize!=null) {
-    div.style.fontSize=fontsize;
+    div.style.cssText="white-space:nowrap; display:inline;font-size:"+fontsize+";";
   }
   document.body.appendChild(div);
 
