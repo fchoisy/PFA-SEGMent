@@ -647,7 +647,7 @@ function verifyDigicode(X,Y){
       }else {
           //Faut changer ça
           console.log(digiFailure);
-          const split_texting = splitThroughPixel(digiFailure,digiBox.clientWidth,digiBox.offset+"px")
+          const split_texting = splitThroughPixel(digiFailure,digiBox.clientWidth,digiBox.clientHeight+"px")
           console.log(split_texting);
           console.log(digiBox.clientWidth);
           if(split_texting.length > 1){
