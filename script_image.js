@@ -641,36 +641,25 @@ function verifyDigicode(X,Y){
       addingBuffer(resDigi[0][1]);
     }
     if(clickValidate){
-      clickValidate = false ;
-      if (bool) {
-          const split_texting = splitThroughPixel(digiSuccess,digiBox.clientWidth,digiBox.clientHeight+"px")
-          if(split_texting.length > 1){
+        let text;
+        if(bool){
+            text = digiSuccess;
+        }
+        else{
+            text = digiFailure;
+        }
+        clickValidate = false ;
+        const split_texting = splitThroughPixel(text,digiBox.clientWidth,digiBox.clientHeight+"px")
+        if(split_texting.length > 1){
               digiBox.innerHTML = '';
               digiBox.classList.add("defileDigicode");
               var digiSpan = document.createElement("div");
-              digiSpan.innerHTML = digiSuccess;
+              digiSpan.innerHTML = text;
               digiBox.appendChild(digiSpan);
           }
           else{
-              digiBox.innerHTML = digiSuccess;
+              digiBox.innerHTML = text;
           }
-	  }else {
-          //Faut changer ça
-          console.log(digiFailure);
-          const split_texting = splitThroughPixel(digiFailure,digiBox.clientWidth,digiBox.clientHeight+"px")
-          console.log(split_texting);
-          console.log(digiBox.clientWidth);
-          if(split_texting.length > 1){
-              digiBox.innerHTML = '';
-              digiBox.classList.add("defileDigicode");
-              var digiSpan = document.createElement("div");
-              digiSpan.innerHTML = digiFailure;
-              digiBox.appendChild(digiSpan);
-          }
-          else{
-              digiBox.innerHTML = digiFailure;
-          }
-      }
     }else {
       digiBox.innerHTML=buffer;
     }
