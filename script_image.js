@@ -1217,7 +1217,7 @@ function Puzzled(id){
         img.height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
         img.src = "Game/" + puzzlePieces[i].Image;
         puzzleImagesZone.appendChild(img);
-        $(".draggable").draggable({containment: "parent"});
+          $(".draggable").draggable({containment: "parent", stack: ".draggable"});
       }
 
       diffX=[];
