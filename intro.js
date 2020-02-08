@@ -7,6 +7,7 @@
 
 window.onload = playIntro();
 window.addEventListener("resize", resizeVideo);
+document.getElementById("video").addEventListener('ended',skip,false);
 
 /**
 * Plays the intro video, or skip it if it does not exist
@@ -20,15 +21,6 @@ function playIntro(){
       skip();
     }
   }
-}
-
-/**
-* Skips the video if the button "Skip" is pressed
-* @param{event} event
-*/
-function skipIntro(event){
-  event.preventDefault();
-  skip();
 }
 
 /**
