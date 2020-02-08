@@ -645,7 +645,21 @@ function verifyDigicode(X,Y){
       if (bool) {
         digiBox.innerHTML = digiSuccess;
       }else {
-        digiBox.innerHTML = digiFailure;
+          //Faut changer ça
+          console.log(digiFailure);
+          const split_texting = splitThroughPixel(digiFailure,digiBox.clientWidth,digiBox.offset+"px")
+          console.log(split_texting);
+          console.log(digiBox.clientWidth);
+          if(split_texting.length > 1){
+              digiBox.innerHTML = '';
+              digiBox.classList.add("defileDigicode");
+              var digiSpan = document.createElement("div");
+              digiSpan.innerHTML = digiFailure;
+              digiBox.appendChild(digiSpan);
+          }
+          else{
+              digiBox.innerHTML = digiFailure;
+          }
       }
     }else {
       digiBox.innerHTML=buffer;
@@ -664,6 +678,7 @@ function verifyDigicode(X,Y){
     changeScene(event, "ping.html", sId, false, fade);
   }
 }
+
 
 /**
 * Verifies if clicked on an object, and changes scene if so
