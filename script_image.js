@@ -1,7 +1,7 @@
 /**
 * script-image.js
 *
-* Functions for displaying and contolling each element on the scene
+* Functions for displaying and controlling each element on the scene
 */
 
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
@@ -12,8 +12,6 @@
 
 // --------------------------------------- Clément ----------------------------------------
 
-// Toujours fondue pour les backClickZone
-
 // ---------------------------------------- Hind ------------------------------------------
 
 // --------------------------------------- Pierre -----------------------------------------
@@ -22,24 +20,11 @@
 
 // --------------------------------------- Emeric -----------------------------------------
 
-
-// Verifier pour le changement de scene que tous les gifs sont sur la bonne frame
-
-// Faire les images que l'on passe pour les état d'objets
-
 // -------------------------------------- Corentin ----------------------------------------
 
 // Pour les gifs IsOnZone, retourner un resTab[] pour pouvoir obtenir l'ID du gif et ainsi pouvoir jouer le son ?
 
-// Pour les transitions Uniques, si on a plusieurs puzzles dans une même scène qui mènent à des scènes différentes, avec une transition unique,
-// que doit-on faire ? (faire test).
-
-// Pas utile de mettre un objet qui prend toute la page en z index grand car on check la position de la souris de toute façon.
-// Seule façon de faire : check en variable globale
-
 // ---------------------------------------- Jean ------------------------------------------
-
-//Mettre les bonnes phrases en cas d'erreur sur le digicode
 
 // ========================================================================================
 //                               ***Global variables***
@@ -59,10 +44,10 @@ let imgSize = []; // contains the size of the image in the background
 let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
-let canPlay = false;
-let canPlayGif = true;
-let isPuzzleScene = false;
-let tabPos = [];
+let canPlay = false; // boolean to check if we can verify the click
+let canPlayGif = true; // TODO Emeric
+let isPuzzleScene = false; // boolean that say if the current scene contain a puzzle
+let tabPos = []; // TODO Emeric
 
 // ========================================================================================
 //                               ***Signals***
@@ -74,6 +59,7 @@ window.addEventListener("click", verifyClick, false);
 window.addEventListener("resize", resize);
 $(window).on('load', handler);
 
+// TODO Emeric
 function handler(){
   console.log("All images loaded");
 }
@@ -88,9 +74,9 @@ function handler(){
 * Function to be called when scene is opened
 */
 function initialisation() {
-  let isBack = getCookieValue("isback");
-  scene_number = getLastElem(getCookieValue("scene_number"));
-  let fade_global=getCookieValue("fade_global") == "true";
+  let isBack = getCookieValue("isback"); // boolean that say if we came to this scene with a backClick
+  scene_number = getLastElem(getCookieValue("scene_number")); // update the scene number
+  // Fade transition
   let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
   if(isBack.substring(0, 4) == "true"){
     fade = findTransition(getTransitions(), scene_number, isBack.substring(4,5))
@@ -98,7 +84,7 @@ function initialisation() {
   if(fade){
     document.body.classList.add("fadein");
   }
-  setTimeout(function(){document.body.classList.remove("fadein")}, 1500)
+  setTimeout(function(){document.body.classList.remove("fadein")}, 1500
   backgroundModifier();
   playSoundScene();
   imgsize();
@@ -330,7 +316,7 @@ function changeScene(event, html, id, back, fade,) {
     let lst;
     if(getLastElem(lstSceneNumber)==scene_number){
       if(trueId==-1){
-        id = getLastElem(lstSceneNumber)
+        id = getLastElem(lstSceneNumber);
         trueId = removeLastElem(lstSceneNumber);
         document.cookie = "isback=" + true + id + ";";
       }
@@ -344,12 +330,7 @@ function changeScene(event, html, id, back, fade,) {
       document.cookie = "scene_number=" + lstSceneNumber + "," + trueId + ";";
     }
   }
-  setTimeout(function(){document.location.href = html}, 1500)
-  // if(fade){
-  //   document.body.addEventListener("animationend", function(){document.location.href = html;})
-  // } else {
-  //   document.location.href = html;
-  // }
+  setTimeout(function(){document.location.href = html}, 1500);
 };
 
 // -------------------------------- Get/Remove last element -------------------------------
@@ -383,6 +364,12 @@ function getLastElem(lst){
   return lst.substring(len,ret);
 }
 
+/**
+* TODO
+* @param {scene_number} : TODO
+* @param {cook} : TODO
+* @returns : TODO
+*/
 function getStateBySceneId(scene_number,cook){
   let len = cook.length-1;
   let len2 = cook.length-1;
@@ -405,6 +392,12 @@ function getStateBySceneId(scene_number,cook){
   return "";
 }
 
+/**
+* TODO
+* @param {scene_number} : TODO
+* @param {cook} : TODO
+* @returns : TODO
+*/
 function getIndexStateBySceneId(scene_number,cook){
   let len = cook.length-1;
   let len2 = cook.length-1;
@@ -427,18 +420,36 @@ function getIndexStateBySceneId(scene_number,cook){
   return [cook.length,cook.length];
 }
 
+/**
+* TODO
+* @param {state} : TODO
+* @param {scene_number} : TODO
+* @param {toAdd} : TODO
+*/
 function addGifStateCookie(state,sceneNumber,toAdd){
   const indexes = getIndexStateBySceneId(sceneNumber,state);
   document.cookie = "gif_state=" + state.substring(0,indexes[0]) + toAdd + state.substring(indexes[1]);
 
 }
 
+/**
+* TODO
+* @param {cook} : TODO
+* @param {topPos} : TODO
+* @param {sceneNb} : TODO
+*/
 function storePuzzleInCookie(cook,topPos,sceneNb){
   console.log(topPos);
   let indexes =  getIndexStateBySceneId(sceneNb,cook);
   document.cookie = "puzzle_pos="+cook.substring(0,indexes[0])+sceneNb +":"+topPos+cook.substring(indexes[1])+"/";
 }
 
+/**
+* TODO
+* @param {resGif} : TODO
+* @param {currentFrame} : TODO
+* @returns : TODO
+*/
 function findNextUnskippedFrame(resGif,currentFrame){
     let i = currentFrame + 1;
     const len = gifClickZone[resGif].id[0]
@@ -609,7 +620,7 @@ function verifyDigicode(X,Y){
     var digiBox = document.getElementById("digiBox");
     var currentSceneId= getLastElem(getCookieValue("scene_number"));
     var digiSuccess = getDigicodeQSF(currentSceneId,"SUCCESS");
-    if (digiSuccess==undefined) {
+    if (digiSuccess==undefined) { // TODO : factoriser ? (isUndefined)
       digiSuccess=="";
     }
     var digiFailure = getDigicodeQSF(currentSceneId,"FAILURE");
@@ -752,7 +763,6 @@ function isOnBackZone(X,Y){
   let resTab = [];
   X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
   Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
-
   let len = backClickZones.length;
   for(let i=0;i<len;i++){
     if(X>=backClickZones[i].x1 && X<=backClickZones[i].x2 && Y>=backClickZones[i].y1 && Y<=backClickZones[i].y2){
@@ -837,10 +847,16 @@ function isOnObjectZone(X,Y){
 //                                      ***Texts***
 // ========================================================================================
 
+/**
+* TODO
+* @param {string} : TODO
+* @param {px} : TODO
+* @param {fontsize} : TODO
+* @returns : TODO
+*/
 function splitThroughPixel(string, px, fontsize=null) {
   let words = string.split(' ');
   let split = [];
-
   let div = document.createElement('div');
   div.style.cssText = 'white-space:nowrap; display:inline;';
 
@@ -866,6 +882,9 @@ function splitThroughPixel(string, px, fontsize=null) {
   return split;
 }
 
+/**
+* TODO
+*/
 function printOpeningText(){
   var text;
   var textBox;
@@ -877,6 +896,9 @@ function printOpeningText(){
   var textBoxBottom;
   var printSpeed = 60;
 
+  /**
+  * TODO
+  */
   function initTextBox() {
     textBox = document.getElementById("textbox");
     textBox.innerHTML="";
@@ -901,6 +923,9 @@ function printOpeningText(){
     textbox.appendChild(textBoxBottom);
   }
 
+  /**
+  * TODO
+  */
   function reset() {
     clearTimeout(timer);
     textBox = document.getElementById("textbox");
@@ -912,6 +937,9 @@ function printOpeningText(){
     }
   }
 
+  /**
+  * TODO
+  */
   function charByChar() {
     if (j<count) {
       if (j==0) {
@@ -946,6 +974,9 @@ function printOpeningText(){
     }
   }
 
+  /**
+  * TODO
+  */
   function instantPrinting(){
     clearTimeout(timer);
     if(i==-1){
@@ -961,6 +992,9 @@ function printOpeningText(){
     }
   }
 
+  /**
+  * TODO
+  */
   function resizeTextBox(){
     setWindowsValues();
     textBox.style.top = (windowsValues[5] + 0.841 * windowsValues[3] * windowsValues[6]) + "px";
@@ -1147,6 +1181,10 @@ function Puzzled(id){
       digiSpan.innerHTML = digiQuestion;
       digiBox.appendChild(digiSpan);
     }
+
+    /**
+    * TODO
+    */
     function deplaceDigiBox(){
       setWindowsValues();
       digiBox.style.left = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
@@ -1204,11 +1242,13 @@ function Puzzled(id){
         tempo[1] = parseFloat(tmpTab[2*i+1]);
         tabPos.push(tempo);
       }
-      console.log(tabPos);
-      console.log(tmpTab);
     }
     var i;
     var firstLoad = 0;
+
+    /**
+    * TODO
+    */
     function displayPuzzleImage() {
       setWindowsValues();
       let puzzleImagesZone = document.getElementById("puzzleImages");
@@ -1237,7 +1277,6 @@ function Puzzled(id){
           top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
           left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
         }
-        // C'est ici puzzle
         img.style.position = "absolute";
         img.style.top = top + "px";
         img.style.left = left + "px";
@@ -1278,6 +1317,10 @@ function Puzzled(id){
     var currentY;
     var pourcentX;
     var pourcentY;
+
+    /**
+    * TODO
+    */
     function storeImagePosition(){
       for (i = 0; i < puzzlePieces.length; i++) {
         let puzzleImagesZone = document.getElementById("puzzleImages");
@@ -1291,11 +1334,14 @@ function Puzzled(id){
     }
     window.addEventListener("touchend", storeImagePosition, false);
     window.addEventListener("mouseup", storeImagePosition, false);
-
     const transition = getTransitionByID(getTransitions(),puzzle[1]);
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
     window.addEventListener("mouseup", verify, false);
     window.addEventListener("touchend", verify, false);
+
+    /**
+    * TODO
+    */
     function verify(){
       currentOriginX = tabPos[0][0];
       currentOriginY = tabPos[0][1];
