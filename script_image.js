@@ -22,7 +22,16 @@
 
 // -------------------------------------- Corentin ----------------------------------------
 
-// Pour les gifs IsOnZone, retourner un resTab[] pour pouvoir obtenir l'ID du gif et ainsi pouvoir jouer le son ?
+  // Pour les gifs IsOnZone, retourner un resTab[] pour pouvoir obtenir l'ID du gif et ainsi pouvoir jouer le son ?
+
+  // len dans get...State... à commenter pour plus de clarté
+
+  //variables globales : tabPos? canPlayFade? fade? gifOK?
+
+  // addGifStateCookie : toAdd ? storePuzzleInCookie : topPos ? storePuzzleInCookie : sceneNB -> scene_number ?
+  // findNextUnskippedFrame : resGif ? splitThroughPixel ? reset ? deplaceDigiBox ? verify ?
+
+  //Note : changer le nom de handler
 
 // ---------------------------------------- Jean ------------------------------------------
 
@@ -61,7 +70,11 @@ window.addEventListener("click", verifyClick, false);
 window.addEventListener("resize", resize);
 $(window).on('load', handler);
 
-// TODO Emeric
+
+/**
+* Function to wait for everything to be loaded before showing the scene
+* (see $(window).on('load', handler);)
+*/
 function handler(){
   if(fade && gifOK == 0){
     document.body.classList.add("fadein");
@@ -146,9 +159,10 @@ function clickzone() {
 // ----------------------------------- Cookie manager -------------------------------------
 
 /**
-* Returns the index of cookie whose name is 'cname' in 'cook'
-* @param {string} cname
-* @param {*} cook
+* Returns the index of cookie whose name is 'cname' in cookie 'cook'
+* @param {String} cname
+* @param {Cookie} cook
+* @returns the index of the cookie if it exists, -1 otherwise
 */
 function getIndexName(cname, cook) {
   var toSearch = cname + "=";
@@ -174,7 +188,8 @@ function getIndexName(cname, cook) {
 
 /**
 * Get the value of the cookie whose name is 'cname'
-* @param {string} cname
+* @param {String} cname
+* @returns value of the cookie (as a String)
 */
 function getCookieValue(cname) {
   const cook = document.cookie;
@@ -196,7 +211,8 @@ function getCookieValue(cname) {
 /**
 * Return true if the 'scene_number' has been visited and false if not
 * Use the cookie visited_scenes
-* @param {number} sceneId
+* @param {Number} sceneId
+* @returns true if scene visited, false otherwise
 */
 function sceneVisited(sceneId){
   let visited = getCookieValue("visited_scenes");
@@ -221,7 +237,7 @@ function sceneVisited(sceneId){
 
 /**
 * Add the 'sceneId' scene to the cookie 'visited_scenes'
-* @param {number} sceneId
+* @param {Number} sceneId
 */
 function addCurrentSceneToVisited(sceneId){
   document.cookie = "visited_scenes=" + getCookieValue("visited_scenes") + "," + sceneId + ";";
@@ -285,10 +301,10 @@ function changeCursor(event) {
 /**
 * Fades in the screen and moves to a new scene
 * @param {Event} event (ignored)
-* @param {string} html path of page to go to
-* @param {number} id id of scene to go to
-* @param {boolean} back is a back transition
-* @param {boolean} fade need a fade transition ?
+* @param {String} html path of page to go to
+* @param {Number} id id of scene to go to
+* @param {Boolean} back is a back transition
+* @param {Boolean} fade need a fade transition ?
 */
 function changeScene(event, html, id, back, fade,) {
   event.preventDefault();
@@ -378,10 +394,10 @@ function getLastElem(lst){
 }
 
 /**
-* TODO
-* @param {scene_number} : TODO
-* @param {cook} : TODO
-* @returns : TODO
+* Gets the state of the objects (position,etc.) in a scene
+* @param {Number} scene_number : id of a scene
+* @param {String} scene_number : cookie containing the value of the different states (from every scenes)
+* @returns the part of the cookie corresponding to the scene scene_number
 */
 function getStateBySceneId(scene_number,cook){
   let len = cook.length-1;
@@ -406,9 +422,9 @@ function getStateBySceneId(scene_number,cook){
 }
 
 /**
-* TODO
-* @param {scene_number} : TODO
-* @param {cook} : TODO
+* Gets the index of the states of the objects (position,etc.) in a scene
+* @param {Number} scene_number : id of the scene
+* @param {String} cook : cookie containing the value of the different states (from every scenes)
 * @returns : TODO
 */
 function getIndexStateBySceneId(scene_number,cook){
@@ -434,10 +450,10 @@ function getIndexStateBySceneId(scene_number,cook){
 }
 
 /**
-* TODO
-* @param {state} : TODO
-* @param {scene_number} : TODO
-* @param {toAdd} : TODO
+* adds the state of a gif (current image) to the cookie containing all the state of the objects (from all scenes)
+* @param {String} state : current state of the gif
+* @param {Number} scene_number : id of the scene
+* @param {*} toAdd : value to add in the cookie
 */
 function addGifStateCookie(state,sceneNumber,toAdd){
   const indexes = getIndexStateBySceneId(sceneNumber,state);
@@ -446,22 +462,21 @@ function addGifStateCookie(state,sceneNumber,toAdd){
 }
 
 /**
-* TODO
-* @param {cook} : TODO
-* @param {topPos} : TODO
-* @param {sceneNb} : TODO
+* Adds the state of a puzzle (position) to the cookie containing all the state of the objects (from all scenes)
+* @param {String} cook : cookie containing the value of the different states (from every scenes)
+* @param {Number} topPos : TODO
+* @param {Number} sceneNb : id of the scene
 */
 function storePuzzleInCookie(cook,topPos,sceneNb){
-  console.log(topPos);
   let indexes =  getIndexStateBySceneId(sceneNb,cook);
   document.cookie = "puzzle_pos="+cook.substring(0,indexes[0])+sceneNb +":"+topPos+cook.substring(indexes[1])+"/";
 }
 
 /**
-* TODO
-* @param {resGif} : TODO
-* @param {currentFrame} : TODO
-* @returns : TODO
+* Function to search when to stop if the gif has a part where many images can be displayed in one click
+* @param {Number} resGif : TODO
+* @param {Number} currentFrame : Current image of the gif displayed
+* @returns : the next index where the gif should stop before a click
 */
 function findNextUnskippedFrame(resGif,currentFrame){
   let i = currentFrame + 1;
@@ -483,18 +498,19 @@ function findNextUnskippedFrame(resGif,currentFrame){
 
 // ------------------------------------- Skip to Scene -------------------------------------
 
-/** TODO
-*
-* @param {} sceneId
+/**
+* Adds the id of the scene in the cookie containing the scenes to skip (if solved + unique)
+* @param {Number} sceneId
 */
 function addSkip(sceneId){
   document.cookie = "skip=" + getCookieValue("skip") + "," + sceneId + ";";
 }
 
-/** TODO
-*
-* @param {} sceneId
-* @param {} back
+/**
+* Checks if the scene is in the cookie containing the scenes to skip (if solved + unique)
+* @param {Number} sceneId
+* @param {Boolean} back : true if the user clicked on a back click zone
+* @returns true if the scene should be skipped, false otherwise
 */
 function isInSkip(sceneId,back){
   let skip = getCookieValue("skip");
@@ -520,10 +536,10 @@ function isInSkip(sceneId,back){
   return false;
 }
 
-/** TODO
-*
-* @param {} sceneId
-* @param {} back
+/**
+* Returns the id of the scene to go if it is skipped
+* @param {Number} sceneId
+* @param {Boolean} back
 */
 function getNextSceneSkip(sceneId,back){
   if(!back){
@@ -539,9 +555,9 @@ function getNextSceneSkip(sceneId,back){
   return lst;
 }
 
-/** TODO
-*
-* @param {} sceneId
+/**
+* returns the transition starting from the sceneId
+* @param {Number} sceneId
 */
 function findTransitionBySceneId(sceneId){
   let transitions = getTransitions();
@@ -588,8 +604,8 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
 
 /**
 * Verifies if clicked on a ClickZone, and changes scene if so
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 */
 function verifyClickZone(X,Y){
   const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
@@ -607,8 +623,8 @@ function verifyClickZone(X,Y){
 
 /**
 * Verifies if clicked on a BackClickZone, and changes scene if so
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 */
 function verifyBackZone(X,Y){
   const resBackZone = isOnBackZone(X, Y); // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
@@ -623,8 +639,8 @@ function verifyBackZone(X,Y){
 
 /**
 * Verifies if clicked on a Digicode letter/validate, memorizes the letter or checks if the answer is correct
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 */
 function verifyDigicode(X,Y){
   const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
@@ -696,8 +712,8 @@ function verifyDigicode(X,Y){
 
 /**
 * Verifies if clicked on an object, and changes scene if so
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 */
 function verifyObject(X,Y){
   const resObject = isOnObjectZone(X, Y);
@@ -716,8 +732,8 @@ function verifyObject(X,Y){
 
 /**
 * Verifies if clicked on a gif, if so, changes the image of the gif, and if the combination is correct, changes scene
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 */
 function verifyGif(X,Y){
   const resGif = isOnGifZone(X,Y);
@@ -757,9 +773,8 @@ function verifyGif(X,Y){
 
 /**
 * Checks wether the point of coordinates (X,Y) is inside a click zone
-* @param {coordinate} X
-* @param {coordinate} Y
-*
+* @param {Coordinate} X
+* @param {Coordinate} Y
 * @returns resTab :  resTab[0] = id pointed scene; resTab[1] = clickzone id
 */
 function isOnZone(X,Y){
@@ -781,9 +796,8 @@ function isOnZone(X,Y){
 
 /**
 * Checks wether the point of coordinates (X,Y) is inside a back click zone
-* @param {coordinate} X
-* @param {coordinate} Y
-*
+* @param {Coordinate} X
+* @param {Coordinate} Y
 * @returns resTab : resTab[0] = is on back zone; resTab[1] = back click zone id
 */
 function isOnBackZone(X,Y){
@@ -805,8 +819,8 @@ function isOnBackZone(X,Y){
 
 /**
 * Checks wether the point of coordinates (X,Y) is inside a back click zone
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 *
 * @returns resTab : resTab[0] = value of text; resTab[1] = clickzone id
 */
@@ -829,8 +843,8 @@ function isOnDigicodeZone(X,Y){
 
 /**
 * Checks wether the point of coordinates (X,Y) is inside a back click zone
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 *
 * @returns index of the gif click zone if is on zone, else returns -1
 */
@@ -848,8 +862,8 @@ function isOnGifZone(X,Y){
 
 /**
 * Checks wether the point of coordinates (X,Y) is inside a back click zone
-* @param {coordinate} X
-* @param {coordinate} Y
+* @param {Coordinate} X
+* @param {Coordinate} Y
 *
 * @returns resTab : resTab[0] = id of the scene to load ; resTab[1] = clickzone id
 */
@@ -876,9 +890,9 @@ function isOnObjectZone(X,Y){
 
 /**
 * TODO
-* @param {string} : TODO
-* @param {px} : TODO
-* @param {fontsize} : TODO
+* @param {String} string
+* @param {Number} px : TODO
+* @param {Number} fontsize : TODO
 * @returns : TODO
 */
 function splitThroughPixel(string, px, fontsize=null) {
@@ -910,7 +924,7 @@ function splitThroughPixel(string, px, fontsize=null) {
 }
 
 /**
-* TODO
+* prints the text at the start of a scene
 */
 function printOpeningText(){
   var text;
@@ -924,7 +938,7 @@ function printOpeningText(){
   var printSpeed = 60;
 
   /**
-  * TODO
+  * Initializes the html code to display the textbox
   */
   function initTextBox() {
     textBox = document.getElementById("textbox");
@@ -965,7 +979,7 @@ function printOpeningText(){
   }
 
   /**
-  * TODO
+  * Prints the next character to display in the textbox
   */
   function charByChar() {
     if (j<count) {
@@ -1002,7 +1016,7 @@ function printOpeningText(){
   }
 
   /**
-  * TODO
+  * Prints all the text in the textbox in one time
   */
   function instantPrinting(){
     clearTimeout(timer);
@@ -1020,7 +1034,7 @@ function printOpeningText(){
   }
 
   /**
-  * TODO
+  * resizes the textbox to the correct values (after a resize of the window)
   */
   function resizeTextBox(){
     setWindowsValues();
@@ -1150,8 +1164,8 @@ function loadObjects(){
 
 /**
 * Display the object on the scene
-* @param {object} object
-* @param {transistion[]} transitions
+* @param {Object} object
+* @param {Transistion[]} transitions
 * @param {Int} scene
 */
 function displayObject(object,transitions,scene){
@@ -1274,7 +1288,7 @@ function Puzzled(id){
     var firstLoad = 0;
 
     /**
-    * TODO
+    * displays and sets all the elements of a puzzle
     */
     function displayPuzzleImage() {
       setWindowsValues();
@@ -1346,7 +1360,7 @@ function Puzzled(id){
     var pourcentY;
 
     /**
-    * TODO
+    * stores the position of all the puzzle pieces in the variable "puzzleImagesZone"
     */
     function storeImagePosition(){
       for (i = 0; i < puzzlePieces.length; i++) {

@@ -12,12 +12,11 @@ window.onload = loadJson();
 
 /**
  * Starts the scene when the button is pressed
- *
  * @param {event} event
  */
 function startScene(event){
   event.preventDefault();
-  //stack of the visited scene
+  // Stack of the visited scenes
   document.cookie = "scene_number=" + getSceneId(getInitialScene()) + ";";
   // Was a backclick zone activated
   document.cookie = "isback=" + false +";";
@@ -25,6 +24,7 @@ function startScene(event){
   document.cookie = "skip=" + 0 + ";";
   // List of already visited scene
   document.cookie = "visited_scenes=" + 0 + ";";
+  // State of a gif
   document.cookie = "gif_state=0/;";
   // Different position of the puzzle given a scene
   document.cookie = "puzzle_pos=0/;";

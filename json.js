@@ -28,6 +28,14 @@
 
   // Video json ? Que intro ? Intro.mp4 ? Vidéo scène finale ?
 
+  // voir NOTE de getElementId
+
+  // TODO pour le nettoyage : vérifier si des fonctions sont unused
+  // + vérifier si les commentaires sont compréhensibles pour tout le monde, ainsi que les noms de fonctions
+  // + éventuellement séparer en plusieurs fichiers
+
+  // getGifPointedScene, return 2000000 ?
+
 // ---------------------------------------- Jean ------------------------------------------
 
 // ========================================================================================
@@ -40,7 +48,7 @@
 const GameURL = "../Game/game.segment"
 
 /**
-* Holds the information of click zones in the game
+* Contains the informations of a clickzone (size, position, id of the next scene, id of the clickzone)
 */
 class ClickZone {
   constructor(x1, y1, x2, y2, id, clickzoneId) {
@@ -53,6 +61,9 @@ class ClickZone {
   }
 }
 
+/**
+* Contains the informations of a back clickzone (size, position, id of the back clickzone)
+*/
 class BackClickZone {
   constructor(x1, y1, x2, y2, bckclickId) {
     this.x1 = x1;
@@ -64,7 +75,7 @@ class BackClickZone {
 }
 
 /**
-* Global variable for containing game JSON
+* Global variable containing the JSON file of the game
 */
 var GameJson;
 
@@ -86,11 +97,9 @@ function initialise() {
 }
 
 /**
-* Loads 'segment.game' from file
+* Loads 'game.segment'
 */
 function loadJson() {
-  //GameURL = "./Game/game.segment";
-  //GameJson = jsonTest;
   return new Promise(function (resolve, reject) {
     $.ajax({
       type: 'GET',
@@ -112,7 +121,8 @@ function loadJson() {
 // ------------------------------------ Basic Getters -------------------------------------
 
 /**
-* Returns the part of the game JSON that holds the game's scenes
+* Returns all the scenes of the JSON file (GameJson)
+* @returns scene[]
 */
 function getScenes() {
   var json = GameJson;
@@ -121,8 +131,8 @@ function getScenes() {
 
 /**
 * Returns path of the background image from the scene object specified
-*
 * @param {Scene object} scene
+* @returns path
 */
 function getSceneImage(scene) {
   return "../Game/" + scene.Image;
@@ -132,6 +142,7 @@ function getSceneImage(scene) {
 /**
 * Returns the id of the specified scene
 * @param {Scene object} scene
+* @returns scene id
 */
 function getSceneId(scene) {
   return scene.id;
@@ -141,6 +152,7 @@ function getSceneId(scene) {
 * Note : may replace getSceneId
 * Returns the id of an element
 * @param {object} element
+* @returns element id
 */
 function getElementId(element) {
   return element.id;
@@ -148,8 +160,8 @@ function getElementId(element) {
 
 /**
 * Returns an array containing the current width and height of the scene
-*
 * @param {Scene object} scene
+* @returns tabular containing the width and height of the scene
 */
 function getImageSize(scene) {
   let image_size = [];
@@ -162,9 +174,9 @@ function getImageSize(scene) {
 
 /**
 * Returns the intial scene object from the game JSON
-*
 * NOTE : different from get_scene_by_id because there is a special type if
 * a scene is an initial scene (i.e. SceneType = 1; Final = 2; Other = 0)
+* @returns initial scene
 */
 function getInitialScene() {
   const scenes = getScenes();
@@ -178,8 +190,8 @@ function getInitialScene() {
 
 /**
 * Returns the click areas described in the game JSON for the scene object 'scene'
-*
 * @param {Scene object} scene
+* @returns click areas of the scene
 */
 function getClickAreas(scene) {
   return scene.ClickAreas;
@@ -187,8 +199,8 @@ function getClickAreas(scene) {
 
 /**
 * Returns the back click areas described in the game JSON for the scene object 'scene'
-*
 * @param {Scene object} scene
+* @returns back click areas of the scene
 */
 function getBackClickAreas(scene) {
   return scene.BackClickAreas;
@@ -196,8 +208,8 @@ function getBackClickAreas(scene) {
 
 /**
 * Returns the FIRST back click areas described in the game JSON for the scene object 'scene'
-*
 * @param {Scene object} scene
+* @returns first back click area of the scene
 */
 function getBackClickArea(scene){
   return scene.BackClickAreas[0];
@@ -205,8 +217,8 @@ function getBackClickArea(scene){
 
 /**
 * Returns the gifs described in the game JSON for the scene object 'scene'
-*
 * @param {Scene object} scene
+* @returns gifs of the scene
 */
 function getGifs(scene) {
   return scene.Gifs;
@@ -214,8 +226,8 @@ function getGifs(scene) {
 
 /**
 * Returns the objects described in the game JSON for the scene object 'scene'
-*
 * @param {Scene object} scene
+* @returns objects of the scene
 */
 function getObjects(scene) {
   return scene.Objects;
@@ -223,8 +235,8 @@ function getObjects(scene) {
 
 /**
 * Returns the textAreas described in the game JSON for the scene object 'scene'
-*
 * @param {Scene object} scene
+* @returns text areas of the scene
 */
 function getTexts(scene) {
   return scene.TextAreas;
@@ -232,8 +244,8 @@ function getTexts(scene) {
 
 /**
 * Returns all the transitions
-*
 * @param {Scene object} scene
+* @returns transition[]
 */
 function getTransitions() {
   var json = GameJson;
@@ -242,8 +254,8 @@ function getTransitions() {
 
 /**
 * Plays the sound described in the parsed part of JSON element
-*
 * @param {JSON object} element
+* @returns sound path
 */
 function getSoundPath(element) {
   return element.Sound.Path;
@@ -252,8 +264,8 @@ function getSoundPath(element) {
 /**
 * Searches for the ClickArea (in game JSON) whose path matches 'path'
 * and returns the scene id to which it points
-*
 * @param {string} clickAreaPath
+* @returns id of the next scene
 */
 function getPointedScene(clickAreaPath) {
   let scene = GameJson.Document.Process;
@@ -273,6 +285,11 @@ function getPointedScene(clickAreaPath) {
   return -1
 }
 
+/**
+* Returns a tabular of all the puzzle objects in the scene id
+* @param {Number} id
+* @returns Objects[]
+*/
 function getPuzzlepieces(id){
   const scene = getSceneByID(id);
   let tab = [];
@@ -284,6 +301,11 @@ function getPuzzlepieces(id){
   return tab;
 }
 
+/**
+* Returns the id of the scene to go after solving the gif of the scene id
+* @param {Number} id
+* @returns next scene id
+*/
 function getGifPointedScene(id){
   const scene = getSceneByID(id);
   let transitions = getTransitions();
@@ -302,8 +324,9 @@ function getGifPointedScene(id){
 }
 
 /**
-* Return the type of the puzzle present in the given scene
+* Return the type of the puzzle present in the given scene and the id of the nex transition
 * @param {Scene object} id
+* @returns tabular containing the type of the puzzle, and the id of the next transition
 */
 function whatPuzzleItIs(id){
   const scene = getSceneByID(id);
@@ -327,8 +350,8 @@ function whatPuzzleItIs(id){
 
 /**
 * Given a path (ex : "Game/Scene.14") return the last number (in the example 14)
-*
 * @param {String} str
+* @returns the last number of str (as an integer)
 */
 function getLastNumberTransition(str){
   let len = str.length;
@@ -338,6 +361,11 @@ function getLastNumberTransition(str){
   return parseInt(str.substring(len+1,str.length));
 }
 
+/**
+* Given a path (ex : "Game/Scene.14") return id of the scene if it is one (in the example : 14)
+* @param {String} path
+* @returns scene id, or -1 if not a scene path
+*/
 function getSceneIdFromPath(path){
   let len = path.length;
   let len2 = len;
@@ -365,7 +393,8 @@ function getSceneIdFromPath(path){
 
 /**
 * Returns the path to the background image of the scene whose id is 'id'
-* @param {number} id
+* @param {Number} id
+* @returns path of the background image as a String
 */
 function getSceneBackgroundById(id) {
   return getSceneImage(getSceneByID(id));
@@ -375,8 +404,7 @@ function getSceneBackgroundById(id) {
 * Returns the scene object whose identifier in the game JSON is 'id'
 * Throws an error if no scene matches the given id
 * Note : scene identifiers start at 0
-*
-* @param {number} id
+* @param {Number} id
 */
 function getSceneByID(id) {
   var json = GameJson;
@@ -391,21 +419,21 @@ function getSceneByID(id) {
 }
 
 /**
-* Returns the scene object whose identifier in the game JSON is 'id'
-*
-* @param {number} id
+* Returns the width and height of the scene background image
+* @param {Number} id
+* @returns tabular containing the width and height of the background image
 */
 function getImageSizeByID(id) {
   return getImageSize(getSceneByID(id));
 }
 
 /**
-* Returns array where each element contains the four positions of the
+* Returns an array where each element contains the four positions of the
 * four edges of the click zone and the id pointed by the click zone,
 * relatively to the image size.
-*
-* @param {number} id,
+* @param {Number} id,
 * @param {bool} back
+* @returns array of class ClickZone/BackClickZone
 */
 function getClickZonesByScenesId(id,back) {
   const scene = getSceneByID(id);
@@ -443,9 +471,9 @@ function getClickZonesByScenesId(id,back) {
 /**
 * Returns the ClickArea whose id is 'id'
 * Throws an error if not found
-*
-* @param {number} clickArea
-* @param {number} id
+* @param {Number} clickArea
+* @param {Number} id
+* @returns ClickArea
 */
 function getClickAreaByID(clickArea, id) {
   for (var i = 0; i < clickArea.length; i++) {
@@ -459,9 +487,9 @@ function getClickAreaByID(clickArea, id) {
 /**
 * Returns the BackClickArea whose id is 'id'
 * Throws an error if not found
-*
-* @param {number} backClickArea
-* @param {number} id
+* @param {Number} backClickArea
+* @param {Number} id*
+* @returns BackClickArea
 */
 function getBackClickAreaByID(backClickArea, id) {
   for (var i = 0; i < backClickArea.length; i++) {
@@ -475,9 +503,9 @@ function getBackClickAreaByID(backClickArea, id) {
 /**
 * Returns the gif whose id is 'id'
 * Throws an error if not found
-*
-* @param {number} gifs
-* @param {number} id
+* @param {Number} gifs
+* @param {Number} id
+* @returns Gif
 */
 function getGifByID(gifs, id) {
   for (var i = 0; i < gifs.length; i++) {
@@ -491,9 +519,9 @@ function getGifByID(gifs, id) {
 /**
 * Returns the object whose id is 'id'
 * Throws an error if not found
-*
-* @param {number} objects
-* @param {number} id
+* @param {Number} objects
+* @param {Number} id
+* @returns Object
 */
 function getObjectByID(objects, id) {
   for (var i = 0; i < objects.length; i++) {
@@ -507,9 +535,9 @@ function getObjectByID(objects, id) {
 /**
 * Returns the text whose id is 'id'
 * Throws an error if not found
-*
-* @param {number} texts
-* @param {number} id
+* @param {Number} texts
+* @param {Number} id
+* @returns text
 */
 function getTextByID(texts, id) {
   for (var i = 0; i < texts.length; i++) {
@@ -523,9 +551,10 @@ function getTextByID(texts, id) {
 /**
 * Returns the transitions whose id is 'id'
 * Throws an error if not found
+* @param {Number} transitions
+* @param {Number} id
+* @returns transition
 *
-* @param {number} transitions
-* @param {number} id
 */
 function getTransitionByID(transitions, id) {
   for (var i = 0; i < transitions.length; i++) {
@@ -539,10 +568,10 @@ function getTransitionByID(transitions, id) {
 /**
 * Find if we have a fade transition for the transition between source and
 * destination
-*
 * @param {object} transitions
-* @param {number} source
-* @param {number} destination
+* @param {Number} source
+* @param {Number} destination
+* @returns true if it is a fade transition, false otherwise
 */
 function findTransition(transitions, source, destination) {
   for (var i = 0; i < transitions.length; i++) {
@@ -557,8 +586,8 @@ function findTransition(transitions, source, destination) {
 /**
 * Returns the start text that has to be displayed at the
 * begining of the scene whose id is 'scene_id'
-*
-* @param {number} sceneId
+* @param {Number} sceneId
+* @returns text
 */
 function getSceneTextBySceneId(sceneId) {
   const scene = getSceneByID(sceneId);
@@ -569,8 +598,8 @@ function getSceneTextBySceneId(sceneId) {
 /**
 * Returns the text in the text areas of the
 * scene whose id is "sceneId"
-*
-* @param {number} sceneId
+* @param {Number} sceneId
+* @returns tabular of text areas
 */
 function getSceneTextAreasBySceneId(sceneId) {
   const scene = getSceneByID(sceneId);
@@ -582,11 +611,11 @@ function getSceneTextAreasBySceneId(sceneId) {
 }
 
 /**
-* Returns Question, Success answer or Failure answer of a digicode
-* in the scene whose id is 'sceneId'
-*
-* @param {number} sceneId
-* @param {number} text
+* Returns the text to show depending on whether it is a Question, a Success or a Failure
+* in the scene sceneId
+* @param {Number} sceneId
+* @param {Number} text
+* @returns string
 */
 function getDigicodeQSF(sceneId,text){
   var transitions = getTransitions();
@@ -622,11 +651,11 @@ function getDigicodeQSF(sceneId,text){
 // ========================================================================================
 
 /**
-* Plays a sound
-*
-* @param {string} soundPath the path of the sound to play
-* @param {bool} loop wether to loop the sound or not
-* @param {float} volume the volume at which the sound should be played
+* Plays the sound located at soundPath, at the volume "volume".
+* The sound loops if loop is true (false by default)
+* @param {string} soundPath
+* @param {bool} loop
+* @param {float} volume
 */
 function playSound(SoundPath,loop=false,volume=1.0){
   if(SoundPath == ""){
@@ -641,8 +670,7 @@ function playSound(SoundPath,loop=false,volume=1.0){
 }
 
 /**
-* Plays the sound of the current scene
-*
+* Plays the Ambience sound of the current scene
 */
 function playSoundScene(){
   let scene = getSceneByID(scene_number);
@@ -653,8 +681,8 @@ function playSoundScene(){
 }
 
 /**
-* Play sound associated with clickZoneId
-* @param {*} clickZoneId
+* Plays the sound associated to clickZoneId
+* @param {Number} clickZoneId
 */
 function playSoundClickZone(clickZoneId){
   var Scene = getSceneByID(scene_number);
@@ -665,8 +693,8 @@ function playSoundClickZone(clickZoneId){
 }
 
 /**
-* Play sound associated with backClickAreaId
-* @param {*} backClickAreaId
+* Plays the sound associated to backClickAreaId
+* @param {Number} backClickAreaId
 */
 function playSoundBackClickArea(backClickAreaId){
   var Scene = getSceneByID(scene_number);
@@ -677,8 +705,8 @@ function playSoundBackClickArea(backClickAreaId){
 }
 
 /**
-* Play sound associated with gifId
-* @param {*} gifId
+* Plays the sound associated with gifId
+* @param {Number} gifId
 */
 function playSoundGif(gifId){
   var Scene = getSceneByID(scene_number);
@@ -689,8 +717,8 @@ function playSoundGif(gifId){
 }
 
 /**
-* Play sound associated with objectId
-* @param {*} objectId
+* Plays the sound associated with objectId
+* @param {Number} objectId
 */
 function playSoundObject(objectId){
   var Scene = getSceneByID(scene_number);
@@ -701,8 +729,8 @@ function playSoundObject(objectId){
 }
 
 /**
-* Play sound associated with textId
-* @param {*} textId
+* Plays the sound associated to textId
+* @param {Number} textId
 */
 function playSoundText(textId){
   var Scene = getSceneByID(scene_number);
@@ -713,8 +741,8 @@ function playSoundText(textId){
 }
 
 /**
-* Play sound associated with transitionId
-* @param {*} transitionId
+* Plays the sound associated to transitionId
+* @param {Number} transitionId
 */
 function playSoundTransition(transitionId){
   var transitions = getTransitions();
@@ -729,9 +757,8 @@ function playSoundTransition(transitionId){
 
 /**
 * Returns true if the transition id is Unique
-* @param {*} transitionId
-*
-* @returns true id the transition id is unique, false otherwise
+* @param {Number} transitionId
+* @returns true if the transition is unique, false otherwise
 */
 function isTransitionUnique(transition){
   return transition.Unique;
@@ -741,11 +768,10 @@ function isTransitionUnique(transition){
 //                                      ***Video***
 // ========================================================================================
 /**
-* plays the video vidName with type "type" (video/mp4, video/ogg, etc.)
-* @param {vidName} path of the video (ex. "Intro.mp4")
-* @param {type} type of the video (ex. "video/mp4")
-*
-* @returns false if the video does not exist. Nothing otherwise
+* Plays the video located at vidName (ex : Video.mp4) with type "type" (video/mp4, video/ogg, etc.).
+* Throw an "fileError" if it does not exist
+* @param {String} vidName
+* @param {String} type
 */
 function playVideo(vidName, type)
 {
@@ -779,9 +805,8 @@ function resizeVideo(){
 //                                      ***Other***
 // ========================================================================================
 /**
-* Checks if a file exists
-* @param {url} url where the file should be
-*
+* Checks if a file located at url exists
+* @param {String} url
 * @returns true if the file exists, false otherwise
 */
 function fileExists(url)
@@ -792,6 +817,11 @@ function fileExists(url)
   return http.status!=404;
 }
 
+/**
+* Checks if the scene is final
+* @param {scene} scene
+* @returns true if the scene is final, false otherwise
+*/
 function isSceneFinal(scene){
   return scene.SceneType == 2;
 }
