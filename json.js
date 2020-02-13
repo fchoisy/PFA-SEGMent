@@ -767,6 +767,18 @@ function isTransitionUnique(transition){
 // ========================================================================================
 //                                      ***Video***
 // ========================================================================================
+
+/**
+* loads all the information to play a video in cookies, then go to the video scene
+* @param {String} vidName : Path to the video
+* @param {String} type : type of the video (video/mp4, video/ogg, etc.)
+*/
+function loadVideoScene(vidName,type){
+  document.cookie = "video_name=" + vidName + ";";
+  document.cookie = "video_type=" + type + ";";
+  document.location.href = 'video.html';
+}
+
 /**
 * Plays the video located at vidName (ex : Video.mp4) with type "type" (video/mp4, video/ogg, etc.).
 * Throw an "fileError" if it does not exist
@@ -824,4 +836,54 @@ function fileExists(url)
 */
 function isSceneFinal(scene){
   return scene.SceneType == 2;
+}
+
+// ----------------------------------- Cookie manager -------------------------------------
+
+/**
+* Returns the index of cookie whose name is 'cname' in cookie 'cook'
+* @param {String} cname
+* @param {Cookie} cook
+* @returns the index of the cookie if it exists, -1 otherwise
+*/
+function getIndexName(cname, cook) {
+  var toSearch = cname + "=";
+  var i = 0;
+  var begin_chaine = 0;
+  while (i < cook.length) {
+    if (i == begin_chaine && cook[i] == " ") {
+      begin_chaine += 1;
+    }
+    if (cook[i] == "=") {
+      var str = cook.substring(begin_chaine, i + 1);
+      if (toSearch == str) {
+        return i;
+      }
+    }
+    if (cook[i] == ";") {
+      begin_chaine = i + 1;
+    }
+    i += 1;
+  }
+  return -1;
+}
+
+/**
+* Get the value of the cookie whose name is 'cname'
+* @param {String} cname
+* @returns value of the cookie (as a String)
+*/
+function getCookieValue(cname) {
+  const cook = document.cookie;
+  var ind = getIndexName(cname, cook);
+  var i = ind;
+  var j = 0;
+  while (j == 0 && i < cook.length) {
+    i = i + 1;
+    if (cook[i] == ";") {
+      j = i;
+    }
+  }
+  j = i
+  return cook.substring(ind + 1, j);
 }

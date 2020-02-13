@@ -156,56 +156,6 @@ function clickzone() {
   backClickZones = getClickZonesByScenesId(scene_number,true);
 }
 
-// ----------------------------------- Cookie manager -------------------------------------
-
-/**
-* Returns the index of cookie whose name is 'cname' in cookie 'cook'
-* @param {String} cname
-* @param {Cookie} cook
-* @returns the index of the cookie if it exists, -1 otherwise
-*/
-function getIndexName(cname, cook) {
-  var toSearch = cname + "=";
-  var i = 0;
-  var begin_chaine = 0;
-  while (i < cook.length) {
-    if (i == begin_chaine && cook[i] == " ") {
-      begin_chaine += 1;
-    }
-    if (cook[i] == "=") {
-      var str = cook.substring(begin_chaine, i + 1);
-      if (toSearch == str) {
-        return i;
-      }
-    }
-    if (cook[i] == ";") {
-      begin_chaine = i + 1;
-    }
-    i += 1;
-  }
-  return -1;
-}
-
-/**
-* Get the value of the cookie whose name is 'cname'
-* @param {String} cname
-* @returns value of the cookie (as a String)
-*/
-function getCookieValue(cname) {
-  const cook = document.cookie;
-  var ind = getIndexName(cname, cook);
-  var i = ind;
-  var j = 0;
-  while (j == 0 && i < cook.length) {
-    i = i + 1;
-    if (cook[i] == ";") {
-      j = i;
-    }
-  }
-  j = i
-  return cook.substring(ind + 1, j);
-}
-
 // -------------------------------- Visited Scenes ------------------------------
 
 /**
@@ -595,7 +545,7 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
     verifyObject(X,Y);
     verifyGif(X,Y);
     if(isSceneFinal(getSceneByID(scene_number))){
-      document.location.href = 'outro.html';
+      loadVideoScene("Outro.mp4","video/mp4");
     }
   }
 }
