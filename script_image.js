@@ -113,11 +113,10 @@ function initialisation() {
   backgroundModifier();
   imgsize();
   setWindowsValues();
-  if(sceneVisited(scene_number)==false){
-    printOpeningText();
+  if(sceneVisited(scene_number)==false && sceneWithText(scene_number)){
     addCurrentSceneToVisited(scene_number);
-  }
-  else{
+    printOpeningText();
+  }else{
     canPlay = true;
   }
   clickzone();
@@ -838,6 +837,10 @@ function isOnObjectZone(X,Y){
 //                                      ***Texts***
 // ========================================================================================
 
+function sceneWithText(id){
+  return getSceneTextBySceneId(id)!="";
+}
+
 /**
 * TODO
 * @param {String} string
@@ -874,7 +877,7 @@ function splitThroughPixel(string, px, fontsize=null) {
 }
 
 /**
-* prints the text at the start of a scene
+* Prints the text at the start of a scene
 */
 function printOpeningText(){
   var text;
@@ -897,6 +900,7 @@ function printOpeningText(){
     textBox.style.borderStyle= "solid";
     textBox.style.borderColor = "black";
     textBox.style.color = "white";
+    textBox.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
     textBox.style.boxSizing = "border-box";
 
     textBoxTop = document.createElement("div");
@@ -921,7 +925,7 @@ function printOpeningText(){
     clearTimeout(timer);
     textBox = document.getElementById("textbox");
     text = getSceneTextBySceneId(scene_number);
-    split_text=splitThroughPixel(text,textBox.clientWidth,"60px");
+    split_text = splitThroughPixel(text, textBox.clientWidth, "60px");
     count = split_text.length;
     if(text.length == 0){
       canPlay = true;
@@ -974,7 +978,7 @@ function printOpeningText(){
       textBox.innerHTML = "";
       setTimeout(function(){ canPlay=true; }, printSpeed);
       textBox.style.height = 0;
-      textBox.style.top = 0;
+      textBox.style.border = 0;
     }
     else {
       textBoxTop.innerHTML=split_text[count-2];
@@ -984,15 +988,18 @@ function printOpeningText(){
   }
 
   /**
-  * resizes the textbox to the correct values (after a resize of the window)
+  * Resizes the textbox to the correct values (after a resize of the window)
   */
   function resizeTextBox(){
-    setWindowsValues();
-    textBox.style.top = (windowsValues[5] + 0.841 * windowsValues[3] * windowsValues[6]) + "px";
-    textBox.style.height = (0.16 * windowsValues[3] * windowsValues[6]) + "px";
-    textBoxTop.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
-    textBoxBottom.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    if(canPlay == false){
+      setWindowsValues();
+      textBox.style.top = (windowsValues[5] + 0.841 * windowsValues[3] * windowsValues[6]) + "px";
+      textBox.style.height = (0.16 * windowsValues[3] * windowsValues[6]) + "px";
+      textBoxTop.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+      textBoxBottom.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
+    }
   }
+
   initTextBox();
   reset();
   charByChar();
@@ -1007,7 +1014,6 @@ function printOpeningText(){
       setTimeout(charByChar, printSpeed);
     }, 250);
   });
-
 }
 
 // ========================================================================================
