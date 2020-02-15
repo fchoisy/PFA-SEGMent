@@ -77,12 +77,15 @@ $(window).on('load', handler);
 */
 function handler(){
   if(fade && gifOK == 0){
-    document.body.classList.add("fadein");
-    setTimeout(function(){document.body.classList.remove("fadein");
+    playSoundScene();
     document.body.style.opacity = 1;
-    canPlayFade = true;}, 1500)
+    document.body.classList.add("fadein");
+    setTimeout(function(){
+    document.body.classList.remove("fadein");
+    canPlayFade = true;}, 1500);
   }
   else if(gifOK == 0){
+    playSoundScene();
     document.body.style.opacity = 1;
     canPlayFade = true;
   }
@@ -103,16 +106,11 @@ function initialisation() {
   let isBack = getCookieValue("isback"); // boolean that say if we came to this scene with a backClick
   scene_number = getLastElem(getCookieValue("scene_number")); // update the scene number
   // Fade transition
-  let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
+  fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
   if(isBack.substring(0, 4) == "true"){
     fade = findTransition(getTransitions(), scene_number, isBack.substring(4,5))
   }
-  if(fade){
-    document.body.classList.add("fadein");
-  }
-  setTimeout(function(){document.body.classList.remove("fadein")}, 1500);
   backgroundModifier();
-  playSoundScene();
   imgsize();
   setWindowsValues();
   if(sceneVisited(scene_number)==false){
@@ -1387,6 +1385,7 @@ function Puzzled(id){
         len++;
       }
     }
+    console.log("salut");
     gifOK = gifs.length;
     for(let i=0;i<gifs.length;i++){
       currentGif = gifs[i];
