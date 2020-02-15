@@ -99,6 +99,68 @@
       100% {transform: translate3d(-100%,0,0);}
     }
 
+    /* Blink digicode chen fail */
+    .blinkDigicode{
+      margin: auto;
+      z-index: 10;
+      border: 5px double DarkBlue;
+      text-align: center;
+      background-color: Red;
+      overflow: hidden;
+      align-content: center;
+      box-shadow: 0 0 .5em #CCC,inset 0 0 1em .25em #CCC;
+      -webkit-animation-name:blink-digicode;
+      -webkit-animation-duration:1.5s;
+      -moz-animation-name:blink-digicode;
+      -moz-animation-duration:1.5s;
+      -o-animation-name:blink-digicode;
+      -o-animation-duration:1.5s;
+      -ms-animation-name:blink-digicode;
+      -ms-animation-duration:1.5s;
+    }
+
+    @keyframes blink-digicode {
+      0% {background-color: CornflowerBlue;}
+      50% {background-color: Red;}
+      100% {background-color: CornflowerBlue;}
+    }
+
+    @-webkit-keyframes blink-digicode {
+      0% {background-color: CornflowerBlue;}
+      50% {background-color: Red;}
+      100% {background-color: CornflowerBlue;}
+    }
+
+    @-moz-keyframes blink-digicode {
+      0% {background-color: CornflowerBlue;}
+      50% {background-color: Red;}
+      100% {background-color: CornflowerBlue;}
+    }
+
+    @-o-keyframes blink-digicode {
+      0% {background-color: CornflowerBlue;}
+      50% {background-color: Red;}
+      100% {background-color: CornflowerBlue;}
+    }
+
+    @-ms-keyframes blink-digicode {
+      0% {background-color: Blue;}
+      50% {background-color: Red;}
+      100% {background-color: Blue;}
+    }
+
+    .blinkDigicode > :first-child  {
+      display: inline-block;                /* modèle de boîte en ligne */
+      padding-right: 2em;                   /* un peu d'espace pour la transition */
+      padding-left: 100%;                   /* placement à droite du conteneur */
+      white-space: nowrap;                  /* pas de passage à la ligne */
+      animation: defilement-digicode 15s infinite linear;
+    	-webkit-animation:defilement-digicode 15s infinite linear;
+    	-moz-animation:defilement-digicode 15s infinite linear;
+    	-o-animation:defilement-digicode 15s infinite linear;
+    	-ms-animation:defilement-digicode 15s infinite linear;
+    }
+
     /* textBox*/
     .defileTexte{
       margin: auto;

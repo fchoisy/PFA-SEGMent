@@ -625,7 +625,10 @@ function verifyDigicode(X,Y){
         text = digiSuccess;
       }
       else{
+        // TODO Mettre le clignotement ici
         text = digiFailure;
+        digiBox.classList.add("blinkDigicode");
+        setTimeout(function(){digiBox.classList.remove("blinkDigicode");}, 1500);
       }
       clickValidate = false ;
       const split_texting = splitThroughPixel(text,digiBox.clientWidth,digiBox.clientHeight+"px")
