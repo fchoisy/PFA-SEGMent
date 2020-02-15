@@ -263,9 +263,9 @@ function changeScene(event, html, id, back, fade,) {
     let toAdd = "";
     toAdd = toAdd + scene_number + ":";
     for(let i=0;i<gifOnScene.length-1;i++){
-      toAdd += gifOnScene[i][0].get_current_frame() +",";
+      toAdd += gifOnScene[i].get_current_frame() +",";
     }
-    toAdd += gifOnScene[gifOnScene.length-1][0].get_current_frame() + "/";
+    toAdd += gifOnScene[gifOnScene.length-1].get_current_frame() + "/";
     addGifStateCookie(state,scene_number,toAdd);
   }
   if(isPuzzleScene){
@@ -686,24 +686,24 @@ function verifyObject(X,Y){
 */
 function verifyGif(X,Y){
   const resGif = isOnGifZone(X,Y);
-  if(resGif!=-1){
-    let currentFrame = gifOnScene[resGif][0].get_current_frame();
-    playSoundGif(gifOnScene[resGif][1]);
+  if(resGif!=-1 && !gifOnScene[resGif].get_playing()){
+    let currentFrame = gifOnScene[resGif].get_current_frame();
+    playSoundGif(gifClickZone[resGif].clickzoneId);
     let first = true;
     while(first && canPlayGif){
       let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
       if(gifClickZone[resGif].id[2][newFrame] == 0){
         let nextScene = findNextUnskippedFrame(resGif,currentFrame);
         if(currentFrame == nextScene){
-          gifOnScene[resGif][0].move_to(newFrame);
+          gifOnScene[resGif].move_to(newFrame);
         }
-        gifOnScene[resGif][0].play_until(nextScene);
+        gifOnScene[resGif].play_until(nextScene);
       }
       else{
-        gifOnScene[resGif][0].pause();
-        gifOnScene[resGif][0].move_to(newFrame);
+        gifOnScene[resGif].pause();
+        gifOnScene[resGif].move_to(newFrame);
       }
-      currentFrame = gifOnScene[resGif][0].get_current_frame();
+      currentFrame = gifOnScene[resGif].get_current_frame();
       first = false;
     }
     if(areGifWellSet()){
@@ -1073,7 +1073,7 @@ function resizeGif(){
     let left = windowsValues[4] + gifClickZone[i].x1 * windowsValues[2] * windowsValues[6];
     let width = windowsValues[2] * windowsValues[6] * (gifClickZone[i].x2-gifClickZone[i].x1);
     let height = windowsValues[3] * windowsValues[6] * (gifClickZone[i].y2-gifClickZone[i].y1);
-    gifOnScene[i][0].resize(width,height,left,top);
+    gifOnScene[i].resize(width,height,left,top);
   }
 }
 
@@ -1085,7 +1085,7 @@ function areGifWellSet(){
   let i = 0 ;
   const len = gifClickZone.length;
   while(i<len && bool){
-    if(gifClickZone[i].id[2][gifOnScene[i][0].get_current_frame()] != 2){
+    if(gifClickZone[i].id[2][gifOnScene[i].get_current_frame()] != 2){
       bool = false;
     }
     i++;
@@ -1405,14 +1405,14 @@ function Puzzled(id){
       let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
       document.getElementById("gifImages").appendChild(img);
       let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height});
-      let pack=[gifl,currentGif.id]; //Gif info + id for gif sound
       var fram =0;
       if(alreadyVisited){
         fram = stateArray[i];
       }
       gifl.load(fram,function(){
-        gifOnScene[i]=pack;
+        gifOnScene[i]=gifl;
         gifOK --;
+        gifl.pause();
         if(gifOK == 0){
           handler();
         }
