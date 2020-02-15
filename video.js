@@ -12,7 +12,8 @@ document.getElementById("video").addEventListener('pause', function(){ //Disable
   document.getElementById("video").play()
 });
 
-document.onkeydown = function(event){
+window.onkeydown = function(event){
+  event.preventDefault();
   if(event.keyCode == 27){ //27 = ESC key
     console.log("Esc pressed");
     skip();
