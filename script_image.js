@@ -589,7 +589,7 @@ function backgroundModifier() {
       playSoundBackClickArea(resBackZone[1]);
       let passedScene = getLastElem(getCookieValue("scene_number"));
       let sId = -1;
-      fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
+      let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
       changeScene(event, "ping.html", sId, true, fade);
     }
   }
