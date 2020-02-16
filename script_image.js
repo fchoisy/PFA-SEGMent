@@ -58,8 +58,9 @@ let canPlayGif = true; // TODO Emeric
 let isPuzzleScene = false; // boolean that say if the current scene contain a puzzle
 let tabPos = []; // TODO Emeric
 let canPlayFade = false;
-let fade = false;
+let fading = false;
 let gifOK = 0;
+let audioSoundScene =  undefined;
 // ========================================================================================
 //                               ***Signals***
 // ========================================================================================
@@ -76,8 +77,8 @@ $(window).on('load', handler);
 * (see $(window).on('load', handler);)
 */
 function handler(){
-  if(fade && gifOK == 0){
-    playSoundScene();
+  if(fading && gifOK == 0){
+    playSoundScene(audioSoundScene);
     document.body.style.opacity = 1;
     document.body.classList.add("fadein");
     setTimeout(function(){
@@ -85,7 +86,7 @@ function handler(){
     canPlayFade = true;}, 1500);
   }
   else if(gifOK == 0){
-    playSoundScene();
+    playSoundScene(audioSoundScene);
     document.body.style.opacity = 1;
     canPlayFade = true;
   }
@@ -106,13 +107,14 @@ function initialisation() {
   let isBack = getCookieValue("isback"); // boolean that say if we came to this scene with a backClick
   scene_number = getLastElem(getCookieValue("scene_number")); // update the scene number
   // Fade transition
-  fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
+  fading = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
   if(isBack.substring(0, 4) == "true"){
-    fade = findTransition(getTransitions(), scene_number, isBack.substring(4,5))
+    fading = findTransition(getTransitions(), scene_number, isBack.substring(4,5))
   }
   backgroundModifier();
   imgsize();
   setWindowsValues();
+  loadSoundScene(); // TODO
   if(sceneVisited(scene_number)==false){
     printOpeningText();
     addCurrentSceneToVisited(scene_number);
@@ -123,6 +125,12 @@ function initialisation() {
   clickzone();
   Puzzled(scene_number);
   loadObjects();
+}
+
+function loadSoundScene(){
+    let scene = getSceneByID(scene_number);
+    let SoundPath = scene.Ambience.Path;
+    audioSoundScene = new Audio('Game/' + SoundPath);
 }
 
 /**
@@ -581,7 +589,7 @@ function verifyBackZone(X,Y){
     playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = -1;
-    fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
+    let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
     changeScene(event, "ping.html", sId, true, fade);
   }
 }
@@ -653,7 +661,7 @@ function verifyDigicode(X,Y){
     }
     document.cookie = "isback=" + false +";";
     playSoundTransition(findTransitionBySceneId(scene_number).id);
-    let fade  = findTransition(getTransitions(), scene_number, sId).
+    let fade  = findTransition(getTransitions(), scene_number, sId);
     changeScene(event, "ping.html", sId, false, fade);
   }
 }

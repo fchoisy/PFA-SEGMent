@@ -657,12 +657,17 @@ function getDigicodeQSF(sceneId,text){
 * @param {bool} loop
 * @param {float} volume
 */
-function playSound(SoundPath,loop=false,volume=1.0){
+function playSound(SoundPath,loop=false,volume=1.0,audioSound=undefined){
   if(SoundPath == ""){
     console.log("Sound not defined !");
   }
   else{
-    var audio = new Audio('Game/' + SoundPath);
+    var audio
+    if(audioSound === undefined){
+        audio = new Audio('Game/' + SoundPath);
+    }else{
+        audio = audioSound;
+    }
     audio.loop = loop;
     audio.volume = volume;
     audio.play();
@@ -672,12 +677,12 @@ function playSound(SoundPath,loop=false,volume=1.0){
 /**
 * Plays the Ambience sound of the current scene
 */
-function playSoundScene(){
+function playSoundScene(audio=undefined){
   let scene = getSceneByID(scene_number);
   let SoundPath = scene.Ambience.Path;
   let loop = scene.Ambience.Repeat;
   let volume = scene.Ambience.Volume;
-  playSound(SoundPath,loop,volume);
+  playSound(SoundPath,loop,volume,audio);
 }
 
 /**
