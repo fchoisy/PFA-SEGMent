@@ -115,9 +115,9 @@ function initialisation() {
   imgsize();
   setWindowsValues();
   loadSoundScene(); // TODO
-  if(sceneVisited(scene_number)==false){
-    printOpeningText();
+  if(sceneVisited(scene_number)==false && sceneWithText(scene_number)){
     addCurrentSceneToVisited(scene_number);
+    printOpeningText();
   }
   else{
     canPlay = true;
