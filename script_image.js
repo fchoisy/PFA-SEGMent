@@ -1261,31 +1261,50 @@ function handler(){
         puzzleImagesZone.height = windowsValues[1];
         var top;
         var left;
-        for (i = 0; i < puzzlePieces.length; i++) {
-          var img;
-          img = document.createElement("IMG");
-          img.id = "draggable" + i;
-          img.classList.add("draggable");
-          if (firstLoad  != puzzlePieces.length-1 && !alreadyVisited) {
-            top = Math.floor(Math.random() * (101-puzzlePieces[i].Size[1]*windowsValues[2]/windowsValues[3]*100)) / 100 * windowsValues[3] * windowsValues[6];
-            left = Math.floor(Math.random() * (101-puzzlePieces[i].Size[0]*100)) / 100 * windowsValues[2] * windowsValues[6];
-            firstLoad = i;
-            let posImg = [left/(windowsValues[2] * windowsValues[6]),top/(windowsValues[3] * windowsValues[6])];
-            tabPos.push(posImg);
-          }else{
-            top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
-            left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
-          }
-          img.style.position = "absolute";
-          img.style.top = top + "px";
-          img.style.left = left + "px";
-          img.width = puzzlePieces[i].Size[0] * windowsValues[2] * windowsValues[6];
-          img.height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
-          img.src = "Game/" + puzzlePieces[i].Image;
-          puzzleImagesZone.appendChild(img);
-          $(".draggable").draggable({containment: "parent", stack: ".draggable"});
-        }
+	var piece = [];
+        var ctx = [];
+        var img =[];
+        for (var i = 0; i < puzzlePieces.length; i++) {
+          piece[i] = document.createElement("canvas");
+            piece[i].style.position = "absolute";
+            piece[i].width = puzzlePieces[i].Size[0] * windowsValues[2] * windowsValues[6];
+            piece[i].height = puzzlePieces[i].Size[1] * windowsValues[2] * windowsValues[6];
+            piece[i].id = "draggable" + i;
+            piece[i].classList.add("draggable");
+	    
+            if (firstLoad  != puzzlePieces.length-1 && !alreadyVisited) {
+		top = Math.floor(Math.random() * (101-puzzlePieces[i].Size[1]*windowsValues[2]/windowsValues[3]*100)) / 100 * windowsValues[3] * windowsValues[6];
+		left = Math.floor(Math.random() * (101-puzzlePieces[i].Size[0]*100)) / 100 * windowsValues[2] * windowsValues[6];
+		console.log(left);
+		firstLoad = i;
+		let posImg = [left/(windowsValues[2] * windowsValues[6]),top/(windowsValues[3] * windowsValues[6])];
+		tabPos.push(posImg);
+            }else{
+		top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
+		left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
+            }
+	    
+            piece[i].style.top = top + "px";
+            piece[i].style.left = left + "px";
+            puzzleImagesZone.appendChild(piece[i]);
+            ctx[i]=piece[i].getContext("2d");
 
+	    $(".draggable").draggable({containment: "parent", stack: ".draggable"});
+	}			  
+        console.log("ctx",ctx);
+        i=0;
+        ctx.forEach(function(item){
+            img[i] = new Image();
+            img[i].onload =  function(i) {
+            item.drawImage(img[i], 0, 0, piece[i].width, piece[i].height);
+		console.log("Object drawn !" + i)
+            }.bind(this,i);
+          img[i].src = "Game/" + puzzlePieces[i].Image;
+            i++;
+            
+        });
+
+        
         diffX=[];
         diffY=[];
         var delta = 0.05;
