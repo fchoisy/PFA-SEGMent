@@ -777,10 +777,12 @@ function isTransitionUnique(transition){
 * loads all the information to play a video in cookies, then go to the video scene
 * @param {String} vidName : Path to the video
 * @param {String} type : type of the video (video/mp4, video/ogg, etc.)
+* @param {String} sceneAfter : scene to go after quitting the video
 */
-function loadVideoScene(vidName,type){
+function loadVideoScene(vidName,type,sceneAfter){
   document.cookie = "video_name=" + vidName + ";";
   document.cookie = "video_type=" + type + ";";
+  document.cookie = "scene_after=" + sceneAfter + ";";
   document.location.href = 'video.html';
 }
 

@@ -551,7 +551,7 @@ function backgroundModifier() {
       verifyObject(X,Y);
       verifyGif(X,Y);
       if(isSceneFinal(getSceneByID(scene_number))){
-        loadVideoScene("Outro.mp4","video/mp4");
+        loadVideoScene("Outro.mp4","video/mp4","index.html");
       }
     }
   }

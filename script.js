@@ -28,5 +28,5 @@ function startScene(event){
   document.cookie = "gif_state=0/;";
   // Different position of the puzzle given a scene
   document.cookie = "puzzle_pos=0/;";
-  loadVideoScene("Intro.mp4","video/mp4");
+  loadVideoScene("Intro.mp4","video/mp4","ping.html");
 };

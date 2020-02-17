@@ -40,5 +40,6 @@ function playIntro(){
 * Skips the video and goes to ping.html
 */
 function skip(){
-  document.location.href = 'ping.html';
+  const sceneAfter = getCookieValue("scene_after");
+  document.location.href = sceneAfter;
 }
