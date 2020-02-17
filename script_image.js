@@ -936,7 +936,7 @@ function backgroundModifier() {
       clearTimeout(timer);
       textBox = document.getElementById("textbox");
       text = getSceneTextBySceneId(scene_number);
-      split_text = splitThroughPixel(text, textBox.clientWidth, "60px");
+      split_text = splitThroughPixel(text, textBox.clientWidth, textBoxTop.clientHeight+"px");
       count = split_text.length;
       if(text.length == 0){
         canPlay = true;
@@ -988,12 +988,16 @@ function backgroundModifier() {
       if(i==-1){
         textBox.innerHTML = "";
         setTimeout(function(){ canPlay=true; }, printSpeed);
-        textBox.style.height = 0;
-        textBox.style.border = 0;
+        textBox.style.display = 'none';
       }
       else {
-        textBoxTop.innerHTML=split_text[count-2];
-        textBoxBottom.innerHTML=split_text[count-1];
+        if (count == 1) {
+          textBoxTop.innerHTML=split_text[count-1];
+          textBoxBottom.innerHTML="";
+        }else {
+          textBoxTop.innerHTML=split_text[count-2];
+          textBoxBottom.innerHTML=split_text[count-1];
+        }
         i=-1;
       }
     }
@@ -1006,6 +1010,8 @@ function backgroundModifier() {
         setWindowsValues();
         textBox.style.top = (windowsValues[5] + 0.841 * windowsValues[3] * windowsValues[6]) + "px";
         textBox.style.height = (0.16 * windowsValues[3] * windowsValues[6]) + "px";
+        textBox.style.left = windowsValues[4] + "px";
+        textBox.style.right = windowsValues[4] + "px";
         textBoxTop.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
         textBoxBottom.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
       }
