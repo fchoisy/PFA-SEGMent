@@ -663,7 +663,7 @@ function backgroundModifier() {
       }
       document.cookie = "isback=" + false +";";
       playSoundTransition(findTransitionBySceneId(scene_number).id);
-      let fade  = findTransition(getTransitions(), scene_number, sId).
+      let fade  = findTransition(getTransitions(), scene_number, sId);
       changeScene(event, "ping.html", sId, false, fade);
     }
   }
