@@ -540,13 +540,13 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
   if(canPlay && canPlayFade){
     const X = event.clientX;
     const Y = event.clientY;
-    verifyClickZone(X,Y);
-    verifyBackZone(X,Y);
-    verifyDigicode(X,Y);
-    verifyObject(X,Y);
-    verifyGif(X,Y);
+    verifyClickZone(X, Y);
+    verifyBackZone(X, Y);
+    verifyDigicode(X, Y);
+    verifyObject(X, Y);
+    verifyGif(X, Y);
     if(isSceneFinal(getSceneByID(scene_number))){
-      loadVideoScene("Outro.mp4","video/mp4","index.html");
+      loadVideoScene("Outro.mp4", "video/mp4", "index.html");
     }
   }
 }
@@ -558,19 +558,18 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
 * @param {Coordinate} X
 * @param {Coordinate} Y
 */
-function verifyClickZone(X,Y){
-  const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
-  if (resClickZone[0] >= 0) {
+function verifyClickZone(X, Y){
+  const resClickZone = isOnZone(X, Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
+  if(resClickZone[0] >= 0){
     playSoundClickZone(resClickZone[1]);
     if(isTransitionUnique(findTransitionBySceneId(scene_number))){
       addSkip(scene_number);
     }
-    document.cookie = "isback=" + false +";";
+    document.cookie = "isback=" + false + ";";
     playSoundTransition(findTransitionBySceneId(scene_number).id);
     let fade = findTransition(getTransitions(), scene_number, resClickZone[0])
     changeScene(event, "ping.html", resClickZone[0], false, fade);
   }
-
 }
 
 /**
@@ -578,13 +577,13 @@ function verifyClickZone(X,Y){
 * @param {Coordinate} X
 * @param {Coordinate} Y
 */
-function verifyBackZone(X,Y){
+function verifyBackZone(X, Y){
   const resBackZone = isOnBackZone(X, Y); // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
   if(resBackZone[0]){
     playSoundBackClickArea(resBackZone[1]);
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = -1;
-    let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number)
+    let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
     changeScene(event, "ping.html", sId, true, fade);
   }
 }
@@ -594,59 +593,54 @@ function verifyBackZone(X,Y){
 * @param {Coordinate} X
 * @param {Coordinate} Y
 */
-function verifyDigicode(X,Y){
+function verifyDigicode(X, Y){
   const resDigi = isOnDigicodeZone(X, Y); // NOTE : resTab[0] = value of text; resTab[1] = clickzone id
   let bool = false;
   if(resDigi[0] != -1){
-    var digiBox = document.getElementById("digiBox");
-    var currentSceneId= getLastElem(getCookieValue("scene_number"));
-    var digiSuccess = getDigicodeQSF(currentSceneId,"SUCCESS");
+    let digiBox = document.getElementById("digiBox");
+    let currentSceneId= getLastElem(getCookieValue("scene_number"));
+    let digiSuccess = getDigicodeQSF(currentSceneId,"SUCCESS");
     digiBox.classList.remove("blinkDigicode");
-    if (digiSuccess==undefined) { // TODO : factoriser ? (isUndefined)
-      digiSuccess=="";
+    if(digiSuccess == undefined){ // TODO : factoriser ? (isUndefined)
+      digiSuccess == "";
     }
-    var digiFailure = getDigicodeQSF(currentSceneId,"FAILURE");
-    if (digiFailure==undefined) {
-      digiFailure=="";
+    let digiFailure = getDigicodeQSF(currentSceneId, "FAILURE");
+    if(digiFailure == undefined){
+      digiFailure == "";
     }
-    var clickValidate = false;
+    let clickValidate = false;
     playSoundText(resDigi[1]);
-    if(resDigi[0][0] =="Validate"){
+    if(resDigi[0][0] == "Validate"){
       clickValidate = true;
       bool = validatingBuffer();
-    }
-    else if(resDigi[0][0] == "Delete"){
+    }else if(resDigi[0][0] == "Delete"){
       deletingBuffer();
-    }
-    else if(resDigi[0][0] == "Replace"){
+    }else if(resDigi[0][0] == "Replace"){
       changingBuffer(resDigi[0][1]);
-    }
-    else{
+    }else{
       addingBuffer(resDigi[0][1]);
     }
     if(clickValidate){
       let text;
       if(bool){
         text = digiSuccess;
-      }
-      else{
+      }else{
         text = digiFailure;
         digiBox.classList.add("blinkDigicode");
       }
       clickValidate = false ;
-      const split_texting = splitThroughPixel(text,digiBox.clientWidth,digiBox.clientHeight+"px")
+      const split_texting = splitThroughPixel(text, digiBox.clientWidth, digiBox.clientHeight + "px")
       if(split_texting.length > 1){
         digiBox.innerHTML = '';
         digiBox.classList.add("defileDigicode");
-        var digiSpan = document.createElement("div");
+        let digiSpan = document.createElement("div");
         digiSpan.innerHTML = text;
         digiBox.appendChild(digiSpan);
-      }
-      else{
+      }else{
         digiBox.innerHTML = text;
       }
-    }else {
-      digiBox.innerHTML=buffer;
+    }else{
+      digiBox.innerHTML = buffer;
     }
   }
   if(bool){
@@ -656,20 +650,19 @@ function verifyDigicode(X,Y){
     if(isTransitionUnique(findTransitionBySceneId(scene_number))){
       addSkip(scene_number);
     }
-    document.cookie = "isback=" + false +";";
+    document.cookie = "isback=" + false + ";";
     playSoundTransition(findTransitionBySceneId(scene_number).id);
-    let fade  = findTransition(getTransitions(), scene_number, sId);
+    let fade = findTransition(getTransitions(), scene_number, sId);
     changeScene(event, "ping.html", sId, false, fade);
   }
 }
-
 
 /**
 * Verifies if clicked on an object, and changes scene if so
 * @param {Coordinate} X
 * @param {Coordinate} Y
 */
-function verifyObject(X,Y){
+function verifyObject(X, Y){
   const resObject = isOnObjectZone(X, Y);
   if(resObject[0] != -1){
     playSoundObject(resObject[1]);
@@ -677,7 +670,7 @@ function verifyObject(X,Y){
     if(isTransitionUnique(findTransitionBySceneId(scene_number))){
       addSkip(scene_number);
     }
-    document.cookie = "isback=" + false +";";
+    document.cookie = "isback=" + false + ";";
     playSoundTransition(findTransitionBySceneId(scene_number).id);
     let fade = findTransition(getTransitions(), scene_number, sId);
     changeScene(event, "ping.html", sId, false, fade);
@@ -689,16 +682,16 @@ function verifyObject(X,Y){
 * @param {Coordinate} X
 * @param {Coordinate} Y
 */
-function verifyGif(X,Y){
-  const resGif = isOnGifZone(X,Y);
-  if(resGif!=-1 && !gifOnScene[resGif].get_playing()){
+function verifyGif(X, Y){
+  const resGif = isOnGifZone(X, Y);
+  if(resGif != -1 && !gifOnScene[resGif].get_playing()){
     let currentFrame = gifOnScene[resGif].get_current_frame();
     playSoundGif(gifClickZone[resGif].clickzoneId);
     let first = true;
     while(first && canPlayGif){
       let newFrame = (currentFrame + 1) % gifClickZone[resGif].id[0];
       if(gifClickZone[resGif].id[2][newFrame] == 0){
-        let nextScene = findNextUnskippedFrame(resGif,currentFrame);
+        let nextScene = findNextUnskippedFrame(resGif, currentFrame);
         if(currentFrame == nextScene){
           gifOnScene[resGif].move_to(newFrame);
         }
@@ -716,10 +709,10 @@ function verifyGif(X,Y){
       if(isTransitionUnique(findTransitionBySceneId(scene_number))){
         addSkip(scene_number);
       }
-      document.cookie = "isback=" + false +";";
+      document.cookie = "isback=" + false + ";";
       playSoundTransition(findTransitionBySceneId(scene_number).id);
       let fade = findTransition(getTransitions(), scene_number, gifClickZone[resGif].id[3]);
-      changeScene(event, "ping.html", gifClickZone[resGif].id[3] , false, fade);
+      changeScene(event, "ping.html", gifClickZone[resGif].id[3], false, fade);
     }
   }
 }
@@ -732,13 +725,13 @@ function verifyGif(X,Y){
 * @param {Coordinate} Y
 * @returns resTab :  resTab[0] = id pointed scene; resTab[1] = clickzone id
 */
-function isOnZone(X,Y){
-  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
-  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+function isOnZone(X, Y){
+  X = (X - windowsValues[4]) / (windowsValues[0] - 2 * windowsValues[4]);
+  Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
   let resTab = [];
   let len = clickZones.length;
-  for(let i=0;i<len;i++){
-    if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
+  for(let i = 0; i < len; i++){
+    if(X >= clickZones[i].x1 && X <= clickZones[i].x2 && Y >= clickZones[i].y1 && Y <= clickZones[i].y2){
       resTab[0] = clickZones[i].id;
       resTab[1] = clickZones[i].clickzoneId;
       return resTab;
@@ -755,13 +748,13 @@ function isOnZone(X,Y){
 * @param {Coordinate} Y
 * @returns resTab : resTab[0] = is on back zone; resTab[1] = back click zone id
 */
-function isOnBackZone(X,Y){
+function isOnBackZone(X, Y){
   let resTab = [];
-  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
-  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+  X = (X - windowsValues[4]) / (windowsValues[0] - 2 * windowsValues[4]);
+  Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
   let len = backClickZones.length;
-  for(let i=0;i<len;i++){
-    if(X>=backClickZones[i].x1 && X<=backClickZones[i].x2 && Y>=backClickZones[i].y1 && Y<=backClickZones[i].y2){
+  for(let i = 0; i < len; i++){
+    if(X >= backClickZones[i].x1 && X <= backClickZones[i].x2 && Y >= backClickZones[i].y1 && Y <= backClickZones[i].y2){
       resTab[0] = true;
       resTab[1] = backClickZones[i].bckclickId;
       return resTab;
@@ -779,13 +772,13 @@ function isOnBackZone(X,Y){
 *
 * @returns resTab : resTab[0] = value of text; resTab[1] = clickzone id
 */
-function isOnDigicodeZone(X,Y){
+function isOnDigicodeZone(X, Y){
   let resTab = [];
-  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
-  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+  X = (X - windowsValues[4]) / ( windowsValues[0] - 2 * windowsValues[4]);
+  Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
   let len = digicodeClickZone.length - 1;
-  for(let i=0;i<len;i++){
-    if(X>=digicodeClickZone[i].x1 && X<=digicodeClickZone[i].x2 && Y>=digicodeClickZone[i].y1 && Y<=digicodeClickZone[i].y2){
+  for(let i = 0; i < len; i++){
+    if(X >= digicodeClickZone[i].x1 && X <= digicodeClickZone[i].x2 && Y >= digicodeClickZone[i].y1 && Y <= digicodeClickZone[i].y2){
       resTab[0] = digicodeClickZone[i].id;
       resTab[1] = digicodeClickZone[i].clickzoneId;
       return resTab;
@@ -803,12 +796,12 @@ function isOnDigicodeZone(X,Y){
 *
 * @returns index of the gif click zone if is on zone, else returns -1
 */
-function isOnGifZone(X,Y){
-  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
-  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+function isOnGifZone(X, Y){
+  X = (X - windowsValues[4]) / (windowsValues[0] - 2 * windowsValues[4]);
+  Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
   let len = gifClickZone.length;
-  for(let i=0;i<len;i++){
-    if(X>=gifClickZone[i].x1 && X<=gifClickZone[i].x2 && Y>=gifClickZone[i].y1 && Y<=gifClickZone[i].y2){
+  for(let i = 0; i < len; i++){
+    if(X >= gifClickZone[i].x1 && X <= gifClickZone[i].x2 && Y >= gifClickZone[i].y1 && Y <= gifClickZone[i].y2){
       return i;
     }
   }
@@ -822,13 +815,13 @@ function isOnGifZone(X,Y){
 *
 * @returns resTab : resTab[0] = id of the scene to load ; resTab[1] = clickzone id
 */
-function isOnObjectZone(X,Y){
+function isOnObjectZone(X, Y){
   let resTab = [];
-  X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
-  Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+  X = (X - windowsValues[4]) / (windowsValues[0] - 2 * windowsValues[4]);
+  Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
   let len = objectClickZones.length ;
-  for(let i=0;i<len;i++){
-    if(X>=objectClickZones[i].x1 && X<=objectClickZones[i].x2 && Y>=objectClickZones[i].y1 && Y<=objectClickZones[i].y2){
+  for(let i = 0; i < len; i++){
+    if(X >= objectClickZones[i].x1 && X <= objectClickZones[i].x2 && Y >= objectClickZones[i].y1 && Y <= objectClickZones[i].y2){
       resTab[0] = objectClickZones[i].id;
       resTab[1] = objectClickZones[i].clickzoneId;
       return resTab;
@@ -844,7 +837,7 @@ function isOnObjectZone(X,Y){
 // ========================================================================================
 
 function sceneWithText(id){
-  return getSceneTextBySceneId(id)!="";
+  return getSceneTextBySceneId(id) != "";
 }
 
 /**
@@ -854,17 +847,15 @@ function sceneWithText(id){
 * @param {Number} fontsize : TODO
 * @returns : TODO
 */
-function splitThroughPixel(string, px, fontsize=null) {
+function splitThroughPixel(string, px, fontsize = null){
   let words = string.split(' ');
   let split = [];
   let div = document.createElement('div');
   div.style.cssText = "white-space:nowrap; display:inline;";
-
-  if (fontsize!=null) {
-    div.style.cssText="white-space:nowrap; display:inline;font-size:"+fontsize+";";
+  if(fontsize != null){
+    div.style.cssText = "white-space:nowrap; display:inline;font-size:" + fontsize + ";";
   }
   document.body.appendChild(div);
-
   for (let i = 0; i < words.length; i++) {
     div.innerText = (div.innerText + ' ' + words[i]).trim();
     let width = Math.ceil(div.getBoundingClientRect().width);
@@ -875,7 +866,7 @@ function splitThroughPixel(string, px, fontsize=null) {
       div.innerText = lastWord;
     }
   }
-  if (div.innerText !== '') {
+  if(div.innerText !== ''){
     split.push(div.innerText);
   }
   document.body.removeChild(div);
@@ -886,15 +877,15 @@ function splitThroughPixel(string, px, fontsize=null) {
 * Prints the text at the start of a scene
 */
 function printOpeningText(){
-  var text;
-  var textBox;
-  var i=0; var j=0;
-  var timer;
-  var split_text;
-  var count;
-  var textBoxTop;
-  var textBoxBottom;
-  var printSpeed = 60;
+  let text;
+  let textBox;
+  let i=0; let j=0;
+  let timer;
+  let split_text;
+  let count;
+  let textBoxTop;
+  let textBoxBottom;
+  let printSpeed = 60;
 
   /**
   * Initializes the html code to display the textbox
@@ -903,21 +894,21 @@ function printOpeningText(){
     textBox = document.getElementById("textbox");
     textBox.innerHTML="";
     textBox.style.zIndex = 11;
-    textBox.style.borderStyle= "solid";
+    textBox.style.borderStyle = "solid";
     textBox.style.borderColor = "black";
     textBox.style.color = "white";
     textBox.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
     textBox.style.boxSizing = "border-box";
 
     textBoxTop = document.createElement("div");
-    textBoxTop.id="texttop";
-    textBoxTop.style.height="50%";
-    textBoxTop.style.width="100%";
+    textBoxTop.id = "texttop";
+    textBoxTop.style.height = "50%";
+    textBoxTop.style.width = "100%";
 
     textBoxBottom = document.createElement("div");
-    textBoxBottom.id="textbottom";
-    textBoxBottom.style.height="50%";
-    textBoxBottom.style.width="100%";
+    textBoxBottom.id = "textbottom";
+    textBoxBottom.style.height = "50%";
+    textBoxBottom.style.width = "100%";
 
     resizeTextBox();
     textBox.appendChild(textBoxTop);
@@ -931,7 +922,7 @@ function printOpeningText(){
     clearTimeout(timer);
     textBox = document.getElementById("textbox");
     text = getSceneTextBySceneId(scene_number);
-    split_text = splitThroughPixel(text, textBox.clientWidth, textBoxTop.clientHeight+"px");
+    split_text = splitThroughPixel(text, textBox.clientWidth, textBoxTop.clientHeight + "px");
     count = split_text.length;
     if(text.length == 0){
       canPlay = true;
@@ -942,20 +933,20 @@ function printOpeningText(){
   * Prints the next character to display in the textbox
   */
   function charByChar() {
-    if (j<count) {
-      if (j==0) {
+    if(j < count){
+      if(j == 0){
         if (i < split_text[j].length) {
           textBoxTop.innerHTML += split_text[j][i];
           i++;
-          timer=setTimeout(charByChar, printSpeed);
+          timer = setTimeout(charByChar, printSpeed);
         }
-        if (i == split_text[j].length){
+        if(i == split_text[j].length){
           clearTimeout(timer);
-          j+=1;
-          i=0;
-          timer=setTimeout(charByChar, printSpeed);
+          j++;
+          i = 0;
+          timer = setTimeout(charByChar, printSpeed);
         }
-      } else {
+      }else{
         if (i < split_text[j].length) {
           textBoxBottom.innerHTML += split_text[j][i];
           i++;
@@ -963,12 +954,12 @@ function printOpeningText(){
         }
         if (i == split_text[j].length){
           clearTimeout(timer);
-          j+=1;
-          i=0;
-          if(j<count){
-            textBoxTop.innerHTML=textBoxBottom.innerHTML;
-            textBoxBottom.innerHTML="";
-            timer=setTimeout(charByChar, printSpeed);
+          j++;
+          i = 0;
+          if(j < count){
+            textBoxTop.innerHTML = textBoxBottom.innerHTML;
+            textBoxBottom.innerHTML = "";
+            timer = setTimeout(charByChar, printSpeed);
           }
         }
       }
@@ -980,18 +971,17 @@ function printOpeningText(){
   */
   function instantPrinting(){
     clearTimeout(timer);
-    if(i==-1){
+    if(i == -1){
       textBox.innerHTML = "";
-      setTimeout(function(){ canPlay=true; }, printSpeed);
+      setTimeout(function(){canPlay = true;}, printSpeed);
       textBox.style.display = 'none';
-    }
-    else {
-      if (count == 1) {
-        textBoxTop.innerHTML=split_text[count-1];
-        textBoxBottom.innerHTML="";
-      }else {
-        textBoxTop.innerHTML=split_text[count-2];
-        textBoxBottom.innerHTML=split_text[count-1];
+    }else{
+      if(count == 1){
+        textBoxTop.innerHTML = split_text[count-1];
+        textBoxBottom.innerHTML = "";
+      }else{
+        textBoxTop.innerHTML = split_text[count-2];
+        textBoxBottom.innerHTML = split_text[count-1];
       }
       i=-1;
     }
@@ -1017,8 +1007,8 @@ function printOpeningText(){
   charByChar();
   document.addEventListener("click", instantPrinting);
 
-  var resizeTimer;
-  window.addEventListener("resize", function () {
+  let resizeTimer;
+  window.addEventListener("resize", function(){
     clearTimeout(timer);
     clearTimeout(resizeTimer);
     resizeTextBox();
@@ -1041,7 +1031,7 @@ function validatingBuffer(){
   if(buffer == answer[0]){
     return true;
   }
-  for(let i=0; i<len;i++){
+  for(let i = 0; i < len; i++){
     if(buffer == answer[1][i]){
       return true ;
     }
@@ -1072,9 +1062,8 @@ function addingBuffer(digi){
 function deletingBuffer(){
   if(buffer.length == 0){
     return;
-  }
-  else{
-    buffer = buffer.substring(0,buffer.length-1);
+  }else{
+    buffer = buffer.substring(0, buffer.length-1);
   }
 }
 
@@ -1086,12 +1075,12 @@ function deletingBuffer(){
 * Refreshes the size of every gif on the scene
 */
 function resizeGif(){
-  for(let i=0;i<gifOnScene.length;i++){
+  for(let i = 0; i < gifOnScene.length; i++){
     let top = windowsValues[5] + gifClickZone[i].y1 * windowsValues[3] * windowsValues[6];
     let left = windowsValues[4] + gifClickZone[i].x1 * windowsValues[2] * windowsValues[6];
     let width = windowsValues[2] * windowsValues[6] * (gifClickZone[i].x2-gifClickZone[i].x1);
     let height = windowsValues[3] * windowsValues[6] * (gifClickZone[i].y2-gifClickZone[i].y1);
-    gifOnScene[i].resize(width,height,left,top);
+    gifOnScene[i].resize(width, height, left, top);
   }
 }
 
@@ -1102,7 +1091,7 @@ function areGifWellSet(){
   let bool = true;
   let i = 0 ;
   const len = gifClickZone.length;
-  while(i<len && bool){
+  while(i < len && bool){
     if(gifClickZone[i].id[2][gifOnScene[i].get_current_frame()] != 2){
       bool = false;
     }
@@ -1125,7 +1114,7 @@ function loadObjects(){
   setWindowsValues();
   for (var i = 0; i < objects.length; i++) {
     if (!objects[i].PuzzlePiece){
-      displayObject(objects[i],transitions,scene);
+      displayObject(objects[i], transitions, scene);
     }
   }
 }
@@ -1136,7 +1125,7 @@ function loadObjects(){
 * @param {Transistion[]} transitions
 * @param {Int} scene
 */
-function displayObject(object,transitions,scene){
+function displayObject(object, transitions, scene){
   var canvas = document.getElementById("canvas");
   canvas.style.position = "absolute";
   canvas.width  = windowsValues[0];
@@ -1154,7 +1143,7 @@ function displayObject(object,transitions,scene){
         let heightPourcentage = object.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
         let transitionSceneId = getLastNumberTransition(transitions[i].Transition.ObjectToScene.To);
         let clickZoneId = object.id
-        let objectClickZone = new ClickZone(object.Pos[0],object.Pos[1],object.Size[0] + object.Pos[0], object.Pos[1] + heightPourcentage ,transitionSceneId,clickZoneId);
+        let objectClickZone = new ClickZone(object.Pos[0], object.Pos[1], object.Size[0] + object.Pos[0], object.Pos[1] + heightPourcentage ,transitionSceneId, clickZoneId);
         objectClickZones.push(objectClickZone);
       }
     }
@@ -1173,7 +1162,7 @@ function Puzzled(id){
   const puzzle = whatPuzzleItIs(id);
   if(puzzle[0] == "Text"){
     var digiBox = document.createElement("div");
-    digiBox.id="digiBox";
+    digiBox.id = "digiBox";
     setWindowsValues();
     digiBox.style.position = "absolute";
     digiBox.style.left = (windowsValues[4] + 0.35 * windowsValues[2] * windowsValues[6]) + "px";
@@ -1181,12 +1170,12 @@ function Puzzled(id){
     digiBox.style.top = (windowsValues[5] + 0.9 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.height = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
-    var digiQuestion = getDigicodeQSF(id,"QUESTION");
-    if (digiQuestion==undefined) {
-      digiQuestion=="";
-    }else {
+    let digiQuestion = getDigicodeQSF(id, "QUESTION");
+    if(digiQuestion == undefined){
+      digiQuestion == "";
+    }else{
       digiBox.classList.add("defileDigicode");
-      var digiSpan = document.createElement("div");
+      let digiSpan = document.createElement("div");
       digiSpan.innerHTML = digiQuestion;
       digiBox.appendChild(digiSpan);
     }
@@ -1211,18 +1200,17 @@ function Puzzled(id){
     for(let i =0; i<len; i++){
       let heightPourcentage = sceneTextArea[i].Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
       if(sceneTextArea[i].Behaviour == 3){
-        clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Validate"], sceneTextArea[i].id);
+        clickz = new ClickZone(sceneTextArea[i].Pos[0], sceneTextArea[i].Pos[1], sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0], heightPourcentage + sceneTextArea[i].Pos[1], ["Validate"], sceneTextArea[i].id);
       }else if(sceneTextArea[i].Behaviour == 2){
-        clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Delete"], sceneTextArea[i].id);
+        clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1], sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0], heightPourcentage + sceneTextArea[i].Pos[1], ["Delete"], sceneTextArea[i].id);
       }else if(sceneTextArea[i].Behaviour == 1){
-        clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Replace",sceneTextArea[i].Text], sceneTextArea[i].id)
-      }
-      else{
-        clickz = new ClickZone(sceneTextArea[i].Pos[0],sceneTextArea[i].Pos[1],sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0],heightPourcentage + sceneTextArea[i].Pos[1],["Add",sceneTextArea[i].Text], sceneTextArea[i].id);
+        clickz = new ClickZone(sceneTextArea[i].Pos[0], sceneTextArea[i].Pos[1], sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0], heightPourcentage + sceneTextArea[i].Pos[1], ["Replace", sceneTextArea[i].Text], sceneTextArea[i].id)
+      }else{
+        clickz = new ClickZone(sceneTextArea[i].Pos[0], sceneTextArea[i].Pos[1], sceneTextArea[i].Size[0] + sceneTextArea[i].Pos[0], heightPourcentage + sceneTextArea[i].Pos[1], ["Add", sceneTextArea[i].Text], sceneTextArea[i].id);
       }
       digicodeClickZone.push(clickz);
     }
-    const transition = getTransitionByID(getTransitions(),puzzle[1]);
+    const transition = getTransitionByID(getTransitions(), puzzle[1]);
     const riddle = transition.Transition.SceneToScene.Riddle;
     let array = [];
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
@@ -1230,7 +1218,7 @@ function Puzzled(id){
     array.push(riddle.Text.FuzzyMatches);
     array.push(idTransition); // Attention cela doit toujours être en dernier
     digicodeClickZone.push(array);
-  } else if (puzzle[0] == "Puzzle") {
+  }else if (puzzle[0] == "Puzzle"){
     isPuzzleScene = true;
     devicePixelRatio = 1;
     let puzzlePieces = getPuzzlepieces(id);
@@ -1238,22 +1226,22 @@ function Puzzled(id){
     let diffY;
     tabPos = [];
     let alreadyVisited =false;
-    let statePuzzle = getStateBySceneId(scene_number,getCookieValue("puzzle_pos"));
+    let statePuzzle = getStateBySceneId(scene_number, getCookieValue("puzzle_pos"));
     if(statePuzzle != ""){
       alreadyVisited = true;
     }
     if(alreadyVisited){
       let tmpTab = statePuzzle.split(",");
       console.log(tmpTab.length);
-      for(let i=0;i<tmpTab.length/2; i++){
+      for(let i = 0; i < tmpTab.length / 2; i++){
         let tempo = [0,0];
-        tempo[0] = parseFloat(tmpTab[2*i]);
-        tempo[1] = parseFloat(tmpTab[2*i+1]);
+        tempo[0] = parseFloat(tmpTab[2 * i]);
+        tempo[1] = parseFloat(tmpTab[2 * i + 1]);
         tabPos.push(tempo);
       }
     }
-    var i;
-    var firstLoad = 0;
+    let i;
+    let firstLoad = 0;
 
     /**
     * displays and sets all the elements of a puzzle
@@ -1269,12 +1257,12 @@ function Puzzled(id){
       puzzleImagesZone.innerHTML = "";
       puzzleImagesZone.width = windowsValues[0];
       puzzleImagesZone.height = windowsValues[1];
-      var top;
-      var left;
-      var piece = [];
-      var ctx = [];
-      var img =[];
-      for (var i = 0; i < puzzlePieces.length; i++) {
+      let top;
+      let left;
+      let piece = [];
+      let ctx = [];
+      let img =[];
+      for (let i = 0; i < puzzlePieces.length; i++) {
         piece[i] = document.createElement("canvas");
         piece[i].style.position = "absolute";
         piece[i].width = puzzlePieces[i].Size[0] * windowsValues[2] * windowsValues[6];
@@ -1283,9 +1271,8 @@ function Puzzled(id){
         piece[i].classList.add("draggable");
 
         if (firstLoad  != puzzlePieces.length-1 && !alreadyVisited) {
-          top = Math.floor(Math.random() * (101-puzzlePieces[i].Size[1]*windowsValues[2]/windowsValues[3]*100)) / 100 * windowsValues[3] * windowsValues[6];
-          left = Math.floor(Math.random() * (101-puzzlePieces[i].Size[0]*100)) / 100 * windowsValues[2] * windowsValues[6];
-          console.log(left);
+          top = Math.floor(Math.random() * (101 - puzzlePieces[i].Size[1] * windowsValues[2] / windowsValues[3] * 100)) / 100 * windowsValues[3] * windowsValues[6];
+          left = Math.floor(Math.random() * (101 - puzzlePieces[i].Size[0] * 100)) / 100 * windowsValues[2] * windowsValues[6];
           firstLoad = i;
           let posImg = [left/(windowsValues[2] * windowsValues[6]),top/(windowsValues[3] * windowsValues[6])];
           tabPos.push(posImg);
@@ -1293,30 +1280,27 @@ function Puzzled(id){
           top = tabPos[i][1] * windowsValues[3] * windowsValues[6];
           left = tabPos[i][0] * windowsValues[2] * windowsValues[6];
         }
-
         piece[i].style.top = top + "px";
         piece[i].style.left = left + "px";
         puzzleImagesZone.appendChild(piece[i]);
         ctx[i]=piece[i].getContext("2d");
-
         $(".draggable").draggable({containment: "parent", stack: ".draggable"});
       }
       console.log("ctx",ctx);
-      i=0;
+      i = 0;
       ctx.forEach(function(item){
         img[i] = new Image();
         img[i].onload =  function(i) {
           item.drawImage(img[i], 0, 0, piece[i].width, piece[i].height);
           console.log("Object drawn !" + i)
-        }.bind(this,i);
+        }.bind(this, i);
         img[i].src = "Game/" + puzzlePieces[i].Image;
         i++;
 
       });
 
-
-      diffX=[];
-      diffY=[];
+      diffX = [];
+      diffY = [];
       var delta = 0.05;
       let originX = puzzlePieces[0].Pos[0];
       let originY = puzzlePieces[0].Pos[1];
@@ -1333,18 +1317,18 @@ function Puzzled(id){
         maxX = (imgX - originX + delta);
         minY = (imgY - originY - delta);
         maxY = (imgY - originY + delta);
-        diffX.push([minX,maxX]);
-        diffY.push([minY,maxY]);
+        diffX.push([minX, maxX]);
+        diffY.push([minY, maxY]);
       }
     }
     displayPuzzleImage();
     window.addEventListener("resize", displayPuzzleImage, false);
-    var currentOriginX;
-    var currentOriginY;
-    var currentX;
-    var currentY;
-    var pourcentX;
-    var pourcentY;
+    let currentOriginX;
+    let currentOriginY;
+    let currentX;
+    let currentY;
+    let pourcentX;
+    let pourcentY;
 
     /**
     * stores the position of all the puzzle pieces in the variable "puzzleImagesZone"
@@ -1352,17 +1336,17 @@ function Puzzled(id){
     function storeImagePosition(){
       for (i = 0; i < puzzlePieces.length; i++) {
         let puzzleImagesZone = document.getElementById("puzzleImages");
-        currentX = parseInt(document.getElementById("draggable"+i).offsetLeft);
-        currentY = parseInt(document.getElementById("draggable"+i).offsetTop);
-        pourcentX = currentX / (windowsValues[0]-(2*windowsValues[4]));
-        pourcentY = currentY / (windowsValues[1]-(2*windowsValues[5]));
-        tabPos[i][0]=pourcentX;
-        tabPos[i][1]=pourcentY;
+        currentX = parseInt(document.getElementById("draggable" + i).offsetLeft);
+        currentY = parseInt(document.getElementById("draggable" + i).offsetTop);
+        pourcentX = currentX / (windowsValues[0] - (2 * windowsValues[4]));
+        pourcentY = currentY / (windowsValues[1] - (2 * windowsValues[5]));
+        tabPos[i][0] = pourcentX;
+        tabPos[i][1] = pourcentY;
       }
     }
     window.addEventListener("touchend", storeImagePosition, false);
     window.addEventListener("mouseup", storeImagePosition, false);
-    const transition = getTransitionByID(getTransitions(),puzzle[1]);
+    const transition = getTransitionByID(getTransitions(), puzzle[1]);
     const idTransition = getLastNumberTransition(transition.Transition.SceneToScene.To);
     window.addEventListener("mouseup", verify, false);
     window.addEventListener("touchend", verify, false);
@@ -1374,7 +1358,7 @@ function Puzzled(id){
       currentOriginX = tabPos[0][0];
       currentOriginY = tabPos[0][1];
       let result = true ;
-      for (var i = 1; i < puzzlePieces.length; i++) {
+      for (let i = 1; i < puzzlePieces.length; i++) {
         currentX = tabPos[i][0];
         currentY = tabPos[i][1];
         if (!((currentX - currentOriginX) >= diffX[i-1][0] && (currentX - currentOriginX) <= diffX[i-1][1])){
@@ -1388,7 +1372,7 @@ function Puzzled(id){
         if(isTransitionUnique(findTransitionBySceneId(scene_number))){
           addSkip(scene_number);
         }
-        document.cookie = "isback=" + false +";";
+        document.cookie = "isback=" + false + ";";
         playSoundTransition(findTransitionBySceneId(scene_number).id);
         let fade = findTransition(getTransitions(), scene_number, idTransition);
         changeScene(event, "ping.html", idTransition, false, fade);
@@ -1403,52 +1387,49 @@ function Puzzled(id){
     let gif;
     let alreadyVisited = false;
     let stateArray = []
-    let len =0;
+    let len = 0;
     const ctx = canvas.getContext("2d");
-    for(let i=0;i<gifs.length;i++){
+    for(let i = 0; i < gifs.length; i++){
       gifOnScene.push(0);
     }
-    let state = getStateBySceneId(scene_number,getCookieValue("gif_state"));
-    if(state !=""){
-      console.log(state);
+    let state = getStateBySceneId(scene_number, getCookieValue("gif_state"));
+    if(state != ""){
       state += "/";
       alreadyVisited = true;
       let buffer = "";
-      while(len<state.length){
-        if(state[len] == "," || state[len] =="/"){
+      while(len < state.length){
+        if(state[len] == "," || state[len] == "/"){
           stateArray.push(parseInt(buffer));
           buffer = "";
-        }
-        else{
+        }else{
           buffer += state[len];
         }
         len++;
       }
     }
-    console.log("salut");
     gifOK = gifs.length;
-    for(let i=0;i<gifs.length;i++){
+    for(let i = 0; i < gifs.length; i++){
       currentGif = gifs[i];
       let heightPourcentage = currentGif.Size[1] * scene.ImageSize[0] / scene.ImageSize[1];
-      clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1],currentGif.Size[0] + currentGif.Pos[0],heightPourcentage + currentGif.Pos[1],[currentGif.Frames.length,0,currentGif.Frames,getGifPointedScene(scene_number)], currentGif.id);
+      clickz = new ClickZone(currentGif.Pos[0],currentGif.Pos[1], currentGif.Size[0] + currentGif.Pos[0], heightPourcentage + currentGif.Pos[1], [currentGif.Frames.length, 0, currentGif.Frames, getGifPointedScene(scene_number)], currentGif.id);
       gifClickZone.push(clickz);
       img = document.createElement("img");
-      img.setAttribute("id","gif"+i);
-      img.setAttribute("rel:auto_play","-1");
-      img.setAttribute("src","Game/"+currentGif.Image);
+      img.setAttribute("id", "gif" + i);
+      img.setAttribute("rel:auto_play", "-1");
+      img.setAttribute("src", "Game/" + currentGif.Image);
       let top = windowsValues[5] + clickz.y1 * windowsValues[3] * windowsValues[6];
       let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
-      let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);
-      let height = windowsValues[3] * windowsValues[6] * (clickz.y2-clickz.y1);
+      let width = windowsValues[2] * windowsValues[6] * (clickz.x2 - clickz.x1);
+      let height = windowsValues[3] * windowsValues[6] * (clickz.y2 - clickz.y1);
       document.getElementById("gifImages").appendChild(img);
-      let gifl=new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height});
-      var fram =0;
+      let gifl= new SuperGif({ gif: img, imageX: left, imageY: top, imageWidth: width, imageHeight: height});
+      var fram = 0;
       if(alreadyVisited){
         fram = stateArray[i];
       }
       gifl.load(fram,function(){
-        gifOnScene[i]=gifl;
-        gifOK --;
+        gifOnScene[i] = gifl;
+        gifOK--;
         gifl.pause();
         if(gifOK == 0){
           handler();
