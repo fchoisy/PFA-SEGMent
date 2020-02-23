@@ -130,7 +130,7 @@ function initialisation() {
 function loadSoundScene(){
     let scene = getSceneByID(scene_number);
     let SoundPath = scene.Ambience.Path;
-    audioSoundScene = new Audio('Game/' + SoundPath);
+    audioSoundScene = new Audio(getGameFolderURL() + SoundPath);
 }
 
 /**
@@ -1151,7 +1151,7 @@ function backgroundModifier() {
     img.onload = function() {
       ctx.drawImage(img, windowsValues[4] + (object.Pos[0] * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (object.Pos[1] * windowsValues[3] * windowsValues[6]), object.Size[0] * windowsValues[2] * windowsValues[6], object.Size[1] * windowsValues[2] * windowsValues[6]);
     };
-    img.src = "Game/" + object.Image;
+    img.src = getGameFolderURL() + object.Image;
 
     for (var i = 0; i < transitions.length; i++) {
       if(transitions[i].Transition.ObjectToScene != undefined) {
@@ -1314,7 +1314,7 @@ function backgroundModifier() {
             item.drawImage(img[i], 0, 0, piece[i].width, piece[i].height);
 		console.log("Object drawn !" + i)
             }.bind(this,i);
-          img[i].src = "Game/" + puzzlePieces[i].Image;
+          img[i].src = getGameFolderURL() + puzzlePieces[i].Image;
             i++;
 
         });
@@ -1440,7 +1440,7 @@ function backgroundModifier() {
         img = document.createElement("img");
         img.setAttribute("id","gif"+i);
         img.setAttribute("rel:auto_play","-1");
-        img.setAttribute("src","Game/"+currentGif.Image);
+        img.setAttribute("src", getGameFolderURL() + currentGif.Image);
         let top = windowsValues[5] + clickz.y1 * windowsValues[3] * windowsValues[6];
         let left = windowsValues[4] + clickz.x1* windowsValues[2] * windowsValues[6];
         let width = windowsValues[2] * windowsValues[6] * (clickz.x2-clickz.x1);

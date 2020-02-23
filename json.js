@@ -36,6 +36,8 @@
 
   // getGifPointedScene, return 2000000 ?
 
+  // storeGameFolderURL : changer pour détecter "index.html"
+
 // ---------------------------------------- Jean ------------------------------------------
 
 // ========================================================================================
@@ -45,7 +47,8 @@
 /**
 * contains the path of the json file
 */
-const GameURL = "../Game/game.segment"
+const CurrentURL = window.location.href;
+storeGameFolderURL();
 
 /**
 * Contains the informations of a clickzone (size, position, id of the next scene, id of the clickzone)
@@ -97,13 +100,24 @@ function initialise() {
 }
 
 /**
+* Stores the folder "Game" URL in the cookie "game_folder"
+* Note : changer pour ne pas avoir à vider les cookies si on veut changer de jeu
+*/
+function storeGameFolderURL(){
+  if(getCookieValue("game_folder") == ""){
+    const GameFolder = CurrentURL + "Game/";
+    document.cookie = "game_folder=" + GameFolder + ";";
+  }
+}
+
+/**
 * Loads 'game.segment'
 */
 function loadJson() {
   return new Promise(function (resolve, reject) {
     $.ajax({
       type: 'GET',
-      url: "../Game/game.segment",
+      url: getGameJsonURL(),
       async: true,
       dataType: 'json',
       success: function (data) {
@@ -121,6 +135,22 @@ function loadJson() {
 // ------------------------------------ Basic Getters -------------------------------------
 
 /**
+* Returns the URL of the Game folder
+* @returns URL as a string
+*/
+function getGameFolderURL(){
+  return getCookieValue("game_folder");
+}
+
+/**
+* Returns the URL of the Game JSON file
+* @returns URL as a string
+*/
+function getGameJsonURL(){
+  return (getCookieValue("game_folder") + "game.segment");
+}
+
+/**
 * Returns all the scenes of the JSON file (GameJson)
 * @returns scene[]
 */
@@ -135,7 +165,7 @@ function getScenes() {
 * @returns path
 */
 function getSceneImage(scene) {
-  return "../Game/" + scene.Image;
+  return getGameFolderURL() + scene.Image;
 }
 
 
@@ -664,7 +694,7 @@ function playSound(SoundPath,loop=false,volume=1.0,audioSound=undefined){
   else{
     var audio
     if(audioSound === undefined){
-        audio = new Audio('Game/' + SoundPath);
+        audio = new Audio(getGameFolderURL() + SoundPath);
     }else{
         audio = audioSound;
     }
