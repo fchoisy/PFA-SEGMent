@@ -78,16 +78,16 @@ $(window).on('load', handler);
 function handler(){
   if(fading && gifOK == 0){
     playSoundScene(audioSoundScene);
-    document.body.style.opacity = 1;
+    document.getElementById("scene").style.opacity = 1;
     document.body.classList.add("fadein");
     setTimeout(function(){document.body.classList.remove("fadein");
     canPlayFade = true;}, FADE_TIME);
   }else if(gifOK == 0){
     playSoundScene(audioSoundScene);
-    document.body.style.opacity = 1;
+    document.getElementById("scene").style.opacity = 1;
     canPlayFade = true;
   }
-
+  hideLoading();
 }
 
 // ========================================================================================
@@ -100,7 +100,8 @@ function handler(){
 * Function to be called when scene is opened
 */
 function initialisation() {
-  document.body.style.opacity = 0;
+  showLoading();
+  document.getElementById("scene").style.opacity = 0;
   let isBack = getCookieValue("isback"); // boolean that say if we came to this scene with a backClick
   scene_number = getLastElem(getCookieValue("scene_number")); // update the scene number
   // Fade transition
@@ -123,6 +124,7 @@ function initialisation() {
   loadObjects();
 }
 
+// To remove ?
 function loadSoundScene(){
   let scene = getSceneByID(scene_number);
   let SoundPath = scene.Ambience.Path;
@@ -1193,7 +1195,7 @@ function Puzzled(id){
       digiBox.style.fontSize = (0.06 * windowsValues[3] * windowsValues[6]) + "px";
     }
     window.addEventListener("resize", deplaceDigiBox, false);
-    document.body.appendChild(digiBox);
+    document.getElementById("scene").appendChild(digiBox);
     const scene = getSceneByID(id);
     const sceneTextArea = scene.TextAreas;
     const len = sceneTextArea.length;
