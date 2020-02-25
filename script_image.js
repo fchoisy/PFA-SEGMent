@@ -882,7 +882,7 @@ function printOpeningText(){
   let text;
   let textBox;
   let i=0; let j=0;
-  let timer;
+  let timer = null;
   let split_text;
   let count;
   let textBoxTop;
@@ -949,22 +949,34 @@ function printOpeningText(){
           timer = setTimeout(charByChar, printSpeed);
         }
       }else{
+        let textB;
+        if(j % 2 == 1){
+            textB = textBoxBottom;
+        }
+        else{
+            textB = textBoxTop;
+        }
         if (i < split_text[j].length) {
-          textBoxBottom.innerHTML += split_text[j][i];
+          textB.innerHTML += split_text[j][i];
           i++;
           timer=setTimeout(charByChar, printSpeed);
         }
         if (i == split_text[j].length){
           clearTimeout(timer);
+          timer = null;
           j++;
           i = 0;
-          if(j < count){
-            textBoxTop.innerHTML = textBoxBottom.innerHTML;
-            textBoxBottom.innerHTML = "";
+          if(j < count && j%2 == 1){
+            //textBoxTop.innerHTML = ""//textBoxBottom.innerHTML;
+            //textBoxBottom.innerHTML = "";
             timer = setTimeout(charByChar, printSpeed);
+          } else{
+            timer = null;
           }
         }
       }
+  }else{
+      timer = "end";
     }
   }
 
@@ -973,7 +985,7 @@ function printOpeningText(){
   */
   function instantPrinting(){
     clearTimeout(timer);
-    if(i == -1){
+    if(j >= count){
       textBox.innerHTML = "";
       setTimeout(function(){canPlay = true;}, printSpeed);
       textBox.style.display = 'none';
@@ -982,10 +994,27 @@ function printOpeningText(){
         textBoxTop.innerHTML = split_text[count-1];
         textBoxBottom.innerHTML = "";
       }else{
-        textBoxTop.innerHTML = split_text[count-2];
-        textBoxBottom.innerHTML = split_text[count-1];
+        if(j%2 == 0){
+            textBoxTop.innerHTML = split_text[j];
+            textBoxBottom.innerHTML = split_text[j+1];
+            i=0;
+            j=j+2;
+        }else{
+            textBoxTop.innerHTML = split_text[j-1];
+            textBoxBottom.innerHTML = split_text[j];
+            i=0;
+            j=j++;
+        }
+        if(j<count){
+            timer = null;
+        }else{
+            timer = "end";
+        }
       }
-      i=-1;
+      /*if(j >= count){
+          i=-1;
+      }*/
+      timer = null;
     }
   }
 
@@ -1004,10 +1033,23 @@ function printOpeningText(){
     }
   }
 
+  function clickText(){
+      if(j >= count){
+          instantPrinting();
+      }else if(timer != null){
+          instantPrinting();
+      }
+      else{
+          textBoxTop.innerHTML = ""//textBoxBottom.innerHTML;
+          textBoxBottom.innerHTML = "";
+          charByChar();
+      }
+  }
+
   initTextBox();
   reset();
   charByChar();
-  document.addEventListener("click", instantPrinting);
+  document.addEventListener("click", clickText);
 
   let resizeTimer;
   window.addEventListener("resize", function(){
