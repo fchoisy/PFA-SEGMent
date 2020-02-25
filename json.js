@@ -38,6 +38,8 @@
 
   // storeGameFolderURL : changer pour détecter "index.html"
 
+  // Mettre des zIndex plus cohérents
+
 // ---------------------------------------- Jean ------------------------------------------
 
 // ========================================================================================
@@ -128,6 +130,40 @@ function loadJson() {
   });
 }
 
+function loadSoundScene(){
+  let scene = getSceneByID(scene_number);
+  let SoundPath = scene.Ambience.Path;
+  audioSoundScene = new Audio(getGameFolderURL() + SoundPath);
+}
+
+/**
+* Shows the loading screen (in front of the background)
+*/
+function showLoading(){
+  let loading = document.getElementById("loading");
+  loading.zIndex = 16;
+  loading.style.display = "inline";
+  loading.style.position = "absolute";
+  loading.style.width = window.innerWidth + "px";
+  loading.style.height = window.innerHeight + "px";
+  loading.style.borderStyle = "solid";
+  loading.style.borderColor = "black";
+  loading.style.backgroundColor = "black";
+  loading.style.color = "white";
+  loading.style.fontSize = "xx-large"; // extra extra large
+  loading.style.textAlign = "center";
+  loading.style.padding = "auto";
+  loading.innerHTML = "Loading ...";
+}
+
+/**
+* Hides the loading screen
+*/
+function hideLoading(){
+  let loading = document.getElementById("loading");
+  loading.innerHTML = "";
+  loading.style.display = "none";
+}
 // ========================================================================================
 //                                      ***Getters***
 // ========================================================================================
@@ -829,7 +865,7 @@ function playVideo(vidName, type)
     video.innerHTML = "";
     video.width = parseInt(window.innerWidth);
     video.height = parseInt(window.innerHeight);
-    video.zIndex = 30;
+    video.zIndex = 16;
     var source = document.createElement("source");
     source.src = vidName;
     source.type = type;
