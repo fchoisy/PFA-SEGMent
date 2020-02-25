@@ -994,7 +994,9 @@ function printOpeningText(){
       }else{
         if(j%2 == 0){
             textBoxTop.innerHTML = split_text[j];
-            textBoxBottom.innerHTML = split_text[j+1];
+            if(j<count-1){
+                textBoxBottom.innerHTML = split_text[j+1];
+            }
             i=0;
             j=j+2;
         }else{
