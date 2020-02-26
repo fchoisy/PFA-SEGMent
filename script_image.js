@@ -76,15 +76,18 @@ $(window).on('load', handler);
 * (see $(window).on('load', handler);)
 */
 function handler(){
+  document.body.style.opacity = 0;
   if(fading && gifOK == 0){
     playSoundScene(audioSoundScene);
     document.getElementById("scene").style.opacity = 1;
+    document.body.style.opacity = 1;
     document.body.classList.add("fadein");
     setTimeout(function(){document.body.classList.remove("fadein");
     canPlayFade = true;}, FADE_TIME);
   }else if(gifOK == 0){
     playSoundScene(audioSoundScene);
     document.getElementById("scene").style.opacity = 1;
+    document.body.style.opacity = 1;
     canPlayFade = true;
   }
   hideLoading();
