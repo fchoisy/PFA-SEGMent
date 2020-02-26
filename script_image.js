@@ -1005,7 +1005,7 @@ function printOpeningText(){
             textBoxTop.innerHTML = split_text[j-1];
             textBoxBottom.innerHTML = split_text[j];
             i=0;
-            j=j++;
+            j++;
         }
         if(j<count){
             timer = null;
@@ -1040,8 +1040,7 @@ function printOpeningText(){
           instantPrinting();
       }else if(timer != null){
           instantPrinting();
-      }
-      else{
+      }else{
           textBoxTop.innerHTML = ""//textBoxBottom.innerHTML;
           textBoxBottom.innerHTML = "";
           charByChar();
