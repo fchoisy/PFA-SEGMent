@@ -19,6 +19,7 @@
 // -------------------------------------- Eleonore ----------------------------------------
 
 // --------------------------------------- Emeric -----------------------------------------
+// Parser le json pour savoir s'il y a un journal à l'écran
 
 // -------------------------------------- Corentin ----------------------------------------
 
@@ -55,11 +56,13 @@ let windowsValues; // contains information of the size of the current window, im
 let canPlay = false; // boolean to check if we can verify the click
 let canPlayGif = true; // TODO Emeric
 let isPuzzleScene = false; // boolean that say if the current scene contain a puzzle
-let tabPos = []; // TODO Emeric
-let canPlayFade = false;
-let fading = false;
-let gifOK = 0;
-let audioSoundScene =  undefined;
+let tabPos = []; // Table of puzzle position on the screen
+let canPlayFade = false; // Allow user to click on the clickzone
+let fading = false; //Do the scene have a fade to begin
+let gifOK = 0; // Number of Gif to be loaded on the scene
+let audioSoundScene =  undefined; // The sound to stream on the scene
+let diaryOnScene = false; // Is there the diary icon on the screen
+let diaryOnScreen = false; // Is the diary now displaying
 // ========================================================================================
 //                               ***Signals***
 // ========================================================================================
@@ -245,8 +248,8 @@ function changeCursor(event) {
   if(canPlay && canPlayFade){
     let X = event.clientX;
     let Y = event.clientY;
-    if(isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1
-    || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1){
+    if(((isOnZone(X, Y)[0] >= 0 || isOnBackZone(X,Y)[0] || isOnDigicodeZone(X,Y)[0]!=-1
+    || isOnGifZone(X,Y)!=-1 || isOnObjectZone(X,Y)[0]!=-1) && !diaryOnScreen) || isOnDiaryZone(X,Y)[0]!=-1){
       document.body.style.cursor = 'pointer';
       return;
     }
@@ -545,13 +548,18 @@ function verifyClick(event) { // NOTE : make separate functions for each case ?
   if(canPlay && canPlayFade){
     const X = event.clientX;
     const Y = event.clientY;
-    verifyClickZone(X, Y);
-    verifyBackZone(X, Y);
-    verifyDigicode(X, Y);
-    verifyObject(X, Y);
-    verifyGif(X, Y);
-    if(isSceneFinal(getSceneByID(scene_number))){
-      loadVideoScene("Outro.mp4", "video/mp4", "index.html");
+    if(diaryOnScreen){
+        verifyDiaryZone(X,Y);
+    }else{
+        verifyDiaryZone(X,Y);
+        verifyClickZone(X, Y);
+        verifyBackZone(X, Y);
+        verifyDigicode(X, Y);
+        verifyObject(X, Y);
+        verifyGif(X, Y);
+        if(isSceneFinal(getSceneByID(scene_number))){
+            loadVideoScene("Outro.mp4", "video/mp4", "index.html");
+        }
     }
   }
 }
@@ -1485,5 +1493,36 @@ function Puzzled(id){
         }
       });
     }
+  }
+}
+
+
+// -------------------------------------------- Diary relative functions
+
+function isOnDiaryZone(){
+    let resTab = [];
+    X = (X - windowsValues[4]) / ( windowsValues[0] - 2 * windowsValues[4]);
+    Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
+    for(let i = 0; i < len; i++){
+      if(diaryOnScene && X >= digicodeClickZone[i].x1 && X <= digicodeClickZone[i].x2 && Y >= digicodeClickZone[i].y1 && Y <= digicodeClickZone[i].y2){
+        resTab[0] = digicodeClickZone[i].id;
+        resTab[1] = digicodeClickZone[i].clickzoneId;
+        return resTab;
+      }
+    }
+    resTab[0] = -1;
+    resTab[1] = -1;
+    return resTab;
+}
+
+/**
+* Verifies if clicked on a ClickZone, and changes scene if so
+* @param {Coordinate} X
+* @param {Coordinate} Y
+*/
+function verifyDiaryZone(X, Y){
+  const resClickZone = isOnDiaryZone(X, Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
+  if(resClickZone[0] >= 0){
+
   }
 }
