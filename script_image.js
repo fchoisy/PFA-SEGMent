@@ -27,7 +27,7 @@
 
 // len dans get...State... à commenter pour plus de clarté
 
-//variables globales : tabPos? canPlayFade? fade? gifOK?
+//variables globales : tabPos? canPlayFade? fade? gifOK? Ayé
 
 // addGifStateCookie : toAdd ? storePuzzleInCookie : topPos ? storePuzzleInCookie : sceneNB -> scene_number ?
 // findNextUnskippedFrame : resGif ? splitThroughPixel ? reset ? deplaceDigiBox ? verify ?
@@ -1523,6 +1523,35 @@ function isOnDiaryZone(){
 function verifyDiaryZone(X, Y){
   const resClickZone = isOnDiaryZone(X, Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if(resClickZone[0] >= 0){
-
+      displayDiary();
+      diaryOnScreen = true;
   }
+}
+
+function displayDiary(){
+    const tabImagesToAdd = cutInTable(getCookieValue("diary_images"));
+    updateDiary(tabImagesToAdd);
+    // Falta le canvas
+    let link = sessionStorage.getItem('diary');
+    const img = new Image();
+    img.onload =  function() {
+     ctx.drawImage(img,0,0);
+    };
+    img.src = link;
+}
+
+function cutInTable(imagesToAdd){
+    remember = 0;
+    tab = [];
+    for(let i=0;i<;i++){
+        if(imagesToAdd[i] = ","){
+            tab.push(imagesToAdd.substring(0,i));
+            remember = i + 1;
+        }
+    }
+    return tab;
+}
+
+function updateDiary(){
+
 }
