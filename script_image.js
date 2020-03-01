@@ -1333,7 +1333,7 @@ function Puzzled(id){
         piece[i].style.left = left + "px";
         puzzleImagesZone.appendChild(piece[i]);
         ctx[i]=piece[i].getContext("2d");
-        $(".draggable").draggable({containment: "parent", stack: ".draggable"});
+        $(".draggable").easyDrag({'container': "parent"});
       }
       console.log("ctx",ctx);
       i = 0;
