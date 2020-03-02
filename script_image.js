@@ -20,6 +20,7 @@
 
 // --------------------------------------- Emeric -----------------------------------------
 // Parser le json pour savoir s'il y a un journal à l'écran
+// Parser le json pour récupérer toutes les données relatives aux images à afficher dans le journal
 
 // -------------------------------------- Corentin ----------------------------------------
 
@@ -1499,16 +1500,14 @@ function Puzzled(id){
 
 // -------------------------------------------- Diary relative functions
 
-function isOnDiaryZone(){
+function isOnDiaryZone(X,Y){
     let resTab = [];
     X = (X - windowsValues[4]) / ( windowsValues[0] - 2 * windowsValues[4]);
     Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
-    for(let i = 0; i < len; i++){
-      if(diaryOnScene && X >= digicodeClickZone[i].x1 && X <= digicodeClickZone[i].x2 && Y >= digicodeClickZone[i].y1 && Y <= digicodeClickZone[i].y2){
+    if(diaryOnScene && X >= 0.92 && X <= 0.97 && Y >= 0.92 && Y <= 0.97){
         resTab[0] = digicodeClickZone[i].id;
         resTab[1] = digicodeClickZone[i].clickzoneId;
         return resTab;
-      }
     }
     resTab[0] = -1;
     resTab[1] = -1;
@@ -1529,21 +1528,21 @@ function verifyDiaryZone(X, Y){
 }
 
 function displayDiary(){
-    const tabImagesToAdd = cutInTable(getCookieValue("diary_images"));
+    const tabImagesToAdd = SplitInTable(getCookieValue("diary_images"));
     updateDiary(tabImagesToAdd);
     // Falta le canvas
     let link = sessionStorage.getItem('diary');
     const img = new Image();
     img.onload =  function() {
-     ctx.drawImage(img,0,0);
+     ctx.drawImage(img, windowsValues[4], windowsValues[5], windowsValues[2], windowsValues[3]);
     };
     img.src = link;
 }
 
-function cutInTable(imagesToAdd){
+function SplitInTable(imagesToAdd){
     remember = 0;
     tab = [];
-    for(let i=0;i<;i++){
+    for(let i=0;i<imagesToAdd.length;i++){
         if(imagesToAdd[i] = ","){
             tab.push(imagesToAdd.substring(0,i));
             remember = i + 1;
