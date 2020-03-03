@@ -4,7 +4,7 @@
 * Page where a video should be displayed (either mp4 or ogg)
 */
 
-window.onload = playIntro();
+window.onload = playVid();
 window.addEventListener("resize", resizeVideo);
 document.getElementById("video").addEventListener('ended',skip,false);
 
@@ -23,7 +23,7 @@ window.onkeydown = function(event){
 /**
 * Plays the video in cookie, or skip it if it does not exist
 */
-function playIntro(){
+function playVid(){
   const vidName = getCookieValue("video_name");
   const type = getCookieValue("video_type");
   try{

@@ -139,7 +139,7 @@ function loadSoundScene(){
 }
 
 /**
-* Changes the background of "ping.html" (or "pong.html")
+* Changes the background of "game.html"
 * according to 'scene_number'
 */
 function backgroundModifier() {
@@ -582,7 +582,7 @@ function verifyClickZone(X, Y){
     document.cookie = "isback=" + false + ";";
     playSoundTransition(findTransitionBySceneId(scene_number).id);
     let fade = findTransition(getTransitions(), scene_number, resClickZone[0])
-    changeScene(event, "ping.html", resClickZone[0], false, fade);
+    changeScene(event, "game.html", resClickZone[0], false, fade);
   }
 }
 
@@ -598,7 +598,7 @@ function verifyBackZone(X, Y){
     let passedScene = getLastElem(getCookieValue("scene_number"));
     let sId = -1;
     let fade = findTransition(getTransitions(), getLastElem(removeLastElem(getCookieValue("scene_number"))), scene_number);
-    changeScene(event, "ping.html", sId, true, fade);
+    changeScene(event, "game.html", sId, true, fade);
   }
 }
 
@@ -667,7 +667,7 @@ function verifyDigicode(X, Y){
     document.cookie = "isback=" + false + ";";
     playSoundTransition(findTransitionBySceneId(scene_number).id);
     let fade = findTransition(getTransitions(), scene_number, sId);
-    changeScene(event, "ping.html", sId, false, fade);
+    changeScene(event, "game.html", sId, false, fade);
   }
 }
 
@@ -687,7 +687,7 @@ function verifyObject(X, Y){
     document.cookie = "isback=" + false + ";";
     playSoundTransition(findTransitionBySceneId(scene_number).id);
     let fade = findTransition(getTransitions(), scene_number, sId);
-    changeScene(event, "ping.html", sId, false, fade);
+    changeScene(event, "game.html", sId, false, fade);
   }
 }
 
@@ -726,7 +726,7 @@ function verifyGif(X, Y){
       document.cookie = "isback=" + false + ";";
       playSoundTransition(findTransitionBySceneId(scene_number).id);
       let fade = findTransition(getTransitions(), scene_number, gifClickZone[resGif].id[3]);
-      changeScene(event, "ping.html", gifClickZone[resGif].id[3], false, fade);
+      changeScene(event, "game.html", gifClickZone[resGif].id[3], false, fade);
     }
   }
 }
@@ -1433,7 +1433,7 @@ function Puzzled(id){
         document.cookie = "isback=" + false + ";";
         playSoundTransition(findTransitionBySceneId(scene_number).id);
         let fade = findTransition(getTransitions(), scene_number, idTransition);
-        changeScene(event, "ping.html", idTransition, false, fade);
+        changeScene(event, "game.html", idTransition, false, fade);
       }
     }
   }else if(puzzle[0] == "Gif"){
