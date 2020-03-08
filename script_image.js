@@ -1498,7 +1498,7 @@ function Puzzled(id){
 }
 
 
-// -------------------------------------------- Diary relative functions
+// -------------------------------------------- Diary relative functions  --------------------------------------
 
 function isOnDiaryZone(X,Y){
     let resTab = [];
@@ -1522,21 +1522,13 @@ function isOnDiaryZone(X,Y){
 function verifyDiaryZone(X, Y){
   const resClickZone = isOnDiaryZone(X, Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if(resClickZone[0] >= 0){
-      displayDiary();
+      updateDiary();
       diaryOnScreen = true;
   }
 }
 
 function displayDiary(){
-    const tabImagesToAdd = SplitInTable(getCookieValue("diary_images"));
-    updateDiary(tabImagesToAdd);
-    // Falta le canvas
-    let link = sessionStorage.getItem('diary');
-    const img = new Image();
-    img.onload =  function() {
-     ctx.drawImage(img, windowsValues[4], windowsValues[5], windowsValues[2], windowsValues[3]);
-    };
-    img.src = link;
+    getElementById("canvas").style.display = "initial";
 }
 
 function SplitInTable(imagesToAdd){
@@ -1550,7 +1542,41 @@ function SplitInTable(imagesToAdd){
     }
     return tab;
 }
-
+// Attention taille des cookies pour conserver les images à mettre dans le journal.
 function updateDiary(){
+    const tabImagesToAdd = SplitInTable(getCookieValue("diary_images"));
+    document.cookie = "diary_images=;";
+    const canvas = document.getElementById("canvas");
+    canvas.style.display = "none";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx=canvas.getContext("2d");
+    let link = sessionStorage.getItem('diary');
+    let img = new Image();
+    img.onload =  function() {
+        //Draw ce qu'il faut TODO
+        ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[1],windowsValues[2]);
+        img.src = link;
+        if(tabToAdd.length < 1){
+            displayDiary();
+        }else{
+            drawPicture(tabImagesToAdd,ctx);
+        }
+    };
+}
 
+function drawPicture(tab,ctx){
+    let link = tab[0];
+    let img = new Image();
+    //Recup dans le storage
+    img.onload =  function() {
+        ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[1],windowsValues[2]);
+        img.src = link;
+        if(tab.length == 1){
+            displayDiary();
+        }
+        else{
+            drawPicture(tab.slice(1),ctx);
+        }
+    };
 }
