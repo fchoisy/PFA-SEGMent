@@ -34,5 +34,5 @@ function startScene(event){
   document.cookie = "diary_images=;";
   //ENDUR ALED CORENTIN
   window.sessionStorage.setItem("diary", "");
-  loadVideoScene("Intro.mp4","video/mp4","ping.html");
+  loadVideoScene("Intro.mp4","video/mp4","game.html");
 };
