@@ -22,6 +22,7 @@
 // Parser le json pour savoir s'il y a un journal à l'écran
 // Parser le json pour récupérer toutes les données relatives aux images à afficher dans le journal
 // Virer la zone de texte quand pas de texte de victoire mais juste un ajout au journal.
+// Zone de click correspond pas au journal icon
 
 // -------------------------------------- Corentin ----------------------------------------
 
@@ -1179,14 +1180,14 @@ function loadObjects(){
   let objects = getObjects(scene);
   setWindowsValues();
   if(diaryOnScene){
-      var canvas = document.getElementById("canvas");
+      let canvas = document.getElementById("canvas");
       canvas.style.position = "absolute";
       canvas.width  = windowsValues[0];
       canvas.height = windowsValues[1];
       var ctx = canvas.getContext('2d');
       var img = new Image();
       img.onload = function() {
-        ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
+          ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
       };
       img.src =  "diaryicon.png";
   }
@@ -1557,6 +1558,7 @@ function verifyDiaryZone(X, Y){
 }
 
 function displayDiary(){
+    displayDiaryIcon(document.getElementById("diaryCanvas"));
     document.getElementById("diaryCanvas").style.display = "initial";
     document.getElementById("canvas").style.display = "none";
 }
@@ -1666,4 +1668,13 @@ function getDiaryFromText(text){
         i++;
     }
     return [buffer,i];
+}
+
+function displayDiaryIcon(canvas){
+    var ctx = canvas.getContext('2d');
+    var img = new Image();
+    img.onload = function() {
+      ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
+    };
+    img.src =  "diaryicon.png";
 }
