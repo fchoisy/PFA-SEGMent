@@ -28,7 +28,11 @@ function startScene(event){
   document.cookie = "gif_state=0/;";
   // Different position of the puzzle given a scene
   document.cookie = "puzzle_pos=0/;";
-  //ENDUR
-  window.sessionStorage.setItem("diary", "Game/Diary/background.png");
+  // Is there an already initialized diary on the project
+  document.cookie = "diary_on_scene=false;";
+  // Lists all the images which have to been edited in the diary
+  document.cookie = "diary_images=;";
+  //ENDUR ALED CORENTIN
+  window.sessionStorage.setItem("diary", "");
   loadVideoScene("Intro.mp4","video/mp4","ping.html");
 };

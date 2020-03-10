@@ -21,6 +21,7 @@
 // --------------------------------------- Emeric -----------------------------------------
 // Parser le json pour savoir s'il y a un journal à l'écran
 // Parser le json pour récupérer toutes les données relatives aux images à afficher dans le journal
+// Virer la zone de texte quand pas de texte de victoire mais juste un ajout au journal.
 
 // -------------------------------------- Corentin ----------------------------------------
 
@@ -64,6 +65,7 @@ let gifOK = 0; // Number of Gif to be loaded on the scene
 let audioSoundScene =  undefined; // The sound to stream on the scene
 let diaryOnScene = false; // Is there the diary icon on the screen
 let diaryOnScreen = false; // Is the diary now displaying
+let computedDiary = false; // Is the diary already computed
 // ========================================================================================
 //                               ***Signals***
 // ========================================================================================
@@ -108,6 +110,7 @@ function handler(){
 */
 function initialisation() {
   showLoading();
+  diaryOnScene = Boolean(getCookieValue("diary_on_scene"));
   document.getElementById("scene").style.opacity = 0;
   let isBack = getCookieValue("isback"); // boolean that say if we came to this scene with a backClick
   scene_number = getLastElem(getCookieValue("scene_number")); // update the scene number
@@ -935,7 +938,6 @@ function printOpeningText(){
   function reset() {
     clearTimeout(timer);
     textBox = document.getElementById("textbox");
-    text = getSceneTextBySceneId(scene_number);
     split_text = splitThroughPixel(text, textBox.clientWidth, textBoxTop.clientHeight + "px");
     count = split_text.length;
     if(text.length == 0){
@@ -1058,21 +1060,28 @@ function printOpeningText(){
           charByChar();
       }
   }
+  text = getSceneTextBySceneId(scene_number);
+  const text1 = getDiaryFromText(text);
+  text = text.slice(text1[1]);
+  document.cookie = "diary_images=" + getCookieValue("diary_images") + "Game/Diary/" + text1[0] + ",;";
+  if(text != ""){
+      initTextBox();
+      reset();
+      charByChar();
+      document.addEventListener("click", clickText);
 
-  initTextBox();
-  reset();
-  charByChar();
-  document.addEventListener("click", clickText);
-
-  let resizeTimer;
-  window.addEventListener("resize", function(){
-    clearTimeout(timer);
-    clearTimeout(resizeTimer);
-    resizeTextBox();
-    resizeTimer = setTimeout(function() {
-      setTimeout(charByChar, printSpeed);
-    }, 250);
-  });
+      let resizeTimer;
+      window.addEventListener("resize", function(){
+          clearTimeout(timer);
+          clearTimeout(resizeTimer);
+          resizeTextBox();
+          resizeTimer = setTimeout(function() {
+              setTimeout(charByChar, printSpeed);
+          }, 250);
+      });
+  }else{
+      canPlay = true;
+  }
 }
 
 // ========================================================================================
@@ -1169,6 +1178,18 @@ function loadObjects(){
   let transitions = getTransitions();
   let objects = getObjects(scene);
   setWindowsValues();
+  if(diaryOnScene){
+      var canvas = document.getElementById("canvas");
+      canvas.style.position = "absolute";
+      canvas.width  = windowsValues[0];
+      canvas.height = windowsValues[1];
+      var ctx = canvas.getContext('2d');
+      var img = new Image();
+      img.onload = function() {
+        ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
+      };
+      img.src =  "diaryicon.png";
+  }
   for (var i = 0; i < objects.length; i++) {
     if (!objects[i].PuzzlePiece){
       displayObject(objects[i], transitions, scene);
@@ -1505,12 +1526,10 @@ function isOnDiaryZone(X,Y){
     X = (X - windowsValues[4]) / ( windowsValues[0] - 2 * windowsValues[4]);
     Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
     if(diaryOnScene && X >= 0.92 && X <= 0.97 && Y >= 0.92 && Y <= 0.97){
-        resTab[0] = digicodeClickZone[i].id;
-        resTab[1] = digicodeClickZone[i].clickzoneId;
+        resTab[0] = 0
         return resTab;
     }
     resTab[0] = -1;
-    resTab[1] = -1;
     return resTab;
 }
 
@@ -1522,21 +1541,37 @@ function isOnDiaryZone(X,Y){
 function verifyDiaryZone(X, Y){
   const resClickZone = isOnDiaryZone(X, Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if(resClickZone[0] >= 0){
-      updateDiary();
-      diaryOnScreen = true;
+      if(!diaryOnScreen){
+          if(!computedDiary){
+              updateDiary();
+              computedDiary = true;
+          }
+          displayDiary();
+          diaryOnScreen = true;
+      }else{
+          diaryOnScreen = false;
+          document.getElementById("diaryCanvas").style.display = "none";
+          document.getElementById("canvas").style.display = "initial";
+      }
   }
 }
 
 function displayDiary(){
-    getElementById("canvas").style.display = "initial";
+    document.getElementById("diaryCanvas").style.display = "initial";
+    document.getElementById("canvas").style.display = "none";
 }
 
 function SplitInTable(imagesToAdd){
-    remember = 0;
-    tab = [];
-    for(let i=0;i<imagesToAdd.length;i++){
-        if(imagesToAdd[i] = ","){
+    let remember = 0;
+    let tab = [];
+    if(imagesToAdd.length <= 0){
+        return tab;
+    }
+    let i;
+    for(i=0;i<imagesToAdd.length;i++){
+        if(imagesToAdd[i] == ","){
             tab.push(imagesToAdd.substring(0,i));
+            imagesToAdd = imagesToAdd.slice(i+1);
             remember = i + 1;
         }
     }
@@ -1546,37 +1581,89 @@ function SplitInTable(imagesToAdd){
 function updateDiary(){
     const tabImagesToAdd = SplitInTable(getCookieValue("diary_images"));
     document.cookie = "diary_images=;";
-    const canvas = document.getElementById("canvas");
+    const canvas = document.getElementById("diaryCanvas");
     canvas.style.display = "none";
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const ctx=canvas.getContext("2d");
+    setWindowsValues();
+    canvas.position="absolute";
+    canvas.style.top="0px";
+    canvas.style.left="0px";
+    canvas.width = windowsValues[0];
+    canvas.height = windowsValues[1];
+    let ctx=canvas.getContext("2d");
     let link = sessionStorage.getItem('diary');
     let img = new Image();
+    console.log(tabImagesToAdd.length);
+    console.log(link);
+    if(link==""){
+            drawPicture(tabImagesToAdd,ctx,canvas);
+    }else{
+    img.src = link;
     img.onload =  function() {
-        //Draw ce qu'il faut TODO
-        ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[1],windowsValues[2]);
-        img.src = link;
-        if(tabToAdd.length < 1){
+        ctx.drawImage(img,0,0,windowsValues[0],windowsValues[1]);
+        //Draw ce qu'il faut TODO   [winWidth, winHeight, imgWidth, imgHeight, dx, dy, scale];
+        //ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[2],windowsValues[3]);
+        if(tabImagesToAdd.length < 1){
+            //if(!computedDiary){
+                var l = canvas.toDataURL();
+                sessionStorage.setItem('diary',l);
+            //}
             displayDiary();
         }else{
-            drawPicture(tabImagesToAdd,ctx);
+            drawPicture(tabImagesToAdd,ctx,canvas);
         }
     };
+
+    }
 }
 
-function drawPicture(tab,ctx){
+function drawPicture(tab,ctx,canvas){
     let link = tab[0];
+    console.log(link);
     let img = new Image();
     //Recup dans le storage
+    img.src = link;
     img.onload =  function() {
-        ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[1],windowsValues[2]);
-        img.src = link;
+        //ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[2],windowsValues[3]);
+        ctx.drawImage(img,0,0,windowsValues[0],windowsValues[1]);
         if(tab.length == 1){
+            //if(!computedDiary){
+                var l = canvas.toDataURL();
+                sessionStorage.setItem('diary',l);
+            //}
             displayDiary();
         }
         else{
-            drawPicture(tab.slice(1),ctx);
+            drawPicture(tab.slice(1),ctx,canvas);
         }
     };
+    console.log(link);
+}
+
+function getDiaryFromText(text){
+    let i = 0
+    while(text[i] == " " && i<text.length){
+        i++;
+    }
+    buffer = "";
+    if(text[i] == "|"){
+        diaryOnScene = true;
+        document.cookie = "diary_on_scene=true;";
+        i++;
+        while(text[i] != "|"){
+            buffer += text[i];
+            i++;
+        }
+        i++;
+    }
+    if(text[i] == "["){
+        diaryOnScene = true;
+        document.cookie = "diary_on_scene=true;";
+        i++;
+        while(text[i] != "]"){
+            buffer += text[i]
+            i++;
+        }
+        i++;
+    }
+    return [buffer,i];
 }
