@@ -23,6 +23,12 @@
 // Parser le json pour récupérer toutes les données relatives aux images à afficher dans le journal
 // Virer la zone de texte quand pas de texte de victoire mais juste un ajout au journal.
 // Zone de click correspond pas au journal icon
+// Faire en sorte que ça soit déja chargé quand on lance
+// Gérer le resizes
+
+// Afficher l'icon même quand on est sur le journal
+// L'image se dégrade significativement avec les nombreux resize.
+// Position des canvas autres
 
 // -------------------------------------- Corentin ----------------------------------------
 
@@ -67,6 +73,7 @@ let audioSoundScene =  undefined; // The sound to stream on the scene
 let diaryOnScene = false; // Is there the diary icon on the screen
 let diaryOnScreen = false; // Is the diary now displaying
 let computedDiary = false; // Is the diary already computed
+let diaryLoaded = false; // Is the diary loaded on scene
 // ========================================================================================
 //                               ***Signals***
 // ========================================================================================
@@ -84,14 +91,14 @@ $(window).on('load', handler);
 */
 function handler(){
   document.body.style.opacity = 0;
-  if(fading && gifOK == 0){
+  if(fading && gifOK == 0 && diaryLoaded){
     playSoundScene(audioSoundScene);
     document.getElementById("scene").style.opacity = 1;
     document.body.style.opacity = 1;
     document.body.classList.add("fadein");
     setTimeout(function(){document.body.classList.remove("fadein");
     canPlayFade = true;}, FADE_TIME);
-  }else if(gifOK == 0){
+    }else if(gifOK == 0 && diaryLoaded){
     playSoundScene(audioSoundScene);
     document.getElementById("scene").style.opacity = 1;
     document.body.style.opacity = 1;
@@ -129,6 +136,11 @@ function initialisation() {
     printOpeningText();
   }else{
     canPlay = true;
+  }
+  if(diaryOnScene){
+      updateDiary();
+  }else{
+      diaryLoaded = true;
   }
   clickzone();
   Puzzled(scene_number);
@@ -217,6 +229,14 @@ function resize(){
   setWindowsValues();
   resizeGif();
   loadObjects();
+  updateDiary();
+  if(diaryOnScreen){
+      document.getElementById("canvas").style.display = "none";
+      document.getElementById("diaryCanvas").style.display = "initial";
+  }else{
+      document.getElementById("canvas").style.display = "initial";
+      document.getElementById("diaryCanvas").style.display = "none";
+  }
 }
 
 /**
@@ -1526,7 +1546,8 @@ function isOnDiaryZone(X,Y){
     let resTab = [];
     X = (X - windowsValues[4]) / ( windowsValues[0] - 2 * windowsValues[4]);
     Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
-    if(diaryOnScene && X >= 0.92 && X <= 0.97 && Y >= 0.92 && Y <= 0.97){
+    let size = (0.05 * windowsValues[2] * windowsValues[6])/(windowsValues[1] - 2 * windowsValues[5]);
+    if(diaryOnScene && X >= 0.92 && X <= 0.97 && Y >= (0.97-size) && Y <= 0.97){
         resTab[0] = 0
         return resTab;
     }
@@ -1544,8 +1565,7 @@ function verifyDiaryZone(X, Y){
   if(resClickZone[0] >= 0){
       if(!diaryOnScreen){
           if(!computedDiary){
-              updateDiary();
-              computedDiary = true;
+              displayDiary();
           }
           displayDiary();
           diaryOnScreen = true;
@@ -1587,10 +1607,10 @@ function updateDiary(){
     canvas.style.display = "none";
     setWindowsValues();
     canvas.position="absolute";
-    canvas.style.top="0px";
-    canvas.style.left="0px";
-    canvas.width = windowsValues[0];
-    canvas.height = windowsValues[1];
+    canvas.style.top=windowsValues[5]+"px";
+    canvas.style.left=windowsValues[4] +"px";
+    canvas.width = Math.ceil(windowsValues[0]-2*windowsValues[4]);
+    canvas.height = Math.ceil(windowsValues[1]-2*windowsValues[5]);
     let ctx=canvas.getContext("2d");
     let link = sessionStorage.getItem('diary');
     let img = new Image();
@@ -1601,15 +1621,20 @@ function updateDiary(){
     }else{
     img.src = link;
     img.onload =  function() {
-        ctx.drawImage(img,0,0,windowsValues[0],windowsValues[1]);
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
         //Draw ce qu'il faut TODO   [winWidth, winHeight, imgWidth, imgHeight, dx, dy, scale];
         //ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[2],windowsValues[3]);
         if(tabImagesToAdd.length < 1){
-            //if(!computedDiary){
+            if(!computedDiary){
                 var l = canvas.toDataURL();
                 sessionStorage.setItem('diary',l);
-            //}
-            displayDiary();
+                computedDiary = true;
+            }
+            if(!diaryLoaded){
+                diaryLoaded = true;
+                handler();
+            }
+            //displayDiary();
         }else{
             drawPicture(tabImagesToAdd,ctx,canvas);
         }
@@ -1626,13 +1651,18 @@ function drawPicture(tab,ctx,canvas){
     img.src = link;
     img.onload =  function() {
         //ctx.drawImage(img,windowsValues[4],windowsValues[5],windowsValues[2],windowsValues[3]);
-        ctx.drawImage(img,0,0,windowsValues[0],windowsValues[1]);
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
         if(tab.length == 1){
-            //if(!computedDiary){
+            if(!computedDiary){
                 var l = canvas.toDataURL();
                 sessionStorage.setItem('diary',l);
-            //}
-            displayDiary();
+                computedDiary = true;
+            }
+            //displayDiary();
+            if(!diaryLoaded){
+                diaryLoaded = true;
+                handler();
+            }
         }
         else{
             drawPicture(tab.slice(1),ctx,canvas);
@@ -1673,8 +1703,9 @@ function getDiaryFromText(text){
 function displayDiaryIcon(canvas){
     var ctx = canvas.getContext('2d');
     var img = new Image();
-    img.onload = function() {
-      ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
-    };
     img.src =  "diaryicon.png";
+    img.onload = function() {
+      ctx.drawImage(img, windowsValues[4] + (1.22 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
+      console.log("Hey");
+    };
 }
