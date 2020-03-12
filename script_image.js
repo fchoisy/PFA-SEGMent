@@ -152,7 +152,9 @@ function initialisation() {
   loadObjects();
 }
 
-// To remove ?
+/**
+* Load a sound before the scene begins in order to begin enigma with music
+*/
 function loadSoundScene(){
   let scene = getSceneByID(scene_number);
   let SoundPath = scene.Ambience.Path;
@@ -879,12 +881,15 @@ function isOnObjectZone(X, Y){
 //                                      ***Texts***
 // ========================================================================================
 
+/**
+* Is there text in the scene ?
+*/
 function sceneWithText(id){
   return getSceneTextBySceneId(id) != "";
 }
 
 /**
-* TODO
+* Split the sentence into lines according to the screen size
 * @param {String} string
 * @param {Number} px : TODO
 * @param {Number} fontsize : TODO
@@ -1075,6 +1080,11 @@ function printOpeningText(){
     }
   }
 
+  /**
+  * Function called when a text is displayed and user click on the scene.
+  * If a text is printing, instantly print two lines on screen
+  * Else Print the next two lines Char By Char.
+  */
   function clickText(){
       if(j >= count){
           instantPrinting();
@@ -1287,7 +1297,7 @@ function Puzzled(id){
     }
 
     /**
-    * TODO
+    * Put the digibox on the right place at the screen
     */
     function deplaceDigiBox(){
       setWindowsValues();
@@ -1548,6 +1558,11 @@ function Puzzled(id){
 
 // -------------------------------------------- Diary relative functions  --------------------------------------
 
+/**
+* Check if the mouse position is on the diary click zone
+* @param {Number} X position of the mouse on X-axis
+* @param {Number} Y position of the mouse on Y-axis
+*/
 function isOnDiaryZone(X,Y){
     let resTab = [];
     X = (X - windowsValues[4]) / ( windowsValues[0] - 2 * windowsValues[4]);
@@ -1562,7 +1577,7 @@ function isOnDiaryZone(X,Y){
 }
 
 /**
-* Verifies if clicked on a ClickZone, and changes scene if so
+* Verifies if clicked on the Diary Zone, and display diary if so
 * @param {Coordinate} X
 * @param {Coordinate} Y
 */
@@ -1580,29 +1595,20 @@ function verifyDiaryZone(X, Y){
   }
 }
 
+/**
+* Display the diary by hiding the playing canvas and displaying the diary canvas
+*/
 function displayDiary(){
     document.getElementById("diaryDisplayedCanvas").style.display = "initial";
     document.getElementById("canvas").style.display = "none";
 }
 
-function SplitInTable(imagesToAdd){
-    let remember = 0;
-    let tab = [];
-    if(imagesToAdd.length <= 0){
-        return tab;
-    }
-    let i;
-    for(i=0;i<imagesToAdd.length;i++){
-        if(imagesToAdd[i] == ","){
-            tab.push(imagesToAdd.substring(0,i));
-            imagesToAdd = imagesToAdd.slice(i+1);
-            remember = i + 1;
-        }
-    }
-    return tab;
-}
 
-// Attention taille des cookies pour conserver les images à mettre dans le journal.
+/**
+* Function that update the ghost canvas and the diaryDisplayedCanvas
+* Add the image of the scene or just rewrite the same diary as the previous
+* scene
+*/
 function updateDiary(){
     let canvasSize = getCookieValue("canvas_size");
     console.log(canvasSize.split(","));
@@ -1652,8 +1658,20 @@ function updateDiary(){
     }
 }
 
-function drawPicture(tab,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,first){
-    let link = tab;
+/**
+* Function that update the ghost canvas and the diaryDisplayedCanvas
+* Add the image of the scene or just rewrite the same diary as the previous
+* scene
+* @param {String} link Link to the image to draw on diary
+* @param {Context element} ctx context of the ghost canvas
+* @param {Canvas element} canvas ghost canvas
+* @param {Canvas element} canvasDisplayed displayed canvas
+* @param {Context element} ctxDisp context of the displayed canvas
+* @param {Table} canvasSize width and height of ghost canvas
+* @param {Boolean} first is it the first image to draw (if so,
+* draw diary icon on canvas)
+*/
+function drawPicture(link,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,first){
     let img = new Image();
     //Recup dans le storage
     img.src = link;
@@ -1676,6 +1694,10 @@ function drawPicture(tab,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,first){
     };
 }
 
+/**
+* Function that resize the diaryDisplayedCanvas by redrawing the ghost
+* canvas in it
+*/
 function resizeDiary(){
     const canvasDisplayed = document.getElementById("diaryDisplayedCanvas");
     setWindowsValues();
@@ -1693,6 +1715,10 @@ function resizeDiary(){
     };
 }
 
+/**
+* Store the diary images contained in the opening text in addedToDiary
+* @param {String} text Opening text
+*/
 function getDiaryFromText(text){
     let i = 0
     while(text[i] == " " && i<text.length){
@@ -1722,6 +1748,13 @@ function getDiaryFromText(text){
     return [buffer,i];
 }
 
+/**
+* Draw the diary icon on both canvas
+* @param {Canvas element} canvas ghost canvas
+* @param {Context element} ctx context of the ghost canvas
+* @param {Canvas element} canvasDisplayed displayed canvas
+* @param {Context element} ctxDisp context of the displayed canvas
+*/
 function displayDiaryIcon(canvas,ctx,canvasDisplayed,ctxDisp){
     var img = new Image();
     img.src =  "diaryicon.png";
