@@ -32,7 +32,9 @@ function startScene(event){
   document.cookie = "diary_on_scene=false;";
   // Lists all the images which have to been edited in the diary
   document.cookie = "diary_images=;";
-  //ENDUR ALED CORENTIN
+  // Size of the diary canvas
+  document.cookie = "canvas_size=;"
+  // Prepare the storage of the URL diary
   window.sessionStorage.setItem("diary", "");
   loadVideoScene("Intro.mp4","video/mp4","game.html");
 };
