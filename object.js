@@ -1,6 +1,10 @@
-// ========================================================================================
-//                       ***Objects functions***
-// ========================================================================================
+/**
+* object.js
+*
+* functions related to load and display every object of the scene, except puzzle pieces
+*/
+
+
 
 /*
 * Gets all objects and display those

@@ -1,3 +1,9 @@
+/**
+* global.js
+*
+* Contains every global variablees and classes that should be used in many other scripts
+*/
+
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
 /**

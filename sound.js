@@ -1,6 +1,10 @@
-// ========================================================================================
-//                                      ***Sounds***
-// ========================================================================================
+/**
+* sound.js
+*
+* functions to play sounds from different elements of the game
+*/
+
+
 
 /**
 * Plays the sound located at soundPath, at the volume "volume".

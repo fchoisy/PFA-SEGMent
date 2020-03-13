@@ -1,5 +1,12 @@
-$(window).on('load', handler);
+/**
+* load.js
+*
+* functions for the loading management (waiting for the scene to load), and for background image loading
+*/
 
+
+
+$(window).on('load', handler);
 
 /**
 * Function to wait for everything to be loaded before showing the scene

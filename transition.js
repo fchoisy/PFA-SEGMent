@@ -1,4 +1,12 @@
 /**
+* transition.js
+*
+* functions related to the changement of a scene
+*/
+
+
+
+/**
 * Fades in the screen and moves to a new scene
 * @param {Event} event (ignored)
 * @param {String} html path of page to go to

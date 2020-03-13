@@ -1,3 +1,11 @@
+/**
+* test_clicks.js
+*
+* functions check if the user clicked on a specific zone
+*/
+
+
+
 window.addEventListener("mousemove", changeCursor, false);
 window.addEventListener("click", verifyClick, false);
 

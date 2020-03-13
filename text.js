@@ -1,4 +1,10 @@
-// -------------------------------- Visited Scenes ------------------------------
+/**
+* text.js
+*
+* functions related to text displaying and management
+*/
+
+
 
 /**
 * Return true if the 'scene_number' has been visited and false if not

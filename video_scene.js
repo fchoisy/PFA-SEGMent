@@ -1,3 +1,11 @@
+/**
+* video_scene.js
+*
+* functions needed to display the video on the scene (should be only used with video.html)
+*/
+
+
+
 window.onload = playVid();
 window.addEventListener("resize", resizeVideo);
 document.getElementById("video").addEventListener('ended',skip,false);

@@ -1,4 +1,13 @@
 /**
+* init.js
+*
+* functions to initialise important global variables (JSON file of the game, location of the game folder)
+* and some other useful functions (test if a file exists, loading screen display)
+*/
+
+
+
+/**
 * Loads the json in variable at start
 */
 window.onload = initialise();

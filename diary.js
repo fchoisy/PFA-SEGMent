@@ -1,4 +1,12 @@
 /**
+* diary.js
+*
+* function related to the diary displaying and management
+*/
+
+
+
+/**
 * Display the diary by hiding the playing canvas and displaying the diary canvas
 */
 function displayDiary(){

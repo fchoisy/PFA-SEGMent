@@ -1,4 +1,12 @@
 /**
+* cookie.js
+*
+* functions related to cookie management (parsing and creating cookies)
+*/
+
+
+
+/**
 * Gets the state of the objects (position,etc.) in a scene
 * @param {Number} scene_number : id of a scene
 * @param {String} scene_number : cookie containing the value of the different states (from every scenes)
@@ -76,8 +84,6 @@ function storePuzzleInCookie(cook, topPos, sceneNb){
   let indexes =  getIndexStateBySceneId(sceneNb, cook);
   document.cookie = "puzzle_pos=" + cook.substring(0, indexes[0]) + sceneNb + ":" + topPos + cook.substring(indexes[1]) + "/";
 }
-
-// ----------------------------------- Cookie manager -------------------------------------
 
 /**
 * Returns the index of cookie whose name is 'cname' in cookie 'cook'

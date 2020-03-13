@@ -1,20 +1,16 @@
 /**
-* video.js
+* video_load.js
 *
-* Page where a video should be displayed (either mp4 or ogg)
+* functions needed to load and switch to the video scene
 */
 
 
-
-// ========================================================================================
-//                                      ***Video***
-// ========================================================================================
 
 /**
 * loads all the information to play a video in cookies, then go to the video scene
 * @param {String} vidName : Path to the video
 * @param {String} type : type of the video (video/mp4, video/ogg, etc.)
-* @param {String} sceneAfter : scene to go after quitting the video
+* @param {String} sceneAfter : scene to go after quitting the video (go to game.html or index.html)
 */
 function loadVideoScene(vidName,type,sceneAfter){
   document.cookie = "video_name=" + vidName + ";";

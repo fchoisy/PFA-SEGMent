@@ -1,6 +1,12 @@
-window.onload = initialisation();
+/**
+* main.js
+*
+* main functions, to open the scene, and to handle the resize of the window
+*/
 
-// ------------------------------------ Initialisation ------------------------------------
+
+
+window.onload = initialisation();
 
 /**
 * Function to be called when scene is opened
@@ -37,8 +43,6 @@ function initialisation() {
 }
 
 window.addEventListener("resize", resize);
-
-// ---------------------------------------- Resize ----------------------------------------
 
 /**
 * Functions to execute when resizing the window size

@@ -1,4 +1,12 @@
 /**
+* resize.js
+*
+* function used to update the windowsValues array (to keep the track of the window size)
+*/
+
+
+
+/**
 * Store the values of the window's width, height, image's width, height,
 * the dx (in pixels), the dy (in pixels), the scale of the resized image
 * into an array named windowsValues

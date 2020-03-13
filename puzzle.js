@@ -1,6 +1,10 @@
-// ========================================================================================
-//                       ***Puzzle functions***
-// ========================================================================================
+/**
+* puzzle.js
+*
+* function related to puzzle pieces management and displaying
+*/
+
+
 
 /**
 * The function parse the different information of the JSON according to the puzzle type
