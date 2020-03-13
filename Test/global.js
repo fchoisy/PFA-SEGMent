@@ -60,3 +60,5 @@ let gifOK = 0; // Number of Gif to be loaded on the scene
 let audioSoundScene =  undefined; // The sound to stream on the scene
 let diaryOnScene = false; // Is there the diary icon on the screen
 let diaryOnScreen = false; // Is the diary now displaying
+let diaryLoaded = false; // Is the diary loaded on scene
+let addedToDiary = "" // Path of the images which is added to the diary

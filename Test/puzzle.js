@@ -29,7 +29,7 @@ function Puzzled(id){
     }
 
     /**
-    * TODO
+    * Put the digibox on the right place at the screen
     */
     function deplaceDigiBox(){
       setWindowsValues();

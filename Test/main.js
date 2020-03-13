@@ -7,6 +7,7 @@ window.onload = initialisation();
 */
 function initialisation() {
   showLoading();
+  diaryOnScene = JSON.parse(getCookieValue("diary_on_scene"));
   document.getElementById("scene").style.opacity = 0;
   let isBack = getCookieValue("isback"); // boolean that say if we came to this scene with a backClick
   scene_number = getLastElem(getCookieValue("scene_number")); // update the scene number
@@ -25,6 +26,11 @@ function initialisation() {
   }else{
     canPlay = true;
   }
+  if(diaryOnScene){
+      updateDiary();
+  }else{
+      diaryLoaded = true;
+  }
   clickzone();
   Puzzled(scene_number);
   loadObjects();
@@ -41,4 +47,12 @@ function resize(){
   setWindowsValues();
   resizeGif();
   loadObjects();
+  resizeDiary();
+  if(diaryOnScreen){
+      document.getElementById("canvas").style.display = "none";
+      document.getElementById("diaryDisplayedCanvas").style.display = "initial";
+  }else{
+      document.getElementById("canvas").style.display = "initial";
+      document.getElementById("diaryDisplayedCanvas").style.display = "none";
+  }
 }

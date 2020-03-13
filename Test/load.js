@@ -7,14 +7,14 @@ $(window).on('load', handler);
 */
 function handler(){
   document.body.style.opacity = 0;
-  if(fading && gifOK == 0){
+  if(fading && gifOK == 0 && diaryLoaded){
     playSoundScene(audioSoundScene);
     document.getElementById("scene").style.opacity = 1;
     document.body.style.opacity = 1;
     document.body.classList.add("fadein");
     setTimeout(function(){document.body.classList.remove("fadein");
     canPlayFade = true;}, FADE_TIME);
-  }else if(gifOK == 0){
+    }else if(gifOK == 0 && diaryLoaded){
     playSoundScene(audioSoundScene);
     document.getElementById("scene").style.opacity = 1;
     document.body.style.opacity = 1;
@@ -23,7 +23,9 @@ function handler(){
   hideLoading();
 }
 
-// To remove ?
+/**
+* Load a sound before the scene begins in order to begin enigma with music
+*/
 function loadSoundScene(){
   let scene = getSceneByID(scene_number);
   let SoundPath = scene.Ambience.Path;

@@ -95,5 +95,5 @@ function getGameFolderURL(){
 * @returns URL as a string
 */
 function getGameJsonURL(){
-  return (getCookieValue("game_folder") + "game.segment");
+  return (getCookieValue("game_folder") + "Game.segment");
 }

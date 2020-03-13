@@ -126,7 +126,6 @@ function printOpeningText(){
   function reset() {
     clearTimeout(timer);
     textBox = document.getElementById("textbox");
-    text = getSceneTextBySceneId(scene_number);
     split_text = splitThroughPixel(text, textBox.clientWidth, textBoxTop.clientHeight + "px");
     count = split_text.length;
     if(text.length == 0){
@@ -238,6 +237,11 @@ function printOpeningText(){
     }
   }
 
+  /**
+  * Function called when a text is displayed and user click on the scene.
+  * If a text is printing, instantly print two lines on screen
+  * Else Print the next two lines Char By Char.
+  */
   function clickText(){
       if(j >= count){
           instantPrinting();
@@ -249,19 +253,27 @@ function printOpeningText(){
           charByChar();
       }
   }
+  text = getSceneTextBySceneId(scene_number);
+  const text1 = getDiaryFromText(text);
+  text = text.slice(text1[1]);
+  //En dur ALED Corentin
+  addedToDiary = "Game/Diary/" + text1[0]
+  if(text != ""){
+      initTextBox();
+      reset();
+      charByChar();
+      document.addEventListener("click", clickText);
 
-  initTextBox();
-  reset();
-  charByChar();
-  document.addEventListener("click", clickText);
-
-  let resizeTimer;
-  window.addEventListener("resize", function(){
-    clearTimeout(timer);
-    clearTimeout(resizeTimer);
-    resizeTextBox();
-    resizeTimer = setTimeout(function() {
-      setTimeout(charByChar, printSpeed);
-    }, 250);
-  });
+      let resizeTimer;
+      window.addEventListener("resize", function(){
+          clearTimeout(timer);
+          clearTimeout(resizeTimer);
+          resizeTextBox();
+          resizeTimer = setTimeout(function() {
+              setTimeout(charByChar, printSpeed);
+          }, 250);
+      });
+  }else{
+      canPlay = true;
+  }
 }

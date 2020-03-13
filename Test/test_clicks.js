@@ -40,7 +40,7 @@ function changeCursor(event) {
 * and launches 'changeScene' if it is
 * @param {MouseEvent} event
 */
-function verifyClick(event) { // NOTE : make separate functions for each case ?
+function verifyClick(event) {
   if(canPlay && canPlayFade){
     const X = event.clientX;
     const Y = event.clientY;
@@ -227,18 +227,23 @@ function verifyGif(X, Y){
 }
 
 /**
-* Verifies if clicked on a ClickZone, and changes scene if so
+* Verifies if clicked on the Diary Zone, and display diary if so
 * @param {Coordinate} X
 * @param {Coordinate} Y
 */
 function verifyDiaryZone(X, Y){
   const resClickZone = isOnDiaryZone(X, Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
   if(resClickZone[0] >= 0){
-      displayDiary();
-      diaryOnScreen = true;
+      if(!diaryOnScreen){
+          displayDiary();
+          diaryOnScreen = true;
+      }else{
+          diaryOnScreen = false;
+          document.getElementById("diaryDisplayedCanvas").style.display = "none";
+          document.getElementById("canvas").style.display = "initial";
+      }
   }
 }
-
 // ------------------------------------- isOn[...]Zone ------------------------------------
 
 /**
@@ -354,16 +359,20 @@ function isOnObjectZone(X, Y){
   return resTab;
 }
 
+/**
+* Check if the mouse position is on the diary click zone
+* @param {Number} X position of the mouse on X-axis
+* @param {Number} Y position of the mouse on Y-axis
+*/
 function isOnDiaryZone(X,Y){
     let resTab = [];
     X = (X - windowsValues[4]) / ( windowsValues[0] - 2 * windowsValues[4]);
     Y = (Y - windowsValues[5]) / (windowsValues[1] - 2 * windowsValues[5]);
-    if(diaryOnScene && X >= 0.92 && X <= 0.97 && Y >= 0.92 && Y <= 0.97){
-        resTab[0] = digicodeClickZone[i].id;
-        resTab[1] = digicodeClickZone[i].clickzoneId;
+    let size = (0.05 * windowsValues[2] * windowsValues[6])/(windowsValues[1] - 2 * windowsValues[5]);
+    if(diaryOnScene && X >= 0.92 && X <= 0.97 && Y >= (0.97-size) && Y <= 0.97){
+        resTab[0] = 0
         return resTab;
     }
     resTab[0] = -1;
-    resTab[1] = -1;
     return resTab;
 }
