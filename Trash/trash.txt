@@ -1,0 +1,250 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+This file contains all the code that is not used but might be used later
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+script_image.js
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Changes the background of "ping.html" (or "pong.html")
+ * according to 'scene_number'
+ */
+function backgroundModifier() {
+  //let elem = document.getElementById('backg');
+  //elem.setAttribute("width",window.innerWidth);
+  //elem.setAttribute("height",window.innerHeight);
+  //console.log(document.cookie);
+  scene_number = getLastElem(getCookieValue("scene_number"));
+  img_path = getSceneBackgroundById(parseInt(scene_number));
+  document.body.style.cursor = "default";
+  //elem.setAttribute("src",img_path);
+  //console.log(img_path);
+  let elem = document.getElementById('html');
+  elem.style.backgroundImage = "url(" + img_path + ")";
+  // elem.innerHTML = "html {height:100%;margin:0;padding:0;background:url(" + img_path +") no-repeat center fixed;background-color: black;-webkit-background-size: cover;background-size: contain;}"
+  //return(elem.backgroundImage.width,elem.backgroundImage.height);
+};
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Function to be called when scene is opened
+ */
+function initialisation() {
+    //document.getElementById("canvas").height = window.innerHeight;
+    //document.getElementById("canvas").width = window.innerWidth;
+    scene_number = getLastElem(getCookieValue("scene_number"));
+    //let isback = getCookieValue("isback");
+    //if(!(isback == "true")){
+    backgroundModifier();
+    //}
+    playSoundScene();
+    imgsize();
+    setWindowsValues();
+    printOpeningText();
+    clickzone();
+    Puzzled(scene_number);
+    loadObjects();
+    $("#fade").fadeOut(FADE_OUT_TIME); // jQuery method
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Initializes the global array 'clickZones'
+ */
+function clickzone() {
+  scene_number = getLastElem(getCookieValue("scene_number"));
+  clickZones = getClickZonesByScenesId(scene_number,false);
+  backClickZones = getClickZonesByScenesId(scene_number,true);
+  //if(!(backClickZones.length == 0)){
+    //displayBackClickImage(backClickZones[0]);
+
+  //}
+  // let x1,x2,y1,y2;
+  // for (let i=0;i<nb_zone;i++){
+  //     x1=getCookieValue("coor_click_x1_"+i);
+  //     x2=getCookieValue("coor_click_x2_" + i);
+  //     y1=getCookieValue("coor_click_y1_" + i);
+  //     y2=getCookieValue("coor_click_y2_" + i);
+  //     let zone = new clickZone(parseFloat(x1),parseFloat(y1),parseFloat(x2),parseFloat(y2),);
+  //     clickZones.push(zone);
+  // }
+  // x1 = parseInt(parseFloat(x1)*500);
+  // y1 = parseInt(parseFloat(y1)*500);
+  // x2 = parseInt(parseFloat(x2)*500);
+  // y2 = parseInt(parseFloat(y2)*500);
+}
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Check wether a mouse click is inside a click zone
+ * and launches 'changeScene' if it is
+ * @param {MouseEvent} event
+ */
+function verifyClick(event) { // NOTE : make separate functions for each case ?
+  const X = event.clientX;
+  const Y = event.clientY;
+  const resClickZone = isOnZone(X,Y); // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
+  if (resClickZone[0] >= 0) {
+    playSoundClickZone(resClickZone[1]);
+    changeScene(event, "ping.html", resClickZone[0], false);
+    // if (window.location.pathname == "/pong.html") {
+    //   changeScene(event, "ping.html", resClickZone[0], false);
+    // } else {
+    //   changeScene(event, "pong.html", resClickZone[0], false);
+    // }
+  }
+  const resBackZone = isOnBackZone(X, Y); // NOTE : resTab[0] = is on back zone; resTab[1] = back click zone id
+  if(resBackZone[0]){
+    playSoundBackClickArea(resBackZone[1]);
+    let passedScene = getLastElem(getCookieValue("scene_number"));
+    let sId = 0;
+    changeScene(event, "ping.html", sId, true);
+    // if (window.location.pathname == "/pong.html") {
+    //   changeScene(event, "ping.html", sId, true);
+    // } else {
+    //   changeScene(event, "pong.html", sId, true);
+    // }
+  }
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+  /**
+   * Checks wether the point of coordinates (X,Y) is inside a click zone
+   * @param {coordinate} X
+   * @param {coordinate} Y
+   *
+   * @returns id of the corresponding click zone, -1 if there is none
+   */
+  function isOnZone(X,Y){
+      //console.log(X,Y);
+      X = (X-windowsValues[4])/(windowsValues[0]-2*windowsValues[4]);
+      Y = (Y-windowsValues[5])/(windowsValues[1]-2*windowsValues[5]);
+      let resTab = [];
+      //console.log(X,Y);
+
+  /*
+      let width = 0;
+      let height = 0;
+      let Dx = 0;
+      let Dy = 0;
+
+      if (parseInt(window.innerWidth) >= imgSize[0].width){
+  	width = imgSize[0].width;
+  	Dx = (parseInt(window.innerWidth) - imgSize[0].width) / 2;
+      }
+      else
+  	width = parseInt(window.innerWidth);
+
+      if (parseInt(window.innerHeight) >= imgSize[0].height){
+  	height = imgSize[0].height;
+  	Dy = (parseInt(window.innerHeight) - imgSize[0].height) / 2;
+      }
+      else
+  	height = parseInt(window.innerHeight);
+
+      X = (X - Dx) / width;
+      Y = (Y - Dy) / height;
+
+      */
+      //console.log(clickZones);
+      let len = clickZones.length;
+      for(let i=0;i<len;i++){
+          if(X>=clickZones[i].x1 && X<=clickZones[i].x2 && Y>=clickZones[i].y1 && Y<=clickZones[i].y2){
+              resTab[0] = clickZones[i].id; // NOTE : resTab[0] = id pointed scene; resTab[1] = clickzone id
+              resTab[1] = clickZones[i].clickzoneId;
+              return resTab;
+          }
+      }
+      resTab[0] = -1
+      resTab[1] = -1
+      return resTab;
+  }
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+  /**
+   * Fades in the screen and moves to a new scene
+   * @param {Event} event (ignored)
+   * @param {string} html path of page to go to
+   * @param {number} id id of scene to go to
+   */
+  function changeScene(event, html, id, back) {
+    event.preventDefault();
+    $("#fade").fadeIn(FADE_IN_TIME, () => {
+      let cook = document.cookie;
+      let i = 0;
+      while (cook[i] != ";" && i < cook.length) {
+        i = i + 1;
+      }
+      // var stri = document.cookie.substring(i,document.cookie.length);
+      // console.log("stri : " + stri);
+      // document.cookie = "json=;expires=Thu, 01 Jan 1970 00:00:01 GMT"
+      // //document.cookie = "scene_number=;expires=Thu, 01 Jan 1970 00:00:01 GMT"
+      // console.log(document.cookie);
+      // console.log("Ho " + document.cookie);
+      let lstSceneNumber = getCookieValue("scene_number")
+      if(lstSceneNumber.length > 0 ){
+          lstSceneNumber = lstSceneNumber.substring(0,lstSceneNumber.length);
+      }
+      else{
+          lstSceneNumber = "";
+      }
+      // if(getCookieValue("isback") == "false;" && back){
+      //     let lst;
+      //     if(getLastElem(lstSceneNumber)==scene_number){
+      //         lst = removeLastElem(lstSceneNumber);
+      //         document.cookie = "scene_number=" + lst + ";";
+      //         document.cookie = "isback=" + true +";";
+      //     }
+      //     document.location.href = html;
+      //     return;
+      // }
+      // else{
+        if(back){
+          let lst;
+          if(getLastElem(lstSceneNumber)==scene_number){
+              lst = removeLastElem(lstSceneNumber);
+              document.cookie = "scene_number=" + lst + ";";
+              //document.cookie = "isback=" + "falsesecond" +";";
+          }
+        }else{
+          if(getLastElem(lstSceneNumber)==scene_number){
+              //document.cookie = "isback=" + false +";";
+              document.cookie = "scene_number=" + lstSceneNumber + "," + id + ";"; // + stri);
+          }
+        }
+      //}
+      //
+      // $.getJSON( GameURL, function(data) {
+      //   var scene = getSceneByID(data,id);
+      //   var img = getSceneImage(scene);
+      //   var clickZones = getClickZones(scene);
+      //   const nbClickZones = clickZones.length;
+      //   document.cookie = "nb_click_zones=" + nbClickZones + ";";
+      //   for(var i = 0; i < nbClickZones; i++){
+      //     var zones = clickZones[i];
+      //     document.cookie = "coor_click_x1_" + i  + "=" + zones.x1 + ";";
+      //     document.cookie = "coor_click_y1_" + i  + "=" + zones.y1 + ";";
+      //     document.cookie = "coor_click_x2_" + i  + "=" + zones.x2 + ";";
+      //     document.cookie = "coor_click_y2_" + i  + "=" + zones.y2 + ";";
+      //   }
+      //   document.cookie = "bckg_path="+ img +";";
+
+
+      document.location.href = html;
+
+      // });
+    })
+  };
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+json.js
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // function getBackClickAreaImagePath(scene){
+  //   let objects = getObjects(scene);
+  //   let len = objects.length;
+  //   let path = "";
+  //   let i = 0;
+  //   while (i < len && path == "") {
+  //     if(objects[i].PuzzlePiece==false){
+  //       path=objects[i].Image;
+  //     }
+  //     i++;
+  //   }
+  //   return path;
+  // }
