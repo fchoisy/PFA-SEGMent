@@ -102,6 +102,9 @@ function drawPicture(link,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,first){
             }
         }
     };
+    img.onerror = function(){
+        alert("L'image de journal à ajouter a été mal renseignée et n'a pas pu être trouvée");
+    };
 }
 
 function resizeDiary(){
