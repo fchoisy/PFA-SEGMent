@@ -48,7 +48,6 @@ function backgroundModifier() {
   img_path = getSceneBackgroundById(parseInt(scene_number));
   document.body.style.cursor = "default";
   let elem = document.body;
-  console.log(spaceToURL(img_path));
   elem.style.backgroundImage = "url(" + spaceToURL(img_path) + ")";
 };
 

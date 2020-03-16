@@ -81,7 +81,8 @@ function splitThroughPixel(string, px, fontsize = null){
     split.push(div.innerText);
   }
   document.body.removeChild(div);
-  return split;
+  console.log(split);
+  return split.map(x=>x.split("\n")).flat();
 }
 
 /**
