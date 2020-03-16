@@ -21,6 +21,9 @@ function loadObjects(){
       canvas.height = windowsValues[1];
       var ctx = canvas.getContext('2d');
       var img = new Image();
+      img.classList.add("diary-blink"); // + setTimeout + code css
+      console.log(img.classList);
+      //setTimeout(function(){img.classList.remove("diary-blink");},5000)
       img.onload = function() {
           ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
       };
