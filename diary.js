@@ -169,6 +169,7 @@ function displayDiaryIcon(canvas,ctx,canvasDisplayed,ctxDisp){
         ctx.drawImage(img, 0.92*canvas.width, (0.97 * canvas.height - 0.05 * canvas.width), 0.05 * canvas.width, 0.05*canvas.width);
         var img1 = new Image();
         img1.src = "diaryicon.png";
+        // img1.class = "diary-blink"; A TESTER (animation clignotement)
         var l = canvas.toDataURL();
         sessionStorage.setItem('diary',l);
         img1.onload = function() {
