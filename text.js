@@ -276,9 +276,11 @@ function printOpeningText(){
           clearTimeout(timer);
           clearTimeout(resizeTimer);
           resizeTextBox();
-          resizeTimer = setTimeout(function() {
-              setTimeout(charByChar, printSpeed);
-          }, 250);
+          if(j%2!=0 || i>0){
+              resizeTimer = setTimeout(function() {
+                  setTimeout(charByChar, printSpeed);
+              }, 250);
+          }
       });
   }else{
       canPlay = true;
