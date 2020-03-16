@@ -12,8 +12,8 @@
 * into an array named windowsValues
 */
 function setWindowsValues(){
-  let winWidth = parseInt(window.innerWidth);
-  let winHeight = parseInt(window.innerHeight);
+  let winWidth = parseInt(window.innerWidth)-0.1;
+  let winHeight = parseInt(window.innerHeight)-0.1;
   let imgWidth = imgSize[0].width;
   let imgHeight = imgSize[0].height;
   let dx = 0;
@@ -26,6 +26,7 @@ function setWindowsValues(){
     scale = 1.0 / (imgHeight / winHeight);
     dx = (winWidth - (imgWidth * scale)) / 2;
   }
+  console.log(document.body.clientWidth);
   let array = [winWidth, winHeight, imgWidth, imgHeight, dx, dy, scale];
   windowsValues = array;
 }
