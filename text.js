@@ -52,11 +52,11 @@ function sceneWithText(id){
 }
 
 /**
-* TODO
-* @param {String} string
-* @param {Number} px : TODO
-* @param {Number} fontsize : TODO
-* @returns : TODO
+* Cut a text line by line given a length of textbox
+* @param {String} string text to split
+* @param {Number} px length of the textbox
+* @param {Number} fontsize fontsize to use
+* @returns : Table which contains the sentence to display line by line
 */
 function splitThroughPixel(string, px, fontsize = null){
   let words = string.split(' ');
