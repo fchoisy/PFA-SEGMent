@@ -136,6 +136,7 @@ function getDiaryFromText(text){
     buffer = "";
     if(text[i] == "|"){
         diaryOnScene = true;
+        flashingDiary = true;
         document.cookie = "diary_on_scene=true;";
         i++;
         while(text[i] != "|"){
