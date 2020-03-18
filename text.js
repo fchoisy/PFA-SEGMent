@@ -198,6 +198,10 @@ function printOpeningText(){
       textBox.innerHTML = "";
       setTimeout(function(){canPlay = true;}, printSpeed);
       textBox.style.display = 'none';
+      if(flashingDiary){
+          diaryBlinking = 3;
+          loadObjects(true);
+      }
     }else{
       if(count == 1){
         textBoxTop.innerHTML = split_text[count-1];
