@@ -132,21 +132,56 @@ function Puzzled(id){
         piece[i].style.left = left + "px";
         puzzleImagesZone.appendChild(piece[i]);
         ctx[i]=piece[i].getContext("2d");
-        $(".draggable").easyDrag({'container': "parent"});
+          $(' .draggable').easyDrag({'container': $('#puzzleImagesZone')});
+	  
+	  function isTransparent(canva, x, y){
+	      var pixelData = canva.getContext("2d").getImageData(x, y, 1, 1).data;
+	      return (pixelData[3] == 0);
+	  }
+	  
+	    
+	  $('#draggable'+i).click(function(e){
+	      var xp = e.clientX;
+	      var yp = e.clientY;
+	      var xpos, ypos, rect;
+	      var chosenId;
+
+	      function firstNonTransparentCanvas(xClick,yClick){
+		  var topCanvas = document.elementFromPoint(xClick,yClick);
+		  
+		  if (topCanvas.id == "puzzleImages")
+		      return;
+		  
+		  rect = topCanvas.getBoundingClientRect();
+		  xpos = xClick - rect.left; 
+		  ypos = yClick - rect.top; 
+		  
+		  if (!isTransparent(topCanvas, xpos, ypos)){
+		      chosenId = topCanvas.id;
+		      return topCanvas.id;
+		  }
+		  else {
+		      $(topCanvas).hide();
+		      firstNonTransparentCanvas(xClick, yClick);
+		      $(topCanvas).show();
+		  }
+	      }
+	      firstNonTransparentCanvas(xp,yp);
+	      $('#draggable' + chosenId.substr(9, chosenId.length)).trigger("mousedown");
+	  });
       }
-      console.log("ctx",ctx);
-      i = 0;
-      ctx.forEach(function(item){
-        img[i] = new Image();
-        img[i].onload =  function(i) {
-          item.drawImage(img[i], 0, 0, piece[i].width, piece[i].height);
-          console.log("Object drawn !" + i)
-        }.bind(this, i);
-        img[i].src = getGameFolderURL() + puzzlePieces[i].Image;
-        i++;
-
-      });
-
+	i = 0;
+	ctx.forEach(function(item){
+            img[i] = new Image();
+            img[i].onload =  function(i) {
+		item.drawImage(img[i], 0, 0, piece[i].width, piece[i].height);
+		console.log("Object drawn !" + i)
+            }.bind(this, i);
+            img[i].src = getGameFolderURL() + puzzlePieces[i].Image;
+            i++;
+	      
+	});
+	  
       diffX = [];
       diffY = [];
       var delta = 0.05;
