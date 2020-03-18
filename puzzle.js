@@ -147,7 +147,7 @@ function Puzzled(id){
 	      var xp = e.clientX;
 	      var yp = e.clientY;
 	      var xpos, ypos, rect;
-	      var chosenId;
+	      var chosenId = "";
 
 	      function firstNonTransparentCanvas(xClick,yClick){
 		  var topCanvas = document.elementFromPoint(xClick,yClick);
