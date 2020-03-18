@@ -1,7 +1,7 @@
 /**
- * script.js
+ * load_game.js
  *
- * First script to be executed, loads the json and starts the first scene when the button is pressed
+ * First script to be executed, loads important variables and starts the intro video (if existing)
  */
 
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables

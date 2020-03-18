@@ -1,4 +1,12 @@
 /**
+* diary.js
+*
+* function related to the diary displaying and management
+*/
+
+
+
+/**
 * Display the diary by hiding the playing canvas and displaying the diary canvas
 */
 function displayDiary(){
@@ -13,7 +21,6 @@ function displayDiary(){
 */
 function updateDiary(){
     let canvasSize = getCookieValue("canvas_size");
-    console.log(canvasSize.split(","));
     const canvas = document.getElementById("diaryCanvas");
     const canvasDisplayed = document.getElementById("diaryDisplayedCanvas");
     canvasDisplayed.style.display = "none";
@@ -29,14 +36,12 @@ function updateDiary(){
     let link = sessionStorage.getItem('diary');
     let img = new Image();
     if(link==""){
-            console.log(addedToDiary);
             let img1 = new Image();
             img1.src = addedToDiary;
             img1.onload = function(){
                 canvasSize = [Math.min(this.width,1280),Math.min(this.height,720)];
                 canvas.width = canvasSize[0];
                 canvas.height = canvasSize[1];
-                console.log(canvasSize);
                 document.cookie = "canvas_size=" + canvasSize + ";";
                 drawPicture(addedToDiary,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,true);
             }
@@ -83,7 +88,6 @@ function drawPicture(link,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,first){
         var l = canvas.toDataURL();
         img1.src = l;
         img1.onload = function(){
-            console.log(img1.src);
             ctxDisp.drawImage(img1,0,0,canvasDisplayed.width,canvasDisplayed.height);
             if(first){
                 displayDiaryIcon(canvas,ctx,canvasDisplayed,ctxDisp);
@@ -93,6 +97,9 @@ function drawPicture(link,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,first){
                 handler();
             }
         }
+    };
+    img.onerror = function(){
+        alert("L'image de journal à ajouter a été mal renseignée et n'a pas pu être trouvée");
     };
 }
 
@@ -125,6 +132,7 @@ function getDiaryFromText(text){
     buffer = "";
     if(text[i] == "|"){
         diaryOnScene = true;
+        flashingDiary = true;
         document.cookie = "diary_on_scene=true;";
         i++;
         while(text[i] != "|"){
@@ -156,17 +164,16 @@ function getDiaryFromText(text){
 function displayDiaryIcon(canvas,ctx,canvasDisplayed,ctxDisp){
     var img = new Image();
     img.src =  "diaryicon.png";
-    console.log("kikou");
     img.onload = function() {
         ctx.drawImage(img, 0.92*canvas.width, (0.97 * canvas.height - 0.05 * canvas.width), 0.05 * canvas.width, 0.05*canvas.width);
         var img1 = new Image();
         img1.src = "diaryicon.png";
+        // img1.class = "diary-blink"; A TESTER (animation clignotement)
         var l = canvas.toDataURL();
         sessionStorage.setItem('diary',l);
         img1.onload = function() {
             ctxDisp.drawImage(img1, 0.92*canvasDisplayed.width, (0.97 * canvasDisplayed.height - 0.05 * canvasDisplayed.width), 0.05 * canvasDisplayed.width, 0.05*canvasDisplayed.width);
             diaryLoaded = true;
-            console.log("Hey");
             handler();
         }
     };

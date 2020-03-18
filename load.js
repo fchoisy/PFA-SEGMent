@@ -1,5 +1,12 @@
-$(window).on('load', handler);
+/**
+* load.js
+*
+* functions for the loading management (waiting for the scene to load), and for background image loading
+*/
 
+
+
+$(window).on('load', handler);
 
 /**
 * Function to wait for everything to be loaded before showing the scene
@@ -41,7 +48,7 @@ function backgroundModifier() {
   img_path = getSceneBackgroundById(parseInt(scene_number));
   document.body.style.cursor = "default";
   let elem = document.body;
-  elem.style.backgroundImage = "url(" + img_path + ")";
+  elem.style.backgroundImage = "url(" + spaceToURL(img_path) + ")";
 };
 
 /**
@@ -50,4 +57,16 @@ function backgroundModifier() {
 function imgsize(){
   scene_number = getLastElem(getCookieValue("scene_number"));
   imgSize = getImageSizeByID(scene_number);
+}
+
+/**
+* Return the URL with " " replaced by %20
+* @param {String} url the url to transform
+*/
+function spaceToURL(url){
+    for(let i = 0; i<url.length;i++){
+        if(url[i] == " ")
+            url = url.substring(0,i) + "%20" + url.substring(i+1);
+    }
+    return url;
 }

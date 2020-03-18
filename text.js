@@ -1,4 +1,10 @@
-// -------------------------------- Visited Scenes ------------------------------
+/**
+* text.js
+*
+* functions related to text displaying and management
+*/
+
+
 
 /**
 * Return true if the 'scene_number' has been visited and false if not
@@ -46,11 +52,11 @@ function sceneWithText(id){
 }
 
 /**
-* TODO
-* @param {String} string
-* @param {Number} px : TODO
-* @param {Number} fontsize : TODO
-* @returns : TODO
+* Cut a text line by line given a length of textbox
+* @param {String} string text to split
+* @param {Number} px length of the textbox
+* @param {Number} fontsize fontsize to use
+* @returns : Table which contains the sentence to display line by line
 */
 function splitThroughPixel(string, px, fontsize = null){
   let words = string.split(' ');
@@ -75,7 +81,8 @@ function splitThroughPixel(string, px, fontsize = null){
     split.push(div.innerText);
   }
   document.body.removeChild(div);
-  return split;
+  console.log(split);
+  return split.map(x=>x.split("\n")).flat();
 }
 
 /**
@@ -191,6 +198,10 @@ function printOpeningText(){
       textBox.innerHTML = "";
       setTimeout(function(){canPlay = true;}, printSpeed);
       textBox.style.display = 'none';
+      if(flashingDiary){
+          diaryBlinking = 3;
+          loadObjects(true);
+      }
     }else{
       if(count == 1){
         textBoxTop.innerHTML = split_text[count-1];
@@ -269,9 +280,11 @@ function printOpeningText(){
           clearTimeout(timer);
           clearTimeout(resizeTimer);
           resizeTextBox();
-          resizeTimer = setTimeout(function() {
-              setTimeout(charByChar, printSpeed);
-          }, 250);
+          if(j%2!=0 || i>0){
+              resizeTimer = setTimeout(function() {
+                  setTimeout(charByChar, printSpeed);
+              }, 250);
+          }
       });
   }else{
       canPlay = true;

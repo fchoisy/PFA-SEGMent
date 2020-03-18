@@ -1,3 +1,9 @@
+/**
+* global.js
+*
+* Contains every global variablees and classes that should be used in many other scripts
+*/
+
 'use strict'; // Turns on "strict mode", preventing use of non-declared variables
 
 /**
@@ -62,3 +68,5 @@ let diaryOnScene = false; // Is there the diary icon on the screen
 let diaryOnScreen = false; // Is the diary now displaying
 let diaryLoaded = false; // Is the diary loaded on scene
 let addedToDiary = "" // Path of the images which is added to the diary
+let flashingDiary = false; //Is it a scene where the diary will flash
+let diaryBlinking = 0; // Remaining bliking number

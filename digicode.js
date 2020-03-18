@@ -1,6 +1,10 @@
-// ========================================================================================
-//                                    ***Digicode functions***
-// ========================================================================================
+/**
+* digicode.js
+*
+* functions related to the management of the inputs (question, answer, deletion) for the digicode
+*/
+
+
 
 /*
 * Implements the validation behavior of a digicode click zone

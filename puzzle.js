@@ -1,6 +1,10 @@
-// ========================================================================================
-//                       ***Puzzle functions***
-// ========================================================================================
+/**
+* puzzle.js
+*
+* function related to puzzle pieces management and displaying
+*/
+
+
 
 /**
 * The function parse the different information of the JSON according to the puzzle type
@@ -80,7 +84,6 @@ function Puzzled(id){
     }
     if(alreadyVisited){
       let tmpTab = statePuzzle.split(",");
-      console.log(tmpTab.length);
       for(let i = 0; i < tmpTab.length / 2; i++){
         let tempo = [0,0];
         tempo[0] = parseFloat(tmpTab[2 * i]);

@@ -1,4 +1,11 @@
 /**
+* parser_json.js
+*
+* functions to get information from the game json file
+*/
+
+
+/**
 * Returns all the scenes of the JSON file (GameJson)
 * @returns scene[]
 */

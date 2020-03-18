@@ -1,3 +1,6 @@
+<!-- game.html -->
+<!-- page for scene displaying -->
+
 <!DOCTYPE HTML>
 
 <html id="html" class="html-class">
@@ -8,8 +11,7 @@
   <meta charset="utf-8">
   <!-- Sert à interdire le mode de compatibilité sur IE -->
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <!-- Permet de fixer la taille de la zone visible par l'utilisateur -->
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
 
   <script src="Libraries/libgif.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -298,15 +300,53 @@
     to   { opacity: 1; }
   }
 
+  .diary-blink { A TESTER (animation clignotement)
+    animation: diary-blink 15s infinite linear;
+    -webkit-animation: diary-blink 15s infinite linear;
+    -moz-animation: diary-blink 15s infinite linear;
+    -o-animation: diary-blink 15s infinite linear;
+    -ms-animation: diary-blink 15s infinite linear;
+  }
+
+  @keyframes diary-blink {
+    0%  { opacity: 0; }
+    33% { opacity: 1; }
+    100%{ opacity: 0; }
+  }
+
+  @-moz-keyframes diary-blink {
+    0%  { opacity: 0; }
+    33% { opacity: 1; }
+    100%{ opacity: 0; }
+  }
+
+  @-webkit-keyframes diary-blink {
+    0%  { opacity: 0; }
+    33% { opacity: 1; }
+    100%{ opacity: 0; }
+  }
+
+  @-ms-keyframes diary-blink {
+    0%  { opacity: 0; }
+    33% { opacity: 1; }
+    100%{ opacity: 0; }
+  }
+
+  @-o-keyframes diary-blink {
+    0%  { opacity: 0; }
+    33% { opacity: 1; }
+    100%{ opacity: 0; }
+  }
+
   </style>
 </head>
 
 <body>
   <canvas  id="canvas" >
   </canvas>
-  <canvas  id="diaryCanvas" style="position: absolute; z-index:112">
+  <canvas  id="diaryCanvas" style="position: absolute; z-index:112;display: none">
   </canvas>
-  <canvas  id="diaryDisplayedCanvas" style="position: absolute; z-index:112">
+  <canvas  id="diaryDisplayedCanvas" style="position: absolute; z-index:112;display: none">
   </canvas>
   <!-- Element for fade in & fade out transitions -->
   <div id="fade"></div>

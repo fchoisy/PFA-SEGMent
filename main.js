@@ -1,6 +1,12 @@
-window.onload = initialisation();
+/**
+* main.js
+*
+* main functions, to open the scene, and to handle the resize of the window
+*/
 
-// ------------------------------------ Initialisation ------------------------------------
+
+
+window.onload = initialisation();
 
 /**
 * Function to be called when scene is opened
@@ -33,12 +39,10 @@ function initialisation() {
   }
   clickzone();
   Puzzled(scene_number);
-  loadObjects();
+  loadObjects((diaryBlinking!=0 && flashingDiary));
 }
 
 window.addEventListener("resize", resize);
-
-// ---------------------------------------- Resize ----------------------------------------
 
 /**
 * Functions to execute when resizing the window size
@@ -46,7 +50,7 @@ window.addEventListener("resize", resize);
 function resize(){
   setWindowsValues();
   resizeGif();
-  loadObjects();
+  loadObjects((diaryBlinking!=0 && flashingDiary));
   resizeDiary();
   if(diaryOnScreen){
       document.getElementById("canvas").style.display = "none";
