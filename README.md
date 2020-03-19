@@ -5,7 +5,7 @@
 * [Technologies](#technologies)
 * [Architecture](#architecture)
 * [Installation](#installation)
-* [Démarrage](#demarrage)
+* [Démarrage](#démarrage)
 
 
 ##  Description du projet
@@ -35,7 +35,7 @@ git clone https://github.com/florbis/PFA-SEGMent.git
 Si vous désirez essayer les jeux déjà dans ce dossier, passez à la section suivante, sinon poursuivez avec les instructions suivantes.
 
 Les fichiers à modifier si votre propre jeu est celui que vous avez envie de tester sont présents dans le dossier Game. Une fois dans ce dossier, vous devez garder l'architecture déjà mise en place, à savoir la suivante :
-* dans le dossier Objects vous pourrez placés les images qui serviront à vos différentes énigmes.
+* dans le dossier Objects vous pourrez placer les images qui serviront à vos différentes énigmes.
 * dans le dossier Scenes sont présentes les images de fond que vous désirez utiliser.
 * dans le dossier Sounds sont présentes les musiques de fond ou d'actions que vous voulez écouter.
 
