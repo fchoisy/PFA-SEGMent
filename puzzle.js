@@ -135,8 +135,8 @@ function Puzzled(id){
         piece[i].style.left = left + "px";
         puzzleImagesZone.appendChild(piece[i]);
         ctx[i]=piece[i].getContext("2d");
-          $(' .draggable').easyDrag({'container': $('#puzzleImagesZone')});
-	  
+          $(' .draggable').easyDrag({'container': $('#puzzleImages')});
+
 	  function isTransparent(canva, x, y){
 	      var pixelData = canva.getContext("2d").getImageData(x, y, 1, 1).data;
 	      return (pixelData[3] == 0);
