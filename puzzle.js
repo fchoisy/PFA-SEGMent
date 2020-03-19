@@ -142,7 +142,8 @@ function Puzzled(id){
 	      return (pixelData[3] == 0);
 	  }
 	  	    
-	  $('#draggable'+i).click(function(e){
+	  
+	  piece[i].addEventListener('mousedown', e => {    
 	      var xp = e.clientX;
 	      var yp = e.clientY;
 	      var xpos, ypos, rect;
