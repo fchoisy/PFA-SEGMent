@@ -141,8 +141,7 @@ function Puzzled(id){
 	      var pixelData = canva.getContext("2d").getImageData(x, y, 1, 1).data;
 	      return (pixelData[3] == 0);
 	  }
-	  
-	    
+	  	    
 	  $('#draggable'+i).click(function(e){
 	      var xp = e.clientX;
 	      var yp = e.clientY;
@@ -170,7 +169,10 @@ function Puzzled(id){
 		  }
 	      }
 	      firstNonTransparentCanvas(xp,yp);
-	      $('#draggable' + chosenId.substr(9, chosenId.length)).trigger("mousedown");
+	      $('#draggable' + chosenId.substr(9, chosenId.length)).trigger('click');
+	      $('#draggable' + i).trigger('mouseup');
+	      var mouseDownEvent = jQuery.Event( "mousedown", { pageX: xp, pageY: yp } );
+	      $('#draggable' + chosenId.substr(9, chosenId.length)).trigger(mouseDownEvent);
 	  });
       }
 	i = 0;
