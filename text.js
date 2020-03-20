@@ -196,7 +196,7 @@ function printOpeningText(){
     clearTimeout(timer);
     if(j >= count){
       textBox.innerHTML = "";
-      setTimeout(function(){canPlay = true;}, printSpeed);
+      setTimeout(function(){canPlay = true;document.removeEventListener("click", clickText);}, printSpeed);
       textBox.style.display = 'none';
       if(flashingDiary){
           diaryBlinking = 3;
