@@ -50,7 +50,8 @@
                     ],
                     "RepeatText": false,
                     "SceneType": 2,
-                    "StartText": "",
+                    "Sonar": false,
+                    "StartText": "[refBookl.png]",
                     "TextAreas": [
                     ],
                     "id": 6
@@ -151,6 +152,7 @@
                     ],
                     "RepeatText": false,
                     "SceneType": 0,
+                    "Sonar": false,
                     "StartText": "",
                     "TextAreas": [
                         {
@@ -490,6 +492,7 @@
                     ],
                     "RepeatText": false,
                     "SceneType": 0,
+                    "Sonar": false,
                     "StartText": "Me voila dans la pièce ! Mais qu'est-ce que ce poster fait là ?",
                     "TextAreas": [
                     ],
@@ -591,7 +594,8 @@
                     ],
                     "RepeatText": false,
                     "SceneType": 0,
-                    "StartText": "",
+                    "Sonar": false,
+                    "StartText": "|exlibrisBook.png|",
                     "TextAreas": [
                     ],
                     "id": 3
@@ -835,13 +839,14 @@
                     ],
                     "Path": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2",
                     "Rect": [
-                        -273.07304478683847,
-                        273.3063913835641,
+                        -279.001060390712,
+                        273.3063913835642,
                         400,
                         400
                     ],
                     "RepeatText": false,
                     "SceneType": 0,
+                    "Sonar": false,
                     "StartText": "",
                     "TextAreas": [
                     ],
@@ -915,7 +920,8 @@
                     ],
                     "RepeatText": false,
                     "SceneType": 1,
-                    "StartText": "Je suis arrivé au casting de \"des int et des strings !\", mais je dois d'abord résoudre cette énigme...",
+                    "Sonar": false,
+                    "StartText": "|background.png|Je suis arrivé au casting de \"des int et des strings !\", mais je dois d'abord résoudre cette énigme...",
                     "TextAreas": [
                         {
                             "Behaviour": 3,
@@ -1249,6 +1255,7 @@
                         "SceneToScene": {
                             "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.5",
                             "Riddle": {
+                                "MaxTime": 0,
                                 "Text": {
                                     "Expected": "DELAI",
                                     "FuzzyMatches": [
@@ -1271,6 +1278,7 @@
                         },
                         "Which": "SceneToScene"
                     },
+                    "Unique": true,
                     "id": 5
                 },
                 {
@@ -1305,6 +1313,7 @@
                         },
                         "Which": "ClickAreaToScene"
                     },
+                    "Unique": false,
                     "id": 4
                 },
                 {
@@ -1334,6 +1343,7 @@
                         "SceneToScene": {
                             "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.1",
                             "Riddle": {
+                                "MaxTime": 0,
                                 "Text": {
                                     "Expected": "1347",
                                     "FuzzyMatches": [
@@ -1351,6 +1361,7 @@
                         },
                         "Which": "SceneToScene"
                     },
+                    "Unique": true,
                     "id": 3
                 },
                 {
@@ -1380,6 +1391,7 @@
                         "SceneToScene": {
                             "From": "/SEGMentDocument.1/SEGMentProcess.0/Scene.2",
                             "Riddle": {
+                                "MaxTime": 0,
                                 "Puzzle": {
                                 },
                                 "Which": "Puzzle"
@@ -1390,6 +1402,7 @@
                         },
                         "Which": "SceneToScene"
                     },
+                    "Unique": true,
                     "id": 2
                 },
                 {
@@ -1424,6 +1437,7 @@
                         },
                         "Which": "ObjectToScene"
                     },
+                    "Unique": false,
                     "id": 1
                 }
             ],
