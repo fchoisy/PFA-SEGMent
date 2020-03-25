@@ -248,6 +248,7 @@ function verifyDiaryZone(X, Y){
       }else{
           diaryOnScreen = false;
           document.getElementById("diaryDisplayedCanvas").style.display = "none";
+          document.getElementById("diaryIconCanvas").style.display = "initial";          
           document.getElementById("canvas").style.display = "initial";
       }
   }

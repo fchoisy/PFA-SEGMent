@@ -54,8 +54,10 @@ function resize(){
   resizeDiary();
   if(diaryOnScreen){
       document.getElementById("canvas").style.display = "none";
+      document.getElementById("diaryIconCanvas").style.display = "none";
       document.getElementById("diaryDisplayedCanvas").style.display = "initial";
   }else{
+      document.getElementById("diaryIconCanvas").style.display = "initial";
       document.getElementById("canvas").style.display = "initial";
       document.getElementById("diaryDisplayedCanvas").style.display = "none";
   }

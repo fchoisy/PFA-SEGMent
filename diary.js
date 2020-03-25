@@ -12,6 +12,7 @@
 function displayDiary(){
     document.getElementById("diaryDisplayedCanvas").style.display = "initial";
     document.getElementById("canvas").style.display = "none";
+    document.getElementById("diaryIconCanvas").style.display = "none";
 }
 
 /**

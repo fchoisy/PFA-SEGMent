@@ -15,34 +15,7 @@ function loadObjects(blink){
   let objects = getObjects(scene);
   setWindowsValues();
   if(diaryOnScene){
-      let canvas = document.getElementById("canvas");
-      canvas.style.position = "absolute";
-      canvas.width  = windowsValues[0];
-      canvas.height = windowsValues[1];
-      var ctx = canvas.getContext('2d');
-      var img = new Image();
-      img.classList.add("diary-blink"); // + setTimeout + code css
-      console.log(img.classList);
-      //setTimeout(function(){img.classList.remove("diary-blink");},5000)
-      img.onload = function() {
-          if(blink){
-              // draw color
-              ctx.fillStyle = "#09f";
-              ctx.fillRect( windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
-
-              // set composite mode
-              ctx.globalCompositeOperation = "destination-in"
-              diaryBlinking --;
-              console.log("diaryBlinking");
-              setTimeout(loadObjects,800,false);
-          }else{
-              console.log(diaryBlinking);
-              if(diaryBlinking > 0)
-              setTimeout(loadObjects,800,true);
-          }
-          ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
-      };
-      img.src =  "diaryicon.png";
+      loadDiary(blink);
   }
   for (var i = 0; i < objects.length; i++) {
     if (!objects[i].PuzzlePiece){
@@ -51,6 +24,36 @@ function loadObjects(blink){
   }
 }
 
+function loadDiary(blink){
+    let canvas = document.getElementById("diaryIconCanvas");
+    canvas.style.position = "absolute";
+    canvas.width  = windowsValues[0];
+    canvas.height = windowsValues[1];
+    var ctx = canvas.getContext('2d');
+    var img = new Image();
+    img.classList.add("diary-blink"); // + setTimeout + code css
+    console.log(img.classList);
+    //setTimeout(function(){img.classList.remove("diary-blink");},5000)
+    img.onload = function() {
+        if(blink){
+            // draw color
+            ctx.fillStyle = "#09f";
+            ctx.fillRect( windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
+
+            // set composite mode
+            ctx.globalCompositeOperation = "destination-in"
+            diaryBlinking --;
+            console.log("diaryBlinking");
+            setTimeout(loadDiary,800,false);
+        }else{
+            console.log(diaryBlinking);
+            if(diaryBlinking > 0)
+            setTimeout(loadDiary,800,true);
+        }
+        ctx.drawImage(img, windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
+    };
+    img.src =  "diaryicon.png";
+}
 
 /**
 * Display the object on the scene
