@@ -170,6 +170,11 @@ function Puzzled(id){
 		  }
 	      }
 	      firstNonTransparentCanvas(xp,yp);
+	      if (chosenId == ""){
+		  $('#puzzleImages').trigger('click');  
+		  var mouseUpEvent = jQuery.Event( "mouseup", { pageX: xp, pageY: yp } );
+		  $('#draggable' + i).trigger(mouseUpEvent);  
+	      }
 	      $('#draggable' + chosenId.substr(9, chosenId.length)).trigger('click');
 	      $('#draggable' + i).trigger('mouseup');
 	      var mouseDownEvent = jQuery.Event( "mousedown", { pageX: xp, pageY: yp } );
@@ -181,7 +186,6 @@ function Puzzled(id){
             img[i] = new Image();
             img[i].onload =  function(i) {
 		item.drawImage(img[i], 0, 0, piece[i].width, piece[i].height);
-		console.log("Object drawn !" + i)
             }.bind(this, i);
             img[i].src = getGameFolderURL() + puzzlePieces[i].Image;
             i++;
