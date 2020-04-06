@@ -130,14 +130,14 @@ function getDiaryFromText(text){
     while(text[i] == " " && i<text.length){
         i++;
     }
-    buffer = "";
+    let bufferD = "";
     if(text[i] == "|"){
         diaryOnScene = true;
         flashingDiary = true;
         document.cookie = "diary_on_scene=true;";
         i++;
         while(text[i] != "|"){
-            buffer += text[i];
+            bufferD += text[i];
             i++;
         }
         i++;
@@ -147,12 +147,12 @@ function getDiaryFromText(text){
         document.cookie = "diary_on_scene=true;";
         i++;
         while(text[i] != "]"){
-            buffer += text[i]
+            bufferD += text[i]
             i++;
         }
         i++;
     }
-    return [buffer,i];
+    return [bufferD,i];
 }
 
 /**

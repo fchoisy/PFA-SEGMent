@@ -268,7 +268,11 @@ function printOpeningText(){
   const text1 = getDiaryFromText(text);
   text = text.slice(text1[1]);
   //En dur ALED Corentin
-  addedToDiary = "Game/Diary/" + text1[0]
+  if(text[0] == ""){
+      addedToDiary = "";
+  }else{
+      addedToDiary = "Game/Diary/" + text1[0]
+  }
   if(text != ""){
       initTextBox();
       reset();
