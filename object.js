@@ -24,6 +24,9 @@ function loadObjects(blink){
   }
 }
 
+/*
+* TODO
+*/
 function loadDiary(blink){
     let canvas = document.getElementById("diaryIconCanvas");
     canvas.style.position = "absolute";
