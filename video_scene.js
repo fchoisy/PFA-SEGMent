@@ -5,15 +5,16 @@
 */
 
 
-
 window.onload = playVid();
 window.addEventListener("resize", resizeVideo);
+// Skips to the next scene if video ends
 document.getElementById("video").addEventListener('ended',skip,false);
 
 document.getElementById("video").addEventListener('pause', function(){ //Disables the pause by playing the video as soon as it is paused
   document.getElementById("video").play()
 });
 
+// Skips to the next scene if escape key is pressed
 window.onkeydown = function(event){
   event.preventDefault();
   if(event.keyCode == 27){ //27 = ESC key
