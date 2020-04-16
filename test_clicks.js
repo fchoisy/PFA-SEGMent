@@ -49,20 +49,19 @@ function changeCursor(event) {
 * @param {MouseEvent} event
 */
 function verifyClick(event) {
-  var diaryClicked = false; // to disable skip scene when diary is clicked on final scene
   if(canPlay && canPlayFade){
     const X = event.clientX;
     const Y = event.clientY;
     if(diaryOnScreen){
         verifyDiaryZone(X,Y);
     }else{
-        diaryClicked = verifyDiaryZone(X,Y);
+        verifyDiaryZone(X,Y);
         verifyClickZone(X, Y);
         verifyBackZone(X, Y);
         verifyDigicode(X, Y);
         verifyObject(X, Y);
         verifyGif(X, Y);
-        if(isSceneFinal(getSceneByID(scene_number)) && (!diaryClicked || !diaryOnScreen)){
+        if(isSceneFinal(getSceneByID(scene_number))){
             loadVideoScene("Outro.mp4", "video/mp4", "index.html");
         }
     }
@@ -252,9 +251,7 @@ function verifyDiaryZone(X, Y){
           document.getElementById("diaryIconCanvas").style.display = "initial";
           document.getElementById("canvas").style.display = "initial";
       }
-      return true; // check to not skip scene if final and clicked on diary
   }
-  return false; // idem
 }
 // ------------------------------------- isOn[...]Zone ------------------------------------
 

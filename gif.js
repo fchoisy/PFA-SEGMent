@@ -7,9 +7,10 @@
 
 
 /**
-* Function to search when to stop if the gif has a part where many images can be displayed in one click
-* @param {Number} resGif : TODO
-* @param {Number} currentFrame : Current image of the gif displayed
+* Function to search when to stop if the gif has a part where many images
+* can be displayed in one click
+* @param {Number} resGif position in the array of the Gif we want to verify 
+* @param {Number} currentFrame Current image of the gif displayed
 * @returns : the next index where the gif should stop before a click
 */
 function findNextUnskippedFrame(resGif, currentFrame){

@@ -46,7 +46,11 @@ function addCurrentSceneToVisited(sceneId){
 // ========================================================================================
 //                                      ***Texts***
 // ========================================================================================
-
+/**
+* Return true if the scene with the id 'id' has text
+* @param {Number} id
+* @returns true if text in scene 'id', false otherwise
+*/
 function sceneWithText(id){
   return getSceneTextBySceneId(id) != "";
 }
@@ -128,7 +132,10 @@ function printOpeningText(){
   }
 
   /**
-  * TODO
+  * Reset the text used timer
+  * split the text in an array to display it easily
+  * set boolean canPlay to true, which allows the palyer to play on screen
+  * @returns {None}
   */
   function reset() {
     clearTimeout(timer);
@@ -176,8 +183,6 @@ function printOpeningText(){
           j++;
           i = 0;
           if(j < count && j%2 == 1){
-            //textBoxTop.innerHTML = ""//textBoxBottom.innerHTML;
-            //textBoxBottom.innerHTML = "";
             timer = setTimeout(charByChar, printSpeed);
           } else{
             timer = null;
@@ -226,9 +231,6 @@ function printOpeningText(){
             timer = "end";
         }
       }
-      /*if(j >= count){
-          i=-1;
-      }*/
       timer = null;
     }
   }
@@ -271,7 +273,7 @@ function printOpeningText(){
   if(text1[0] == ""){
       addedToDiary = "";
   }else{
-      addedToDiary = "Game/Diary/" + text1[0]
+      addedToDiary = getGameFolderURL() + text1[0];
   }
   if(text != ""){
       initTextBox();

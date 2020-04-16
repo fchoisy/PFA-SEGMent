@@ -141,9 +141,9 @@ function Puzzled(id){
 	      var pixelData = canva.getContext("2d").getImageData(x, y, 1, 1).data;
 	      return (pixelData[3] == 0);
 	  }
-	  	    
-	  
-	  piece[i].addEventListener('mousedown', e => {    
+
+
+	  piece[i].addEventListener('mousedown', e => {
 	      var xp = e.clientX;
 	      var yp = e.clientY;
 	      var xpos, ypos, rect;
@@ -151,14 +151,14 @@ function Puzzled(id){
 
 	      function firstNonTransparentCanvas(xClick,yClick){
 		  var topCanvas = document.elementFromPoint(xClick,yClick);
-		  
+
 		  if (topCanvas.id == "puzzleImages")
 		      return;
-		  
+
 		  rect = topCanvas.getBoundingClientRect();
-		  xpos = xClick - rect.left; 
-		  ypos = yClick - rect.top; 
-		  
+		  xpos = xClick - rect.left;
+		  ypos = yClick - rect.top;
+
 		  if (!isTransparent(topCanvas, xpos, ypos)){
 		      chosenId = topCanvas.id;
 		      return topCanvas.id;
@@ -171,9 +171,9 @@ function Puzzled(id){
 	      }
 	      firstNonTransparentCanvas(xp,yp);
 	      if (chosenId == ""){
-		  $('#puzzleImages').trigger('click');  
+		  $('#puzzleImages').trigger('click');
 		  var mouseUpEvent = jQuery.Event( "mouseup", { pageX: xp, pageY: yp } );
-		  $('#draggable' + i).trigger(mouseUpEvent);  
+		  $('#draggable' + i).trigger(mouseUpEvent);
 	      }
 	      $('#draggable' + chosenId.substr(9, chosenId.length)).trigger('click');
 	      $('#draggable' + i).trigger('mouseup');
@@ -189,9 +189,9 @@ function Puzzled(id){
             }.bind(this, i);
             img[i].src = getGameFolderURL() + puzzlePieces[i].Image;
             i++;
-	      
+
 	});
-	  
+
       diffX = [];
       diffY = [];
       var delta = 0.05;
@@ -245,7 +245,11 @@ function Puzzled(id){
     window.addEventListener("touchend", verify, false);
 
     /**
-    * TODO
+    * Check the enigma type and check if the enigma is solved
+    * If it is move to next scene
+    * Else display error signals
+    * @param {void}
+    * @returns None
     */
     function verify(){
       currentOriginX = tabPos[0][0];

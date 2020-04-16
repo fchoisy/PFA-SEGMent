@@ -38,7 +38,7 @@ function getStateBySceneId(scene_number, cook){
 * Gets the index of the states of the objects (position,etc.) in a scene
 * @param {Number} scene_number : id of the scene
 * @param {String} cook : cookie containing the value of the different states (from every scenes)
-* @returns : TODO
+* @returns : the state index of the object (for example for the gif if a frame is accepted or stopped) 
 */
 function getIndexStateBySceneId(scene_number, cook){
   let len = cook.length-1;
@@ -77,7 +77,7 @@ function addGifStateCookie(state, sceneNumber, toAdd){
 /**
 * Adds the state of a puzzle (position) to the cookie containing all the state of the objects (from all scenes)
 * @param {String} cook : cookie containing the value of the different states (from every scenes)
-* @param {Number} topPos : TODO
+* @param {Number} topPos : position of the piece from the top of the page
 * @param {Number} sceneNb : id of the scene
 */
 function storePuzzleInCookie(cook, topPos, sceneNb){
