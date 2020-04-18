@@ -51,7 +51,7 @@ Le code a ét& séparé en plusieurs fichiers. Voici le contenu global de chaque
 
 ## Installation et démarrage
 
-veuillez vous référer au manuel d'installation afin d'avoir une explication détaillée 
+veuillez vous référer au manuel d'installation afin d'avoir une explication détaillée
 
 
 ## Auteurs
@@ -61,5 +61,6 @@ BOUCHERIT Hind
 CHOISY Floris
 COUTOLLEAU Eléonore
 DUCHEMIN Emeric
-LEMETAYER Corentin
+LE METAYER Corentin
+CHEVALLIER Pierre
 ZHU Jean
