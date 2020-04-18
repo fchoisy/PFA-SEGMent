@@ -104,6 +104,12 @@ function drawPicture(link,ctx,canvas,canvasDisplayed,ctxDisp,canvasSize,first){
     };
 }
 
+/**
+* Function that resizes the diary
+* Only resize the canvas which contains the diary and redraw
+* the diary image which is in the store
+* @param {void}
+*/
 function resizeDiary(){
     const canvasDisplayed = document.getElementById("diaryDisplayedCanvas");
     setWindowsValues();

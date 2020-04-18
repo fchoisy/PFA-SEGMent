@@ -24,8 +24,12 @@ function loadObjects(blink){
   }
 }
 
-/*
-* TODO
+/**
+* Load the DiaryIcon Image
+* Make it blink if 'blink' is set to true
+* Only display it otherwise
+* @param {Boolean} loadDiary will the diaryIcon blink
+* @returns void
 */
 function loadDiary(blink){
     let canvas = document.getElementById("diaryIconCanvas");
@@ -34,22 +38,18 @@ function loadDiary(blink){
     canvas.height = windowsValues[1];
     var ctx = canvas.getContext('2d');
     var img = new Image();
-    img.classList.add("diary-blink"); // + setTimeout + code css
+    img.classList.add("diary-blink");
     console.log(img.classList);
-    //setTimeout(function(){img.classList.remove("diary-blink");},5000)
     img.onload = function() {
         if(blink){
             // draw color
             ctx.fillStyle = "#09f";
             ctx.fillRect( windowsValues[4] + (0.92 * windowsValues[2] * windowsValues[6]), windowsValues[5]+ (0.97 * windowsValues[3] * windowsValues[6])-0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6], 0.05 * windowsValues[2] * windowsValues[6]);
-
             // set composite mode
             ctx.globalCompositeOperation = "destination-in"
             diaryBlinking --;
-            console.log("diaryBlinking");
             setTimeout(loadDiary,800,false);
         }else{
-            console.log(diaryBlinking);
             if(diaryBlinking > 0)
             setTimeout(loadDiary,800,true);
         }

@@ -57,7 +57,7 @@ let gifOnScene = []; // contains all the gifs in the current scene
 let buffer = ""; // String to memorize the answer of the user for a digicode enigma
 let windowsValues; // contains information of the size of the current window, image and bands on sides and top/bottom
 let canPlay = false; // boolean to check if we can verify the click
-let canPlayGif = true; // TODO Emeric
+let canPlayGif = true; //Allows player to interact with gifs on scene. Set to false if a Gif is playing on its own
 let isPuzzleScene = false; // boolean that say if the current scene contain a puzzle
 let tabPos = []; // Table of puzzle position on the screen
 let canPlayFade = false; // Allow user to click on the clickzone
